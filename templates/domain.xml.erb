@@ -1,0 +1,72 @@
+<%
+disk_src_attrs = {
+  'file'    => ['file',],
+  'block'   => ['dev',],
+  'network' => ['protocol','name'],
+  'volume'  => ['pool','volume'],
+}
+-%>
+<domain type='kvm'>
+  <name><%= @name %></name>
+  <title><%= @domain_title %></title>
+  <% if @uuid -%>
+  <uuid><%= @uuid %></uuid>
+  <% end -%>
+  <description><%= @description %></description>
+  <memory unit='MiB'><%= @max_memory %></memory>
+  <currentMemory unit='MiB'><%= @initial_memory %></currentMemory>
+  <vcpu><%= @cpus %></vcpu>
+  <os>
+    <type arch='x86_64'>hvm</type>
+    <% if @bootmenu -%>
+    <bootmenu enable='yes' />
+    <% end -%>
+    <boot dev='<%= @boot %>'/>
+  </os>
+  <features>
+    <acpi/>
+    <apic/>
+    <pae/>
+  </features>
+  <clock offset='utc'/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <devices>
+    <input type='mouse' bus='ps2'/>
+    <input type='keyboard' bus='ps2'/>
+    <graphics type='vnc' autoport='yes' listen='127.0.0.1'>
+      <listen type='address' address='127.0.0.1'/>
+    </graphics>
+    <video>
+      <model type='cirrus' vram='9216' heads='1'/>
+      <alias name='video0'/>
+    </video>
+    <memballoon model='virtio'>
+      <alias name='balloon0'/>
+    </memballoon>
+    <serial type='pty'>
+      <target port='0'/>
+    </serial>
+    <console type='pty'>
+      <target type='serial' port='0'/>
+    </console>
+    <% @disks.each_with_index do |disk,i| -%>
+    <disk type='<%= disk['type'] %>' device='<%= disk['device'] %>'>
+      <source <% disk_src_attrs[disk['type']].each do |attr| -%><%= attr %>='<%= disk['source'][attr] %>'<% end -%>/>
+      <target dev='vd<%= (i+97).chr %>' bus='<%= disk['bus'] %>'/>
+      <driver io='native' cache='none' />
+    </disk>
+    <% end -%>
+    <% @interfaces.each do |iface| -%>
+    <interface type='network'>
+      <% if iface.has_key?('mac') -%>
+        <mac address='<%= iface['mac'] %>'/>
+      <% end -%>
+      <source network='<%= iface['network'] %>'<% if iface.has_key?('portgroup') %> portgroup='<%= iface['portgroup'] %>'<% end %>/>
+      <model type='<%= iface.has_key?('type') and iface['type'] or 'virtio' %>'/>
+    </interface>
+    <% end -%>
+  </devices>
+</domain>
+

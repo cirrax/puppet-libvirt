@@ -1,0 +1,27 @@
+<network>
+  <name><%= @name %></name>
+  <% if @forward_mode -%>
+  <forward mode='<%= @forward_mode %>'/>
+  <% end -%>
+  <% if @bridge -%>
+  <bridge name='<%= @bridge %>'/>
+  <% end -%>
+  <% if @virtualport_type -%>
+  <virtualport type='<%= @virtualport_type %>'/>
+  <% end -%>
+  <% @portgroups.each do |pg| -%>
+  <portgroup name='<%= pg['name'] %>'>
+    <% if pg['trunk'] -%>
+    <vlan trunk='yes'>
+      <% pg['vlan_tag'].each do |tag| %>
+      <tag id='<%= tag %>'/>
+      <% end -%>
+    </vlan>
+    <% else -%>
+    <vlan>
+      <tag id='<%= pg['vlan_tag'] %>'/>
+    </vlan>
+    <% end -%>
+  </portgroup>
+  <% end -%>
+</network>
