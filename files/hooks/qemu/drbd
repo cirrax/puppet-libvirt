@@ -21,6 +21,9 @@ drbd_role () {
     for res in $(drbd_resources) ; do
         drbdadm ${role} ${res}
     done
+    # DRBD sometimes needs some time
+    # wait 1s time to actually get to this role
+    sleep 1
 }
 
 drbd_dual_primary () {
