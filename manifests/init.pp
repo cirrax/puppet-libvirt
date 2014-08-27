@@ -31,7 +31,7 @@
 # Copyright 2014 Cirrax GmbH
 #
 class libvirt (
-  $qemu_hook=undef,
+  $qemu_hook          = undef,
   ) {
 
   include libvirt::params

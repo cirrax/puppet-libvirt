@@ -58,16 +58,16 @@
 #
 define libvirt::domain (
   $max_memory,
-  $initial_memory = $max_memory,
-  $domain_title   = '',
-  $description    = '',
-  $uuid           = undef,
-  $cpus           = '1',
-  $boot           = 'hd',
-  $bootmenu       = true,
-  $disks          = [],
-  $interfaces     = [],
-  $autostart      = true,
+  $initial_memory     = $max_memory,
+  $domain_title       = '',
+  $description        = '',
+  $uuid               = undef,
+  $cpus               = '1',
+  $boot               = 'hd',
+  $bootmenu           = true,
+  $disks              = [],
+  $interfaces         = [],
+  $autostart          = true,
 ) {
 
   exec {"libvirt-domain-${name}":
