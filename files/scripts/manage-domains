@@ -41,7 +41,7 @@ class ManageDomains(object):
         )
         self._args = arg_parser.parse_args()
 
-        self._config = SafeConfigParser({'max-job-time': 120, 'suspend-multiplier':5})
+        self._config = SafeConfigParser({'max-job-time': '120', 'suspend-multiplier':'5'})
         self._config.read(self._args.config)
 
         self._con = {}
@@ -66,7 +66,7 @@ class ManageDomains(object):
     def _progress_callback(self, domain, migration = False):
         def cb():
             start = datetime.now()
-            while datetime.now() - start < timedelta(self._get_config(domain.name(),'max-job-time')):
+            while datetime.now() - start < timedelta(self._config.getint(domain.name(),'max-job-time')):
                 # wait for the next update
                 sleep(1)
 
@@ -88,7 +88,7 @@ class ManageDomains(object):
                     # migration, use 5% of the time already spent on
                     # migration
                     try:
-                        max_downtime = (datetime.now() - start).total_seconds()*self._get_config(dmain.name(), 'suspend-multiplier')
+                        max_downtime = (datetime.now() - start).total_seconds()*self._config.getint(domain.name(), 'suspend-multiplier')
                         domain.migrateSetMaxDowntime(max_downtime)
                     except libvirtError:
                         pass
@@ -120,15 +120,6 @@ class ManageDomains(object):
         sys.stdout.write("(%i/%i) %s" % (i+1, self._total, msg))
         sys.stdout.flush()
 
-    def _get_config(self, name, option):
-        try:
-            return self._config.get(name, option)
-        except NoOptionError:
-            try:
-                return self._config.get('defaults', option)
-            except (NoSectionError, NoOptionError):
-                raise NoOptionError
-
     def evacuate(self):
         con = self._connect('localhost')
         target = self._connect(self._args.target)
@@ -136,7 +127,7 @@ class ManageDomains(object):
         for i, id in enumerate(con.listDomainsID()):
             domain = con.lookupByID(id)
             try:
-                action = self._get_config(domain.name(), 'evacuation')
+                action = self._config.get(domain.name(), 'evacuation')
             except NoOptionError:
                 self._print_progress_start("Unable to evacuate %s. No action defined.\n" % domain.name(), i)
                 continue
@@ -164,7 +155,7 @@ class ManageDomains(object):
         for i, id in enumerate(con.listDomainsID()):
             domain = con.lookupByID(id)
             try:
-                target = self._get_config(domain.name(), 'default-host')
+                target = self._config.get(domain.name(), 'default-host')
             except NoOptionError:
                 self._print_progress_start("Unable to distribute %s. No default host defined.\n" % domain.name(), i)
                 continue
