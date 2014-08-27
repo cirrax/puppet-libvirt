@@ -11,5 +11,4 @@ class libvirt::config inherits libvirt {
       source => "puppet:///modules/libvirt/hooks/qemu/${qemu_hook}",
     }
   }
-
 }

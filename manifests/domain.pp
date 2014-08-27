@@ -56,6 +56,25 @@
 #   Wheter the libvirt autostart flag should be set. Defaults to true. Autostart
 #   domains are started if the host is booted.
 #
+# The following values are only useful together with the drbd qemu_hook in
+# setups of two redundant virtualization hosts synchronized over DRBD. They
+# have no effect if qemu_hook is not set to drbd.
+#
+# [*default_host*]
+#   FQDN for the default host of this domain. The manage-domains script uses
+#   this value to move a domain to it's default host if it's running elsewhere.
+#   The default value is undef.
+# [*evacuation*]
+#   Evacuation policy for this domain. Valid values are 'migrate', 'save' and
+#   'shutdown'. The default is to not set a value and to use the global default.
+# [*max_job_time*]
+#   Maximum job time in seconds when migrating, saving or shuting down this
+#   domain with the manage-domains script. The default is to not set a value
+#   and to use the global default.
+# [*suspend_multiplier*]
+#   suspend_multiplier for migrating domains with the manage-domains
+#   script. The default is to not set a value and to use the global default.
+#
 define libvirt::domain (
   $max_memory,
   $initial_memory     = $max_memory,
@@ -68,6 +87,10 @@ define libvirt::domain (
   $disks              = [],
   $interfaces         = [],
   $autostart          = true,
+  $default_host       = undef,
+  $evacuation         = undef,
+  $max_job_time       = undef,
+  $suspend_multiplier = undef,
 ) {
 
   exec {"libvirt-domain-${name}":
@@ -90,6 +113,14 @@ define libvirt::domain (
       command => "virsh start ${name}",
       unless  => "virsh list --name | grep -q ^${name}$",
       require => Exec["libvirt-domain-${name}"],
+    }
+  }
+
+  if ($libvirt::qemu_hook=='drbd') {
+    concat::fragment { $name:
+      target  => $params::manage_domains_config,
+      content => template('libvirt/manage-domains.ini.domain.erb'),
+      order   => '10',
     }
   }
 }
