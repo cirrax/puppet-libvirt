@@ -10,11 +10,6 @@ class libvirt::config inherits libvirt {
       mode    => '0755',
       source  => "puppet:///modules/libvirt/hooks/qemu/${qemu_hook}",
     }
-    if ($params::qemu_hook_packages[$qemu_hook]) {
-      package {$params::qemu_hook_packages[$qemu_hook]:
-        ensure => 'installed',
-      }
-    }
   }
 
 }
