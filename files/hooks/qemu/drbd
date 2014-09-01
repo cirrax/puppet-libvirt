@@ -3,40 +3,59 @@
 set -e
 
 migration_state_dir="/var/run/libvirt/drbd-migration"
+allow_disconnected_drbd="/var/run/libvirt/allow-disconnected-drbd"
+disconnected_timeout="1 hour ago"
 
 domain="$1"
 action="$2"
 
 domxml=$(cat)
 
-drbd_resources () {
+find_drbd_resources () {
     drbd_disks=$(echo ${domxml} | xmlstarlet sel -t -v '/domain/devices/disk/source/@dev' | grep drbd)
     for d in ${drbd_disks} ; do
         echo $(udevadm info --query=property --name=${d} | grep RESOURCE | cut -d "=" -f 2 | cut -d "/" -f 1)
     done
 }
 
+drbd_resources=$(find_drbd_resources)
+
 drbd_role () {
     role=$1
-    for res in $(drbd_resources) ; do
-        drbdadm ${role} ${res}
+    # check if all resources are connected before allowing
+    # the primary role
+    if [ "${role}" = "primary" ] ; then
+        check_connected
+    fi
+
+    for res in $drbd_resources ; do
+        i=0
+        while ! drbdadm ${role} ${res} ; do
+            # wait 1s and try again, sometimes QEMU does not immediately release
+            # the device, wait 5s at most, otherwise cancel hook
+            sleep 1
+            i=$((i+1))
+            if [ $i -gt 4 ] ; then
+                exit 1
+            fi
+        done
     done
-    # DRBD sometimes needs some time
-    # wait 1s time to actually get to this role
-    sleep 1
 }
 
 drbd_dual_primary () {
     mode=$1
     check=$2
-    for res in $(drbd_resources) ; do
+
+    for res in $drbd_resources ; do
         if [ "${check}" = "check-migration" -a -e ${migration_state_dir}/${res} ] ; then
             # This resource is part of a migration, remove the state file
             # and continue. This allows setting dual primary mode exactly once
             # after the state file is created.
             rm -f ${migration_state_dir}/${res}
         else
-            drbdadm net-options --protocol=C --allow-two-primaries=${mode} ${res}
+            if [ ! "$(drbdadm cstate ${res})" = "StandAlone" ] ; then
+                drbdadm net-options --protocol=C --allow-two-primaries=${mode} ${res}
+            fi
             if [ "${mode}" = "no" -a -e ${migration_state_dir}/${res} ] ; then
                 # remove migration state file in case it was left over from a
                 # previous failed migration attempt
@@ -46,10 +65,61 @@ drbd_dual_primary () {
     done
 }
 
+check_connected () {
+
+    for res in $drbd_resources ; do
+        if [ ! $(drbdadm cstate ${res}) = "Connected" ] ; then
+            # check for allow state file
+            if [ -f ${allow_disconnected_drbd} ] ; then
+                timeout=$(date "+%s" -d "${disconnected_timeout}")
+                file_time=$(date "+%s" -r "${allow_disconnected_drbd}")
+                if [ $(($timeout - $file_time)) -lt 0 ] ; then
+                    # timeout has not yet expired, continue to next
+                    # resource
+                    continue
+                else
+                    cat >&2 <<EOF
+
+
+${allow_disconnected_drbd} was created more than ${disconnected_timeout}.
+Issue the following command again if you want to continue in
+disconnected state:
+
+touch ${allow_disconnected_drbd}
+
+USE AT YOUR OWN RISK. This may create inconsistent data.
+EOF
+                fi
+            else
+                cat >&2  <<EOF
+
+
+DRBD resource ${res} is not connected (state = $(drbdadm cstate ${res}))
+To allow setting the primary role even if unconnected, create the
+file ${allow_disconnected_drbd}.
+
+Issue the following command:
+
+touch ${allow_disconnected_drbd}
+
+USE AT YOUR OWN RISK. This may create inconsistent data.
+EOF
+            fi
+            exit 1
+        fi
+    done
+}
+
+# Install trap to unset dual primary on error
+trap 'drbd_dual_primary no' 0
+
 case $action in
     prepare)
         drbd_dual_primary no check-migration
         drbd_role primary
+        # DRBD sometimes needs some time
+        # wait 1s to actually get to this role
+        sleep 1
         ;;
     release)
         drbd_role secondary
@@ -59,12 +129,15 @@ case $action in
         # create state file indicating that these DRBD resources
         # are part of a migration
         [ -d ${migration_state_dir} ] || mkdir ${migration_state_dir}
-        for res in $(drbd_resources) ; do
+        for res in $drbd_resources ; do
             touch ${migration_state_dir}/$res
         done
         drbd_dual_primary yes
         echo ${domxml}
         ;;
 esac
+
+# reset trap
+trap - 0
 
 exit 0
