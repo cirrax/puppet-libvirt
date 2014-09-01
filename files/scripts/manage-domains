@@ -121,6 +121,11 @@ class ManageDomains(object):
         sys.stdout.flush()
 
     def evacuate(self):
+
+        if not self._args.target:
+            print "Need a target to evacuate to."
+            sys.exit(1)
+
         con = self._connect('localhost')
         target = self._connect(self._args.target)
 
