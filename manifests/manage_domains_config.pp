@@ -3,10 +3,10 @@
 # Installs configuration files for manage-domains script
 class libvirt::manage_domains_config {
   concat { $params::manage_domains_config:
-    owner  => 'root',
-    group  => 'root',
-    mode   => '644',
-    force  => false,
+    owner => 'root',
+    group => 'root',
+    mode  => '644',
+    force => false,
   }
 
   concat::fragment { "${params::manage_domains_config} header":
