@@ -1,0 +1,25 @@
+{
+    "name": "gaudenz-libvirt",
+    "version": "1.0.0",
+    "author": "Gaudenz Steinlin",
+    "license": "GPLv3",
+    "summary": "Puppet module to install libvirt and create virtual domain configuration",
+    "source": "http://git.cirrax.com/?p=puppet-modules/libvirt.git",
+    "tags": ["libvirt", "kvm", "drbd", "virtualization"],
+    "operatingsystem_support": [
+        {
+            "operatingsystem": "Debian",
+            "operatingsystemrelease": ["7.0"]
+        }
+    ],
+    "dependencies": [
+        {
+            "name": "puppetlabs/stdlib",
+            "version_requirement": ">=3.0.0"
+        },
+        {
+            "name": "puppetlabs/concat",
+            "version_requirement": ">= 1.0.0"
+        }
+    ]
+}
