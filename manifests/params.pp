@@ -2,14 +2,30 @@
 #
 # Operating system dependent parameters
 class libvirt::params {
-  if ($::osfamily == 'Debian') {
-    $libvirt_package_names  = ['libvirt-bin', 'qemu']
-    $service_name           = 'libvirt-bin'
-    $config_dir             = '/etc/libvirt'
-    $manage_domains_config  = '/etc/manage-domains.ini'
-    $qemu_hook_packages     = {'drbd' => ['xmlstarlet','python-libvirt'], }
-  } else {
-    fail("${::osfamily} is currently not supported by the libvirt module.
-      Please add support for it and submit a patch!")
+  case $::osfamily {
+    'Debian': {
+      case $::lsbdistcodename {
+        'wheezy': {
+          $libvirt_package_names  = ['libvirt-bin', 'qemu']
+          $service_name           = 'libvirt-bin'
+        }
+        'jessie': {
+          $libvirt_package_names  = ['libvirt-system-daemon', 'qemu']
+          $service_name           = 'libvirtd'
+        }
+        default: {
+          fail("${::lsbdistcodename} is currently not supported by the libvirt
+                module. Please add support for it and submit a patch!")
+        }
+      }
+      $config_dir             = '/etc/libvirt'
+      $manage_domains_config  = '/etc/manage-domains.ini'
+      $qemu_hook_packages     = {'drbd' => ['xmlstarlet','python-libvirt'], }
+    }
+
+    default: {
+      fail("${::osfamily} is currently not supported by the libvirt module.
+            Please add support for it and submit a patch!")
+    }
   }
 }
