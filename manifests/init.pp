@@ -11,6 +11,11 @@
 #
 # === Parameters
 #
+# [*service_name*]
+#   Service name for libvirt. The default value is Distribution specific.
+#   Only set this if your setup differs from the packages provided by
+#   your distribution.
+#
 # [*qemu_hook*]
 #   QEMU hook to install. The only currently available hook is a script
 #   to setup DRBD resources. Valid values are 'drbd' or 'undef' (=no hook).
@@ -47,6 +52,7 @@
 # Copyright 2014 Cirrax GmbH
 #
 class libvirt (
+  $service_name       = undef,
   $qemu_hook          = undef,
   $evacuation         = 'migrate',
   $max_job_time       = '120',
