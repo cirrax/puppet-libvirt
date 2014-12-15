@@ -135,6 +135,11 @@ case $action in
         drbd_dual_primary yes
         echo ${domxml}
         ;;
+    restore)
+        # restore domain from saved state, no dual primary necessary,
+        # but copy XML
+        echo ${domxml}
+        ;;
 esac
 
 # reset trap
