@@ -23,6 +23,11 @@
 #   that libvirt will generate a UUID for the domain.
 # [*cpus*]
 #   Number of virtual CPUs for the domain. Defaults to '1'.
+# [*cpu_model*]
+#   CPU model to emulate. Valid values are any cpu model accepted by libvirt or
+#   the special values 'host-model' and 'host-passthrough'. See
+#   http://libvirt.org/formatdomain.html#elementsCPU for details. Defaults to
+#   'host-model'.
 # [*boot*]
 #   Default boot device. Defaults to 'hd'.
 # [*bootmenu*]
@@ -83,6 +88,7 @@ define libvirt::domain (
   $description        = '',
   $uuid               = undef,
   $cpus               = '1',
+  $cpu_model          = 'host-model',
   $boot               = 'hd',
   $bootmenu           = true,
   $disks              = [],
@@ -93,6 +99,13 @@ define libvirt::domain (
   $max_job_time       = undef,
   $suspend_multiplier = undef,
 ) {
+
+  # set $cpu_mode variable, used in domain XML template
+  if ($cpu_model == 'host-model' or $cpu_model == 'host-passthrough') {
+    $cpu_mode = $cpu_model
+  } else {
+    $cpu_mode = 'match'
+  }
 
   exec {"libvirt-domain-${name}":
     command  => join(['f=$(mktemp) && echo "',

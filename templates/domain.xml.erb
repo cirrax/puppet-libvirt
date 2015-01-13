@@ -16,6 +16,11 @@ disk_src_attrs = {
   <memory unit='MiB'><%= @max_memory %></memory>
   <currentMemory unit='MiB'><%= @initial_memory %></currentMemory>
   <vcpu><%= @cpus %></vcpu>
+  <cpu mode='<%= @cpu_mode %>'>
+    <% if @cpu_mode == 'match' -%>
+    <model><%= @cpu_model %></model>
+    <% end -%>
+  </cpu>
   <os>
     <type arch='x86_64'>hvm</type>
     <% if @bootmenu -%>
