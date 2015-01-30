@@ -27,7 +27,8 @@
 #   CPU model to emulate. Valid values are any cpu model accepted by libvirt or
 #   the special values 'host-model' and 'host-passthrough'. See
 #   http://libvirt.org/formatdomain.html#elementsCPU for details. Defaults to
-#   'host-model'.
+#   not set a CPU at all and let libvirt choose. The values 'host-model' and
+#   'host-passthroug' prevent migrations from working.
 # [*boot*]
 #   Default boot device. Defaults to 'hd'.
 # [*bootmenu*]
@@ -88,7 +89,7 @@ define libvirt::domain (
   $description        = '',
   $uuid               = undef,
   $cpus               = '1',
-  $cpu_model          = 'host-model',
+  $cpu_model          = undef,
   $boot               = 'hd',
   $bootmenu           = true,
   $disks              = [],
