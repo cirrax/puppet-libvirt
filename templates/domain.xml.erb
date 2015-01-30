@@ -18,7 +18,7 @@ disk_src_attrs = {
   <vcpu><%= @cpus %></vcpu>
   <% if @cpu_model -%>
   <cpu mode='<%= @cpu_mode %>'>
-    <% if @cpu_mode == 'match' -%>
+    <% if @cpu_mode == 'custom' -%>
     <model><%= @cpu_model %></model>
     <% end -%>
   </cpu>

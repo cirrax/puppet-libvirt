@@ -105,7 +105,7 @@ define libvirt::domain (
   if ($cpu_model == 'host-model' or $cpu_model == 'host-passthrough') {
     $cpu_mode = $cpu_model
   } else {
-    $cpu_mode = 'match'
+    $cpu_mode = 'custom'
   }
 
   exec {"libvirt-domain-${name}":
