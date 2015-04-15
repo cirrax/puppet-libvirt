@@ -62,7 +62,11 @@ disk_src_attrs = {
     <disk type='<%= disk['type'] %>' device='<%= disk['device'] %>'>
       <source <% disk_src_attrs[disk['type']].each do |attr| -%><%= attr %>='<%= disk['source'][attr] %>'<% end -%>/>
       <target dev='vd<%= (i+97).chr %>' bus='<%= disk['bus'] %>'/>
-      <driver io='native' cache='none' />
+      <% if disk.has_key?('driver') -%>
+      <driver <% disk['driver'].each do |attr| -%><%= attr[0] %>='<%= attr[1] %>' <% end -%>/>
+      <% else -%>
+      <driver name='qemu' type='raw' io='native' cache='none' />
+      <% end -%>
     </disk>
     <% end -%>
     <% @interfaces.each do |iface| -%>

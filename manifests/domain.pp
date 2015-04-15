@@ -49,6 +49,10 @@
 #                        backing this disk.
 #               network: 'protocol' and 'name'
 #               volume:  'pool' and 'volume'
+#    * driver:  Hash of driver parameters. Defaults to raw disks images, no caching
+#               and native io. Use {'name' => 'qemu', 'type' => 'qcow2'} for QCOW2
+#               images.
+#               See the libvirt domain XML documentation for all possible values.
 # [*interfaces*]
 #   Array of hashes defining the network interfaces of this domain. Defaults to
 #   no network interfaces.
