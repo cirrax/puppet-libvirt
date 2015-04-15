@@ -4,7 +4,7 @@
 class libvirt::install inherits libvirt {
 
   package {$params::libvirt_package_names:
-    ensure => 'installed',
+    ensure => 'latest',
   }
 
   # install hook specific packages
