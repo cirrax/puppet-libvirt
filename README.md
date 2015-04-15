@@ -34,14 +34,14 @@ Python management script to create a 2 node cluster with disks
 replicated over DRBD. This setup allows live migration of VMs from one
 node to the other.
 
-A complete working solution ca be achived by integrating the following
+A complete working solution can be achived by integrating the following
 modules in addition to this module:
 
 * [puppetlabs-lvm](http://forge.puppetlabs.com/puppetlabs/lvm)
 * [puppetlabs-drbd](http://forge.puppetlabs.com/puppetlabs/drbd) (only
   for DRBD setups)
 * [puppet-vswitch](http://forge.puppetlabs.com/puppetlabs/vswitch)
-  (only when using OpenvSwitch
+  (only when using OpenvSwitch)
 
 ## Usage
 
@@ -53,6 +53,11 @@ Install including the DRBD hook:
 
     class {'libvirt':
       qemu_hook => 'drbd',
+    }
+
+Defining a personnal directory to generate XML files:
+    class {'libvirt':
+      xml_dir => '/tmp/virtxml',
     }
 
 Define a network (basic linux bridge example):
@@ -87,12 +92,27 @@ Define a domain (VM):
       max_memory     => '2000',
       cpus           => 2,
       boot           => 'hd',
-      disks          => [{'type' => 'block',
+      disks          => [{'name'   => 'qemu',
+                          'type'   => 'file',
                           'device' => 'disk',
-                          'source' => {'dev' => '/dev/vm-pool/my-domain.img'},
+                          'bus'    => 'virtio',
+                          'source' => {'file' => '/dev/vm-pool/my-domain.img'},
+                          'driver' => {'name'  => 'qemu',
+                                       'type'  => 'qcow2',
+                                       'cache' => 'none',},
+                          },
+                          {'type'  => 'block',
+                           'device' => 'disk',
+                           'bus'    => 'virtio',
+                           'source' => {'dev'  => '/dev/vg00/data'},
+                           'driver' => {'name'  => 'qemu',
+                                        'type'  => 'raw',
+                                        'cache' => 'none',
+                                        'io'    => 'native',},
                           },
                          ],
       interfaces     => [{'network' => 'net-simple'},],
+      xml_dir        => '/tmp/virtxml',
       autostart      => true,
     }
 
@@ -114,10 +134,15 @@ Patches to support any of these (or other) missing features are welcome.
 ## Development
 
 Contributions are welcome. Please send pull request or patches to
-gaudenz.steinlin@cirrax.com.
+julien.georges@atos.net
 
 Browse source code:
-http://git.cirrax.com/?p=puppet-modules/libvirt.git
+    https://github.com/GiooDev/puppet-libvirt
 
 Clone repository:
-    git clone git://git.cirrax.com/puppet-modules/libvirt.git
+    git clone https://github.com/GiooDev/puppet-libvirt.git
+
+Based on the module gaudenz-libvirt
+    gaudenz.steinlin@cirrax.com
+    https://forge.puppetlabs.com/gaudenz/libvirt
+    http://git.cirrax.com/?p=puppet-modules/libvirt.git
