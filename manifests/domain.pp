@@ -99,10 +99,8 @@ define libvirt::domain (
   $evacuation         = undef,
   $max_job_time       = undef,
   $suspend_multiplier = undef,
-  $config_dir         = undef,
+  $xml_dir            = undef,
 ) {
-  
-  $_config_dir = pick($config_dir, $libvirt::config_dir, $params::config_dir)
 
   # set $cpu_mode variable, used in domain XML template
   if ($cpu_model == 'host-model' or $cpu_model == 'host-passthrough') {
@@ -111,19 +109,29 @@ define libvirt::domain (
     $cpu_mode = 'custom'
   }
 
+  #External storage for the xml
+  $_xml_dir = pick($xml_dir, $libvirt::xml_dir, $params::config_dir)
+  #TODO: Problem with subdirectories (recurse)
+  file {"${_xml_dir}":
+    ensure   => 'directory',
+  }
+
+  file {"${_xml_dir}/${name}.xml":
+    content  => template('libvirt/domain.xml.erb'),
+    require  => File["${_xml_dir}"],
+  }
+
   exec {"libvirt-domain-${name}":
-    command  => join(['f=$(mktemp) && echo "',
-                      template('libvirt/domain.xml.erb'),
-                      '" > $f && virsh define $f && rm $f']),
+    command  => "virsh define ${_xml_dir}/${name}.xml",
     provider => 'shell',
-    creates  => "${_config_dir}/qemu/${name}.xml",
-    require  => Class['libvirt'],
+    creates  => "${params::config_dir}/qemu/${name}.xml",
+    require  => [ Class['libvirt'], File["${_xml_dir}/${name}.xml"] ],
   }
 
   if ($autostart) {
     exec {"libvirt-domain-autostart-${name}":
       command => "virsh autostart ${name}",
-      creates => "${_config_dir}/qemu/autostart/${name}.xml",
+      creates => "${params::config_dir}/qemu/autostart/${name}.xml",
       require => Exec["libvirt-domain-${name}"],
     }
 
