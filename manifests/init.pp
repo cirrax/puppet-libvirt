@@ -53,6 +53,7 @@
 #
 class libvirt (
   $service_name       = undef,
+  $config_dir         = undef,
   $qemu_hook          = undef,
   $evacuation         = 'migrate',
   $max_job_time       = '120',

@@ -99,7 +99,10 @@ define libvirt::domain (
   $evacuation         = undef,
   $max_job_time       = undef,
   $suspend_multiplier = undef,
+  $config_dir         = undef,
 ) {
+  
+  $_config_dir = pick($config_dir, $libvirt::config_dir, $params::config_dir)
 
   # set $cpu_mode variable, used in domain XML template
   if ($cpu_model == 'host-model' or $cpu_model == 'host-passthrough') {
@@ -113,14 +116,14 @@ define libvirt::domain (
                       template('libvirt/domain.xml.erb'),
                       '" > $f && virsh define $f && rm $f']),
     provider => 'shell',
-    creates  => "${params::config_dir}/qemu/${name}.xml",
+    creates  => "${_config_dir}/qemu/${name}.xml",
     require  => Class['libvirt'],
   }
 
   if ($autostart) {
     exec {"libvirt-domain-autostart-${name}":
       command => "virsh autostart ${name}",
-      creates => "${params::config_dir}/qemu/autostart/${name}.xml",
+      creates => "${_config_dir}/qemu/autostart/${name}.xml",
       require => Exec["libvirt-domain-${name}"],
     }
 
