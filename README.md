@@ -143,7 +143,7 @@ Browse source code:
 Clone repository:
     git clone https://github.com/GiooDev/puppet-libvirt.git
 
-# Based on the module gaudenz-libvirt
+### Based on the module gaudenz-libvirt
 
 gaudenz.steinlin@cirrax.com
 
