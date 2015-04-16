@@ -143,9 +143,10 @@ Browse source code:
 Clone repository:
     git clone https://github.com/GiooDev/puppet-libvirt.git
 
-Based on the module gaudenz-libvirt
-    gaudenz.steinlin@cirrax.com
+# Based on the module gaudenz-libvirt
 
-    https://forge.puppetlabs.com/gaudenz/libvirt
+gaudenz.steinlin@cirrax.com
 
-    http://git.cirrax.com/?p=puppet-modules/libvirt.git
+Original module : https://forge.puppetlabs.com/gaudenz/libvirt
+
+Original sources : http://git.cirrax.com/?p=puppet-modules/libvirt.git
