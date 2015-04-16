@@ -48,12 +48,14 @@ define libvirt::network (
   if ($autostart) {
     exec {"libvirt-network-autostart-${name}":
       command => "virsh net-autostart ${name}",
+      provider => 'shell',
       creates => "${params::config_dir}/qemu/networks/autostart/${name}.xml",
       require => Exec["libvirt-network-${name}"],
     }
 
     exec {"libvirt-network-start-${name}":
       command => "virsh net-start ${name}",
+      provider => 'shell',
       unless  => "virsh net-list | tail -n +3 | cut -d ' ' -f 2 | \
                   grep -q ^${name}$",
       require => Exec["libvirt-network-${name}"],
