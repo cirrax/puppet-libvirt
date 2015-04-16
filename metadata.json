@@ -1,6 +1,6 @@
 {
     "name": "bull-libvirt",
-    "version": "1.2.1",
+    "version": "1.2.2",
     "author": "Julien Georges",
     "license": "GPLv3",
     "summary": "Puppet module to install libvirt and create virtual domain configuration (based on gaudenz-libvirt module)",
