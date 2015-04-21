@@ -68,17 +68,21 @@ drbd_dual_primary () {
 check_connected () {
 
     for res in $drbd_resources ; do
-        if [ ! $(drbdadm cstate ${res}) = "Connected" ] ; then
-            # check for allow state file
-            if [ -f ${allow_disconnected_drbd} ] ; then
-                timeout=$(date "+%s" -d "${disconnected_timeout}")
-                file_time=$(date "+%s" -r "${allow_disconnected_drbd}")
-                if [ $(($timeout - $file_time)) -lt 0 ] ; then
-                    # timeout has not yet expired, continue to next
-                    # resource
-                    continue
-                else
-                    cat >&2 <<EOF
+        cstate=$(drbdadm cstate ${res})
+        case "${cstate}" in
+            Connected|SyncSource|SyncTarget)
+		;;
+            *)
+                # check for allow state file
+                if [ -f ${allow_disconnected_drbd} ] ; then
+                    timeout=$(date "+%s" -d "${disconnected_timeout}")
+                    file_time=$(date "+%s" -r "${allow_disconnected_drbd}")
+                    if [ $(($timeout - $file_time)) -lt 0 ] ; then
+                        # timeout has not yet expired, continue to next
+                        # resource
+                        continue
+                    else
+                        cat >&2 <<EOF
 
 
 ${allow_disconnected_drbd} was created more than ${disconnected_timeout}.
@@ -89,9 +93,9 @@ touch ${allow_disconnected_drbd}
 
 USE AT YOUR OWN RISK. This may create inconsistent data.
 EOF
-                fi
-            else
-                cat >&2  <<EOF
+                    fi
+                else
+                    cat >&2  <<EOF
 
 
 DRBD resource ${res} is not connected (state = $(drbdadm cstate ${res}))
@@ -104,9 +108,10 @@ touch ${allow_disconnected_drbd}
 
 USE AT YOUR OWN RISK. This may create inconsistent data.
 EOF
-            fi
-            exit 1
-        fi
+                fi
+                exit 1
+                ;;
+        esac
     done
 }
 
