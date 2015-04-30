@@ -102,7 +102,7 @@ manifest files.
 ## Limitations
 
 Things currently not supported:
-* Operating Systems other than Debian. Adding support for other
+* Operating Systems other than Debian or RedHat. Adding support for other
   systems is a matter of defining the relevant parameters in
   params.pp. So this is really easy for someone with access to such a
   system.

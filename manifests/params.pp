@@ -23,6 +23,22 @@ class libvirt::params {
       $qemu_hook_packages     = {'drbd' => ['xmlstarlet','python-libvirt'], }
     }
 
+    'RedHat': {
+      case $::operatingsystemmajrelease {
+        '7': {
+          $libvirt_package_names  = ['libvirt', 'qemu-kvm']
+          $service_name           = 'libvirtd'
+        }
+        default: {
+          fail("RedHat ${::operatingsystemmajrelease} is currently not supported by the libvirt module.
+               Please add support for it and submit a patch!")
+        }
+      }
+      $config_dir             = '/etc/libvirt'
+      $manage_domains_config  = '/etc/manage-domains.ini'
+      $qemu_hook_packages     = { }
+    }
+
     default: {
       fail("${::osfamily} is currently not supported by the libvirt module.
             Please add support for it and submit a patch!")
