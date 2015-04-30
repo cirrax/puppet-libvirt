@@ -41,7 +41,7 @@ modules in addition to this module:
 * [puppetlabs-drbd](http://forge.puppetlabs.com/puppetlabs/drbd) (only
   for DRBD setups)
 * [puppet-vswitch](http://forge.puppetlabs.com/puppetlabs/vswitch)
-  (only when using OpenvSwitch
+  (only when using OpenvSwitch)
 
 ## Usage
 
