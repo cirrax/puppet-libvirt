@@ -30,39 +30,45 @@
 #   not set a CPU at all and let libvirt choose. The values 'host-model' and
 #   'host-passthroug' prevent migrations from working.
 # [*boot*]
-#   Default boot device. Defaults to 'hd'.
+#   Default boot device. Valid values are any accepted by libvirt or the string
+#   'per-device' to set individual boot orders on disks or interfaces.
+#   Defaults to 'hd'.
 # [*bootmenu*]
 #   Wheter the boot menu option should be available or not. Defaults to true.
 # [*disks*]
 #   Array of hashes defining the disks of this domain. Defaults to no disks
 #   at all. The hashes support the following keys:
-#     * type:   Disk type, supported types are 'file', 'block', 'network' and
-#               'volume'.
-#     * device: Disk device type exposed to the guest. Supported values are
-#               'floppy', 'disk', 'cdrom' and 'lun'.
-#     * bus:    target bus (eg. 'virtio')
-#     * source: Hash of source parameters. The supported hash keys vary by the
-#               type of disk:
-#               file:    'file' key to specify the pathname of the source file
-#                        backing this disk.
-#               block:   'dev' key to specify the pathname to the block device
-#                        backing this disk.
-#               network: 'protocol' and 'name'
-#               volume:  'pool' and 'volume'
-#    * driver:  Hash of driver parameters. Defaults to raw disks images, no caching
-#               and native io. Use {'name' => 'qemu', 'type' => 'qcow2'} for QCOW2
-#               images.
-#               See the libvirt domain XML documentation for all possible values.
+#     * type:       Disk type, supported types are 'file', 'block', 'network' and
+#                   'volume'.
+#     * device:     Disk device type exposed to the guest. Supported values are
+#                   'floppy', 'disk', 'cdrom' and 'lun'.
+#     * bus:        target bus (eg. 'virtio')
+#     * source:     Hash of source parameters. The supported hash keys vary by the
+#                   type of disk:
+#                   file:    'file' key to specify the pathname of the source file
+#                            backing this disk.
+#                   block:   'dev' key to specify the pathname to the block device
+#                            backing this disk.
+#                   network: 'protocol' and 'name'
+#                   volume:  'pool' and 'volume'
+#    * driver:      Hash of driver parameters. Defaults to raw disks images, no caching
+#                   and native io. Use {'name' => 'qemu', 'type' => 'qcow2'} for QCOW2
+#                   images.
+#                   See the libvirt domain XML documentation for all possible values.
+#     * boot_order: Integer starting at 1 for the highest priority (shared with
+#                   interfaces).
 # [*interfaces*]
 #   Array of hashes defining the network interfaces of this domain. Defaults to
 #   no network interfaces.
 #   The hashes support the following keys:
-#     * mac:       MAC address of the interface. Without a mac key, a random
-#                  address will be assigned by libvirt. The MAC address should
-#                  start with 52:54:00.
-#     * network:   libvirt network to attach to (mandatory).
-#     * portgroup: portgroup to attach to (optional).
-#     * type:      Type of network card. Defaults to 'virtio'.
+#     * mac:        MAC address of the interface. Without a mac key, a random
+#                   address will be assigned by libvirt. The MAC address should
+#                   start with 52:54:00.
+#     * network:    libvirt network to attach to (mandatory).
+#     * portgroup:  portgroup to attach to (optional).
+#     * type:       Type of network card. Defaults to 'virtio'.
+#     * boot_order: Integer starting at 1 for the highest priority (shared with
+#                   disks).
 # [*autostart*]
 #   Wheter the libvirt autostart flag should be set. Defaults to true. Autostart
 #   domains are started if the host is booted.

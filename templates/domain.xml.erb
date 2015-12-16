@@ -28,7 +28,9 @@ disk_src_attrs = {
     <% if @bootmenu -%>
     <bootmenu enable='yes' />
     <% end -%>
+    <% if @boot != 'per-device' -%>
     <boot dev='<%= @boot %>'/>
+    <% end -%>
   </os>
   <features>
     <acpi/>
@@ -67,6 +69,9 @@ disk_src_attrs = {
       <% else -%>
       <driver name='qemu' type='raw' io='native' cache='none' />
       <% end -%>
+      <% if @boot == 'per-device' && disk.has_key?('boot_order') -%>
+      <boot order='<%= disk['boot_order'] %>'/>
+      <% end -%>
     </disk>
     <% end -%>
     <% @interfaces.each do |iface| -%>
@@ -76,6 +81,9 @@ disk_src_attrs = {
       <% end -%>
       <source network='<%= iface['network'] %>'<% if iface.has_key?('portgroup') %> portgroup='<%= iface['portgroup'] %>'<% end %>/>
       <model type='<%= iface.has_key?('type') and iface['type'] or 'virtio' %>'/>
+      <% if @boot == 'per-device' && iface.has_key?('boot_order') -%>
+      <boot order='<%= iface['boot_order'] %>'/>
+      <% end -%>
     </interface>
     <% end -%>
   </devices>
