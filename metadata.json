@@ -1,6 +1,6 @@
 {
     "name": "gaudenz-libvirt",
-    "version": "1.3.0",
+    "version": "1.4.0",
     "author": "Gaudenz Steinlin",
     "license": "GPLv3",
     "summary": "Puppet module to install libvirt and create virtual domain configuration",
