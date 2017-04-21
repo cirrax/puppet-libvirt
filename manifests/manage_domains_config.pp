@@ -5,7 +5,7 @@ class libvirt::manage_domains_config {
   concat { $params::manage_domains_config:
     owner => 'root',
     group => 'root',
-    mode  => '644',
+    mode  => '0644',
     force => false,
   }
 
