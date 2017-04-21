@@ -129,17 +129,17 @@ define libvirt::domain (
 
   if ($autostart) {
     exec {"libvirt-domain-autostart-${name}":
-      command => "virsh autostart ${name}",
+      command  => "virsh autostart ${name}",
       provider => 'shell',
-      creates => "${params::config_dir}/qemu/autostart/${name}.xml",
-      require => Exec["libvirt-domain-${name}"],
+      creates  => "${params::config_dir}/qemu/autostart/${name}.xml",
+      require  => Exec["libvirt-domain-${name}"],
     }
 
     exec {"libvirt-domain-start-${name}":
-      command => "virsh start ${name}",
+      command  => "virsh start ${name}",
       provider => 'shell',
-      unless  => "virsh list --name | grep -q ^${name}$",
-      require => Exec["libvirt-domain-${name}"],
+      unless   => "virsh list --name | grep -q ^${name}$",
+      require  => Exec["libvirt-domain-${name}"],
     }
   }
 
