@@ -1,11 +1,11 @@
 [DEFAULT]
-<% if @evacuation -%>
-evacuation = <%= @evacuation %>
+<% if scope['libvirt::evacuation'] -%>
+evacuation = <%= scope['libvirt::evacuation'] %>
 <% end -%>
-<% if @max_job_time -%>
-max-job-time = <%= @max_job_time %>
+<% if scope['libvirt::max_job_time'] -%>
+max-job-time = <%= scope['libvirt::max_job_time'] %>
 <% end -%>
-<% if @suspend_multiplier -%>
-suspend_multiplier = <%= @suspend_multiplier %>
+<% if scope['libvirt::suspend_multiplier'] -%>
+suspend_multiplier = <%= scope['libvirt::suspend_multiplier'] %>
 <% end -%>
 

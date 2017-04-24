@@ -35,12 +35,15 @@ define libvirt::network (
   $portgroups       = [],
   $autostart        = true,
 ) {
+
+  include libvirt::params
+
   exec {"libvirt-network-${name}":
     command  => join(['f=$(mktemp) && echo "',
                       template('libvirt/network.xml.erb'),
                       '" > $f && virsh net-define $f && rm $f']),
     provider => 'shell',
-    creates  => "${params::config_dir}/qemu/networks/${name}.xml",
+    creates  => "${libvirt::params::config_dir}/qemu/networks/${name}.xml",
     require  => Class['libvirt'],
   }
 
@@ -48,7 +51,7 @@ define libvirt::network (
     exec {"libvirt-network-autostart-${name}":
       command  => "virsh net-autostart ${name}",
       provider => 'shell',
-      creates  => "${params::config_dir}/qemu/networks/autostart/${name}.xml",
+      creates  => "${libvirt::params::config_dir}/qemu/networks/autostart/${name}.xml",
       require  => Exec["libvirt-network-${name}"],
     }
 

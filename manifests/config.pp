@@ -4,7 +4,7 @@
 class libvirt::config inherits libvirt {
 
   if ($libvirt::qemu_hook) {
-    file {"${params::config_dir}/hooks/qemu":
+    file {"${libvirt::params::config_dir}/hooks/qemu":
       owner  => 'root',
       group  => 'root',
       mode   => '0755',
