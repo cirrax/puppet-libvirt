@@ -9,7 +9,6 @@ class libvirt::manage_domains_config {
     owner => 'root',
     group => 'root',
     mode  => '0644',
-    force => false,
   }
 
   concat::fragment { "${libvirt::params::manage_domains_config} header":
