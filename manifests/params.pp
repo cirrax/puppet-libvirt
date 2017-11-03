@@ -21,6 +21,10 @@ class libvirt::params {
           $libvirt_package_names  = ['libvirt-bin', 'qemu-kvm']
           $service_name           = 'libvirt-bin'
         }
+        'artful': {
+          $libvirt_package_names  = ['libvirt-bin']
+          $service_name           = 'libvirtd'
+        }
         default: {
           fail("${::lsbdistcodename} is currently not supported by the libvirt
                 module. Please add support for it and submit a patch!")
