@@ -24,7 +24,7 @@ disk_src_attrs = {
   </cpu>
   <% end -%>
   <os>
-    <type arch='x86_64'>hvm</type>
+    <type arch='x86_64' <% if @machine_type -%>machine='<%= @machine_type %>'<% end-%>>hvm</type>
     <% if @bootmenu -%>
     <bootmenu enable='yes' />
     <% end -%>
