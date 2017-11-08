@@ -1,2 +1,4 @@
 *~
-pkg
+pkg/
+.bundle/
+Gemfile.lock
