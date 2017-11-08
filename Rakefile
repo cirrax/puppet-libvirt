@@ -1,8 +1,11 @@
-require 'rubygems'
-require 'puppet-syntax/tasks/puppet-syntax'
+require 'puppetlabs_spec_helper/rake_tasks'
 
-# see http://puppet-lint.com/checks/ for check output
-require 'puppet-lint/tasks/puppet-lint'
-
-task :test => [:syntax, :lint]
+ 
+desc "Run syntax, lint, and spec tests."
+task :test => [
+	       :lint,
+	       :syntax,
+	       :lint,
+	       :spec,
+	      ]
 
