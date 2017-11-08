@@ -1,4 +1,10 @@
-# libvirt
+# libvirt puppet module
+
+[![Build Status](https://travis-ci.org/cirrax/puppet-libvirt.svg?branch=master)](https://travis-ci.org/cirrax/puppet-libvirt)
+[![Puppet Forge](https://img.shields.io/puppetforge/v/cirrax/libvirt.svg?style=flat-square)](https://forge.puppetlabs.com/cirrax/libvirt)
+[![Puppet Forge](https://img.shields.io/puppetforge/dt/cirrax/libvirt.svg?style=flat-square)](https://forge.puppet.com/cirrax/libvirt)
+[![Puppet Forge](https://img.shields.io/puppetforge/e/cirrax/libvirt.svg?style=flat-square)](https://forge.puppet.com/cirrax/libvirt)
+[![Puppet Forge](https://img.shields.io/puppetforge/f/cirrax/libvirt.svg?style=flat-square)](https://forge.puppet.com/cirrax/libvirt)
 
 #### Table of Contents
 
@@ -34,13 +40,13 @@ Python management script to create a 2 node cluster with disks
 replicated over DRBD. This setup allows live migration of VMs from one
 node to the other.
 
-A complete working solution ca be achived by integrating the following
+A complete working solution can be achived by integrating the following
 modules in addition to this module:
 
 * [puppetlabs-lvm](http://forge.puppetlabs.com/puppetlabs/lvm)
-* [puppetlabs-drbd](http://forge.puppetlabs.com/puppetlabs/drbd) (only
+* [puppet-drbd](https://forge.puppet.com/puppet/drbd) (only
   for DRBD setups)
-* [puppet-vswitch](http://forge.puppetlabs.com/puppetlabs/vswitch)
+* [puppet-vswitch](https://forge.puppet.com/openstack/vswitch)
   (only when using OpenvSwitch)
 
 ## Usage
@@ -119,13 +125,10 @@ Things currently not supported:
 
 Patches to support any of these (or other) missing features are welcome.
 
-## Development
+## Contributing
 
-Contributions are welcome. Please send pull request or patches to
-gaudenz.steinlin@cirrax.com.
+Please report bugs and feature request using GitHub issue tracker.
 
-Browse source code:
-http://git.cirrax.com/?p=puppet-modules/libvirt.git
-
-Clone repository:
-    git clone git://git.cirrax.com/puppet-modules/libvirt.git
+For pull requests, it is very much appreciated to check your Puppet manifest with puppet-lint
+and the available spec tests  in order to follow the recommended Puppet style guidelines
+from the Puppet Labs style guide.
