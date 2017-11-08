@@ -2,7 +2,7 @@
     "name": "cirrax-libvirt",
     "version": "2.0.1",
     "author": "Cirrax GmbH",
-    "license": "GPLv3",
+    "license": "GPL-3.0",
     "summary": "Puppet module to install libvirt and create virtual domain configuration",
     "source": "https://github.com/cirrax/puppet-libvirt",
     "project_page": "https://github.com/cirrax/puppet-libvirt",
