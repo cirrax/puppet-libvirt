@@ -59,18 +59,18 @@ class libvirt (
   $suspend_multiplier = '5',
   ) {
 
-  include libvirt::params
+  include ::libvirt::params
 
-  anchor { 'libvirt::begin': } ->
-  class {'libvirt::install': } ->
-  class {'libvirt::config': } ~>
-  class {'libvirt::service': } ->
-  anchor { 'libvirt::end': }
+  anchor { 'libvirt::begin': }
+  -> class { '::libvirt::install': }
+  -> class { '::libvirt::config': }
+  ~> class { '::libvirt::service': }
+  -> anchor { 'libvirt::end': }
 
   # include manage-domains script config outside of the anchor to
   # avoid dependency cycles when declaring libvirt before and
   # libvirt::domains
   if ($qemu_hook == 'drbd') {
-    class {'libvirt::manage_domains_config': }
+    class {'::libvirt::manage_domains_config': }
   }
 }

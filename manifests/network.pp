@@ -36,7 +36,7 @@ define libvirt::network (
   $autostart        = true,
 ) {
 
-  include libvirt::params
+  include ::libvirt::params
 
   exec {"libvirt-network-${name}":
     command  => join(['f=$(mktemp) && echo "',

@@ -3,7 +3,7 @@
 # Installs configuration files for manage-domains script
 class libvirt::manage_domains_config {
 
-  include libvirt::params
+  include ::libvirt::params
 
   concat { $libvirt::params::manage_domains_config:
     owner => 'root',
