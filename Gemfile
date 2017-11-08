@@ -6,7 +6,7 @@ group :test do
   gem 'rspec-core', '< 3.2.0' if RUBY_VERSION < '1.9'
   gem 'rspec-puppet'
   gem 'puppetlabs_spec_helper'
-  gem 'metadata-json-lint'
+  gem 'metadata-json-lint', '1.1' if RUBY_VERSION < '1.9'
   gem 'rspec-puppet-facts'
 
   gem 'puppet-lint-absolute_classname-check'
