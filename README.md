@@ -11,6 +11,7 @@
 1. [Overview](#overview)
 2. [Module Description - What the module does and why it is useful](#description)
 3. [Usage - Configuration options and additional functionality](#usage)
+3. [Reference](#reference)
 4. [Limitations - OS compatibility, etc.](#limitations)
 5. [Development - Guide for contributing to the module](#development)
 
@@ -112,6 +113,17 @@ Define a domain (VM):
 
 Complete documentation is included in puppet doc format in the
 manifest files.
+
+## Reference
+### Functions
+
+#### libvirt_generate_mac
+Returns a MAC address in the QEMU/KVM MAC OID (52:54:00:...)
+
+#### libvirt_generate_mac_addresses
+Generates MAC addresses for all interfaces in the array which do not yet have an
+address specified. The MAC addresses are based on the domain name, network and
+portgroup.
 
 ## Limitations
 
