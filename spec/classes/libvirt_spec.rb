@@ -36,7 +36,7 @@ describe 'libvirt' do
     it_behaves_like 'libvirt shared examples'
   end
 
-  context 'with defaults' do
+  context 'with drbd qemu_hook' do
     let :params do
       default_params.merge(
         :qemu_hook => 'drbd',
@@ -45,5 +45,31 @@ describe 'libvirt' do
     it_behaves_like 'libvirt shared examples'
 
     it { is_expected.to contain_class('libvirt::manage_domains_config') }
+  end
+
+  context 'with create_networks' do
+    let :params do
+      default_params.merge(
+        :create_networks => { 'mynetwork' => { 'bridge' => 'test' }},
+      )
+    end
+    it_behaves_like 'libvirt shared examples'
+
+    it { is_expected.to contain_libvirt__network('mynetwork')
+      .with_bridge('test')
+    }
+  end
+
+  context 'with create_domain' do
+    let :params do
+      default_params.merge(
+        :create_domains => { 'mydom' => { 'max_memory' => 2048 }},
+      )
+    end
+    it_behaves_like 'libvirt shared examples'
+
+    it { is_expected.to contain_libvirt__domain('mydom')
+      .with_max_memory(2048)
+    }
   end
 end

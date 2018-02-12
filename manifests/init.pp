@@ -32,6 +32,18 @@
 #   to setup DRBD resources. Valid values are 'drbd' or 'undef' (=no hook).
 #   Defaults to 'undef'.
 #
+# [*qemu_hook_packages*]
+#   Hash of Arrays of hook specific packages to install
+#   Defaults to $libvirt::params::qemu_hook_packages
+#
+# [*create_networks*]
+#   Hash of networks to create with libvirt::network
+#   Defaults to {}
+#
+# [*create_domains*]
+#   Hash of domains to create with libvirt::domain
+#   Defaults to {}
+#
 # The following values are only useful together with the drbd qemu_hook in
 # setups of two redundant virtualization hosts synchronized over DRBD. They
 # have no effect if qemu_hook is not set to drbd.
@@ -71,17 +83,20 @@ class libvirt (
   $qemu_conf             = {},
   $qemu_hook             = undef,
   $qemu_hook_packages    = $libvirt::params::qemu_hook_packages,
+  $create_networks       = {},
+  $create_domains        = {},
   $evacuation            = 'migrate',
   $max_job_time          = '120',
   $suspend_multiplier    = '5',
 ) inherits libvirt::params {
 
-  Anchor['libvirt::begin'] -> Class['Libvirt::Install'] -> Class['Libvirt::Config'] -> Class['Libvirt::Service'] -> Anchor['libvirt::end']
+  Anchor['libvirt::begin'] -> Class['Libvirt::Install'] -> Class['Libvirt::Config'] -> Class['Libvirt::Service'] -> Anchor['libvirt::installed'] -> Anchor['libvirt::end']
 
   anchor { 'libvirt::begin': }
   include ::libvirt::install
   include ::libvirt::config
   include ::libvirt::service
+  anchor { 'libvirt::installed': }
   anchor { 'libvirt::end': }
 
   # include manage-domains script config outside of the anchor to
@@ -90,4 +105,7 @@ class libvirt (
   if ($qemu_hook == 'drbd') {
     include ::libvirt::manage_domains_config
   }
+
+  create_resources('::libvirt::network', $create_networks)
+  create_resources('::libvirt::domain', $create_domains)
 }

@@ -50,7 +50,7 @@ define libvirt::network (
                       '" > $f && virsh net-define $f && rm $f']),
     provider => 'shell',
     creates  => "${libvirt::params::config_dir}/qemu/networks/${name}.xml",
-    require  => Class['libvirt'],
+    require  => Anchor['libvirt::installed'],
   }
 
   if ($autostart) {

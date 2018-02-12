@@ -124,7 +124,7 @@ define libvirt::domain (
                       '" > $f && virsh define $f && rm $f']),
     provider => 'shell',
     creates  => "${libvirt::params::config_dir}/qemu/${name}.xml",
-    require  => Class['libvirt'],
+    require  => Anchor['libvirt::end'],
   }
 
   if ($autostart) {
