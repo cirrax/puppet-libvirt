@@ -1,8 +1,14 @@
 <network>
   <name><%= @name %></name>
-  <% if @forward_mode -%>
-  <forward mode='<%= @forward_mode %>'/>
-  <% end -%>
+  <%- if @forward_mode -%>
+    <forward<%-if @forward_dev -%> dev='<%= @forward_dev -%>'<%-end-%> mode='<%= @forward_mode -%>'<%-if @forward_interfaces.empty? -%>/<%-end-%>>
+      <%- if !@forward_interfaces.empty? -%>
+        <%- @forward_interfaces.each do |dev| -%>
+          <interface dev='<%= dev -%>'/>
+        <%- end -%>
+      </forward>
+    <%- end -%>
+  <%- end -%>
   <% if @bridge -%>
   <bridge name='<%= @bridge %>'/>
   <% end -%>
