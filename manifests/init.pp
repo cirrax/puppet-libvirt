@@ -36,11 +36,16 @@
 # [*suspend_multiplier*]
 #   Default suspend_multiplier for migrating domains with the manage-domains
 #   script. This can be overriden on a per domain basis. The default is 5.
+# [*qemu_conf*]
+#   Hash of key/value pairs you want to put in qemu.conf file.
 #
 # === Examples
 #
 #  class { 'libvirt':
 #    qemu_hook => 'drbd',
+#    qemu_conf => {
+#     'vnc_listen' => '0.0.0.0'
+#    }
 #  }
 #
 # === Authors
@@ -57,6 +62,7 @@ class libvirt (
   $evacuation         = 'migrate',
   $max_job_time       = '120',
   $suspend_multiplier = '5',
+  $qemu_conf          = {},
   ) {
 
   include ::libvirt::params
