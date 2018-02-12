@@ -76,17 +76,18 @@ class libvirt (
   $suspend_multiplier    = '5',
 ) inherits libvirt::params {
 
+  Anchor['libvirt::begin'] -> Class['Libvirt::Install'] -> Class['Libvirt::Config'] -> Class['Libvirt::Service'] -> Anchor['libvirt::end']
 
   anchor { 'libvirt::begin': }
-  -> class { '::libvirt::install': }
-  -> class { '::libvirt::config': }
-  ~> class { '::libvirt::service': }
-  -> anchor { 'libvirt::end': }
+  include ::libvirt::install
+  include ::libvirt::config
+  include ::libvirt::service
+  anchor { 'libvirt::end': }
 
   # include manage-domains script config outside of the anchor to
   # avoid dependency cycles when declaring libvirt before and
   # libvirt::domains
   if ($qemu_hook == 'drbd') {
-    class {'::libvirt::manage_domains_config': }
+    include ::libvirt::manage_domains_config
   }
 }
