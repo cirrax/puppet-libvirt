@@ -1,21 +1,46 @@
 # == Class: libvirt::install
 #
 # Installs the required packages and files
-class libvirt::install inherits libvirt {
+#
+# === Parameters
+#
+# [*qemu_hook*]
+#   QEMU hook to install. The only currently available hook is a script
+#   to setup DRBD resources. Valid values are 'drbd' or 'undef' (=no hook).
+#   Default inherited from ::libvirt class
+#
+# [*packages*]
+#   Array of the libvirt package names to install.
+#   Default inherited from ::libvirt class
+#
+# [*qemu_hook_packages*]
+#   Hash of Arrays of hook specific packages to install
+#   Default inherited from ::libvirt class
+#
+# [*package_ensure*]
+#   What state the packages should be in.
+#   Defaults to 'installed'
+#
+class libvirt::install (
+  $qemu_hook          = $libvirt::qemu_hook,
+  $packages           = $libvirt::libvirt_package_names,
+  $qemu_hook_packages = $libvirt::qemu_hook_packages,
+  $package_ensure     = 'installed',
+) inherits libvirt {
 
-  package {$libvirt::params::libvirt_package_names:
-    ensure => 'installed',
+  package { $packages:
+    ensure => $package_ensure,
   }
 
   # install hook specific packages
-  if ($libvirt::params::qemu_hook_packages[$qemu_hook]) {
-    package {$libvirt::params::qemu_hook_packages[$qemu_hook]:
-      ensure => 'installed',
+  if ($qemu_hook_packages[$qemu_hook]) {
+    package {$qemu_hook_packages[$qemu_hook]:
+      ensure => $package_ensure,
     }
   }
 
   # install managment script for drbd hook
-  if ($libvirt::qemu_hook == 'drbd') {
+  if ($qemu_hook == 'drbd') {
     file {'/usr/local/sbin/manage-domains':
       ensure => 'present',
       owner  => 'root',

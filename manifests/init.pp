@@ -16,6 +16,17 @@
 #   Only set this if your setup differs from the packages provided by
 #   your distribution.
 #
+# [*libvirt_package_names*]
+#   Array of the libvirt packages to install.
+#   Defaults to $libvirt::params::libvirt_package_names
+#
+# [*qemu_hook_packages*]
+#   Hash of Arrays of hook specific packages to install
+#   Defaults to $libvirt::params::qemu_hook_packages
+#
+# [*qemu_conf*]
+#   Hash of key/value pairs you want to put in qemu.conf file.
+#
 # [*qemu_hook*]
 #   QEMU hook to install. The only currently available hook is a script
 #   to setup DRBD resources. Valid values are 'drbd' or 'undef' (=no hook).
@@ -36,8 +47,6 @@
 # [*suspend_multiplier*]
 #   Default suspend_multiplier for migrating domains with the manage-domains
 #   script. This can be overriden on a per domain basis. The default is 5.
-# [*qemu_conf*]
-#   Hash of key/value pairs you want to put in qemu.conf file.
 #
 # === Examples
 #
@@ -57,15 +66,16 @@
 # Copyright 2014 Cirrax GmbH
 #
 class libvirt (
-  $qemu_hook          = undef,
-  $evacuation         = 'migrate',
-  $max_job_time       = '120',
-  $suspend_multiplier = '5',
-  $qemu_conf          = {},
-  $service_name       = $libvirt::params::service_name,
+  $service_name          = $libvirt::params::service_name,
+  $libvirt_package_names = $libvirt::params::libvirt_package_names,
+  $qemu_conf             = {},
+  $qemu_hook             = undef,
+  $qemu_hook_packages    = $libvirt::params::qemu_hook_packages,
+  $evacuation            = 'migrate',
+  $max_job_time          = '120',
+  $suspend_multiplier    = '5',
 ) inherits libvirt::params {
 
-  include ::libvirt::params
 
   anchor { 'libvirt::begin': }
   -> class { '::libvirt::install': }
