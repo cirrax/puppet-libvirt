@@ -57,13 +57,13 @@
 # Copyright 2014 Cirrax GmbH
 #
 class libvirt (
-  $service_name       = undef,
   $qemu_hook          = undef,
   $evacuation         = 'migrate',
   $max_job_time       = '120',
   $suspend_multiplier = '5',
   $qemu_conf          = {},
-  ) {
+  $service_name       = $libvirt::params::service_name,
+) inherits libvirt::params {
 
   include ::libvirt::params
 
