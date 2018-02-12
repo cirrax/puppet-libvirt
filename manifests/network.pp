@@ -27,13 +27,19 @@
 #   * vlan_tag: VLAN tag for this portgroup.
 # [*autostart*]
 #   Wheter to start this network on boot or not. Defaults to true.
+# [*forward_dev*]
+#    The interface to forward, useful in bridge and route mode
+# [*forward_interfaces*]
+#    An array of interfaces to forwad
 #
 define libvirt::network (
   $bridge,
-  $forward_mode     = 'bridge',
-  $virtualport_type = undef,
-  $portgroups       = [],
-  $autostart        = true,
+  $forward_mode       = 'bridge',
+  $forward_dev        = undef,
+  $forward_interfaces = [],
+  $virtualport_type   = undef,
+  $portgroups         = [],
+  $autostart          = true,
 ) {
 
   include ::libvirt::params
