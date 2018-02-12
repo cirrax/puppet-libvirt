@@ -13,6 +13,10 @@ class libvirt::params {
           $libvirt_package_names  = ['libvirt-daemon-system', 'qemu']
           $service_name           = 'libvirtd'
         }
+        'stretch': {
+          $libvirt_package_names  = ['libvirt-daemon-system', 'qemu']
+          $service_name           = 'libvirtd'
+        }
         default: {
           fail("${::lsbdistcodename} is currently not supported by the libvirt
                 module. Please add support for it and submit a patch!")
