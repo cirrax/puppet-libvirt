@@ -33,7 +33,7 @@
 #    An array of interfaces to forwad
 #
 define libvirt::network (
-  $bridge,
+  $bridge             = '',
   $forward_mode       = 'bridge',
   $forward_dev        = undef,
   $forward_interfaces = [],
