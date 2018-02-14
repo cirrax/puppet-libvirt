@@ -111,6 +111,8 @@ define libvirt::domain (
   $suspend_multiplier = undef,
 ) {
 
+  include ::libvirt
+
   # set $cpu_mode variable, used in domain XML template
   if ($cpu_model == 'host-model' or $cpu_model == 'host-passthrough') {
     $cpu_mode = $cpu_model
