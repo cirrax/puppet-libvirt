@@ -16,7 +16,7 @@ class libvirt::config inherits libvirt {
     file {"${libvirt::params::config_dir}/qemu.conf":
       owner   => 'root',
       group   => 'root',
-      mode    => '0755',
+      mode    => '0600',
       content => template('libvirt/qemu.conf'),
     }
   }
