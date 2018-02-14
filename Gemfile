@@ -8,6 +8,7 @@ group :test do
   gem 'puppetlabs_spec_helper'
   gem 'metadata-json-lint', '1.1' if RUBY_VERSION < '1.9'
   gem 'rspec-puppet-facts'
+  gem 'puppet-blacksmith'
 
   gem 'puppet-lint-absolute_classname-check'
   gem 'puppet-lint-leading_zero-check'
