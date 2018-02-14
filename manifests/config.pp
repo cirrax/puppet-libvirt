@@ -1,9 +1,14 @@
 # == Class: libvirt::config
 #
 # Installs configuration files
-class libvirt::config inherits libvirt {
+class libvirt::config (
+  $qemu_hook = $libvirt::qemu_hook,
+  $qemu_conf = $libvirt::qemu_conf,
+) inherits libvirt {
 
-  if ($libvirt::qemu_hook) {
+  include ::libvirt::params
+
+  if ($qemu_hook) {
     file {"${libvirt::params::config_dir}/hooks/qemu":
       owner  => 'root',
       group  => 'root',
@@ -12,7 +17,7 @@ class libvirt::config inherits libvirt {
     }
   }
 
-  if ($libvirt::qemu_conf != {}) {
+  if ($qemu_conf != {}) {
     file {"${libvirt::params::config_dir}/qemu.conf":
       owner   => 'root',
       group   => 'root',
