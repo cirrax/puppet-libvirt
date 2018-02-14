@@ -11,4 +11,13 @@ class libvirt::config inherits libvirt {
       source => "puppet:///modules/libvirt/hooks/qemu/${libvirt::qemu_hook}",
     }
   }
+
+  if ($libvirt::qemu_conf != {}) {
+    file {"${libvirt::params::config_dir}/qemu.conf":
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0600',
+      content => template('libvirt/qemu.conf'),
+    }
+  }
 }
