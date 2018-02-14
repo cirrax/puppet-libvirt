@@ -2,8 +2,6 @@
 require 'spec_helper'
 
 describe 'libvirt::network' do
-  let(:pre_condition) { 'Class{"libvirt": }' }
-
   let :facts do
     {
       :osfamily               => 'Debian',
