@@ -1,3 +1,10 @@
+# Deprecation warning
+
+This module moved to [cirrax-libvirt](https://forge.puppetlabs.com/cirrax/libvirt).
+
+I'm no longer actively maintaining it, but my colleagues at [Cirrax](https://www.cirrax.com/)
+still use it and moved it to their namespace.
+
 # libvirt
 
 #### Table of Contents
