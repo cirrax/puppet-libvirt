@@ -111,6 +111,17 @@ Define a domain (VM):
       autostart      => true,
     }
 
+Define a network pool:
+
+    libvirt_pool { 'default' :
+		ensure     => present,
+		type       => 'logical',
+		autostart  => true,
+		sourcedev  => '/dev/sda5',
+		sourcename => 'vm',
+		target     => '/dev/vm',
+    }
+
 Complete documentation is included in puppet doc format in the
 manifest files.
 
