@@ -60,12 +60,19 @@
 #   Default suspend_multiplier for migrating domains with the manage-domains
 #   script. This can be overriden on a per domain basis. The default is 5.
 #
+# [*libvirtd_conf*]
+#   Hash of key/value pairs you want to put in libvirtd.conf file.
+#
 # === Examples
 #
 #  class { 'libvirt':
-#    qemu_hook => 'drbd',
-#    qemu_conf => {
+#    qemu_hook     => 'drbd',
+#    qemu_conf     => {
 #     'vnc_listen' => '0.0.0.0'
+#    }
+#    libvirtd_conf => {
+#     'listen_tls' => '0',
+#     'tcp_port'   =>  '"12345"',
 #    }
 #  }
 #
@@ -88,6 +95,7 @@ class libvirt (
   $evacuation            = 'migrate',
   $max_job_time          = '120',
   $suspend_multiplier    = '5',
+  $libvirtd_conf         = {},
 ) inherits libvirt::params {
 
   Anchor['libvirt::begin'] -> Class['Libvirt::Install'] -> Class['Libvirt::Config'] -> Class['Libvirt::Service'] -> Anchor['libvirt::installed'] -> Anchor['libvirt::end']
