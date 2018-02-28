@@ -44,6 +44,9 @@
 #   Hash of domains to create with libvirt::domain
 #   Defaults to {}
 #
+# [*default_conf*]
+#   Configuration hash for default file. Defaults to {'start_libvirtd' => 'yes'}
+#
 # The following values are only useful together with the drbd qemu_hook in
 # setups of two redundant virtualization hosts synchronized over DRBD. They
 # have no effect if qemu_hook is not set to drbd.
@@ -63,9 +66,13 @@
 # === Examples
 #
 #  class { 'libvirt':
-#    qemu_hook => 'drbd',
-#    qemu_conf => {
+#    qemu_hook    => 'drbd',
+#    qemu_conf    => {
 #     'vnc_listen' => '0.0.0.0'
+#    },
+#    default_conf => {
+#      'start_libvirtd'   => 'yes',
+#      'libvirtd_options' => '-d -l',
 #    }
 #  }
 #
@@ -85,6 +92,7 @@ class libvirt (
   $qemu_hook_packages    = $libvirt::params::qemu_hook_packages,
   $create_networks       = {},
   $create_domains        = {},
+  $default_conf          = {},
   $evacuation            = 'migrate',
   $max_job_time          = '120',
   $suspend_multiplier    = '5',
