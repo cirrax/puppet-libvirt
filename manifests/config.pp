@@ -4,7 +4,7 @@
 class libvirt::config (
   $qemu_hook    = $libvirt::qemu_hook,
   $qemu_conf    = $libvirt::qemu_conf,
-  $default_conf = $libvirt::qemu_conf,
+  $default_conf = $libvirt::default_conf,
 ) inherits libvirt {
 
   include ::libvirt::params
