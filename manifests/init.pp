@@ -81,6 +81,10 @@
 #     'listen_tls' => '0',
 #     'tcp_port'   =>  '"12345"',
 #    }
+#    libvirtd_conf => {
+#     'listen_tls' => '0',
+#     'tcp_port'   =>  '"12345"',
+#    }
 #  }
 #
 # === Authors

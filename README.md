@@ -119,6 +119,15 @@ Add some libvirtd options:
         }
     }
 
+Configure libvirtd settings in libvirtd.conf file:
+
+    class { '::libvirtd':
+        libvirtd_conf => {
+            'listen_tcp' => 1,
+            'tcp_port'   => 16509,
+        }
+    }
+
 Complete documentation is included in puppet doc format in the
 manifest files.
 
