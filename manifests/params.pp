@@ -23,6 +23,7 @@ class libvirt::params {
         }
       }
       $config_dir             = '/etc/libvirt'
+      $default_dir            = '/etc/default'
       $manage_domains_config  = '/etc/manage-domains.ini'
       $qemu_hook_packages     = {'drbd' => ['xmlstarlet','python-libvirt'], }
     }
@@ -39,6 +40,7 @@ class libvirt::params {
         }
       }
       $config_dir             = '/etc/libvirt'
+      $default_dir            = '/etc/sysconfig'
       $manage_domains_config  = '/etc/manage-domains.ini'
       $qemu_hook_packages     = { }
     }

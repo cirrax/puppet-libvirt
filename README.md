@@ -111,6 +111,14 @@ Define a domain (VM):
       autostart      => true,
     }
 
+Add some libvirtd options:
+
+    class { '::libvirtd':
+        default_conf => {
+            'libvirtd_opts' => '-d -l'
+        }
+    }
+
 Complete documentation is included in puppet doc format in the
 manifest files.
 
