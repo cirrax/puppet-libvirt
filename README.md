@@ -111,7 +111,7 @@ Define a domain (VM):
       autostart      => true,
     }
 
-Define a network pool:
+Define a storage pool:
 
     libvirt_pool { 'default' :
 		ensure     => present,
