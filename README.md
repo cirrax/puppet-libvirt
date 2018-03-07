@@ -143,7 +143,6 @@ Things currently not supported:
   systems is a matter of defining the relevant parameters in
   params.pp. So this is really easy for someone with access to such a
   system.
-* libvirt storage pools
 * Network interfaces not attached to a libvirt network
 
 Patches to support any of these (or other) missing features are welcome.
