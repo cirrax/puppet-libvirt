@@ -136,6 +136,147 @@ Generates MAC addresses for all interfaces in the array which do not yet have an
 address specified. The MAC addresses are based on the domain name, network and
 portgroup.
 
+### Types
+
+#### libvirt_pool
+
+Manages libvirt pools
+
+Example :
+  libvirt_pool { 'default' :
+    ensure => absent
+  }
+
+  libvirt_pool { 'mydirpool' :
+    ensure    => present,
+    active    => true,
+    autostart => true,
+    type      => 'dir',
+    target    => '/tmp/mypool',
+  }
+
+  libvirt_pool { 'mydirpool2' :
+    ensure       => present,
+    active       => true,
+    autostart    => true,
+    type         => 'dir',
+    target       => '/tmp/mypool2',
+    target_owner => 107,
+    target_group => 107,
+    target_mode  => '0755',
+  }
+
+  libvirt_pool { 'vm_storage':
+    ensure    => 'present',
+    active    => 'true',
+    type      => 'logical',
+    sourcedev => ['/dev/sdb', '/dev/sdc'],
+    target    => '/dev/vg0'
+  }
+
+
+##### Properties
+
+The following properties are available in the `libvirt_pool` type.
+
+###### `ensure`
+
+Valid values: present, absent
+
+Manages the creation or the removal of a pool
+`present` means that the pool will be defined and created
+`absent` means that the pool will be purged from the system
+
+Default value: present
+
+###### `active`
+
+Valid values: `true`, `false`
+
+Whether the pool should be started.
+
+Default value: true
+
+###### `autostart`
+
+Valid values: `true`, `false`
+
+Whether the pool should be autostarted.
+
+Default value: false
+
+##### Parameters
+
+The following parameters are available in the `libvirt_pool` type.
+
+###### `name`
+
+Valid values: /^\S+$/
+
+namevar
+
+The pool name.
+
+###### `type`
+
+Valid values: dir, netfs, fs, logical, disk, iscsi, mpath, rbd, sheepdog
+
+The pool type.
+
+###### `sourcehost`
+
+Valid values: /^\S+$/
+
+The source host.
+
+###### `sourcepath`
+
+Valid values: /(\/)?(\w)/
+
+The source path.
+
+###### `sourcedev`
+
+Valid values: /(\/)?(\w)/
+
+The source device.
+
+###### `sourcename`
+
+Valid values: /^\S+$/
+
+The source name.
+
+###### `sourceformat`
+
+Valid values: auto, nfs, glusterfs, cifs
+
+The source format.
+
+###### `target`
+
+Valid values: /(\/)?(\w)/
+
+The target.
+
+###### `target_owner`
+
+Valid values: /^\S+$/
+
+The owner of the target dir or filesystem
+
+###### `target_group`
+
+Valid values: /^\S+$/
+
+The group of the target dir or filesystem
+
+###### `target_mode`
+
+Valid values: /^[0-7]{4}$/
+
+The mode of the target dir or filesystem
+
 ## Limitations
 
 Things currently not supported:
