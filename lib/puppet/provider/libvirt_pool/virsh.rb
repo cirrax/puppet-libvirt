@@ -174,10 +174,32 @@ Puppet::Type.type(:libvirt_pool).provide(:virsh) do
     end
 
     target = resource[:target]
+    targetOwner = resource[:target_owner]
+    targetGroup = resource[:target_group]
+    targetMode = resource[:target_mode]
     if target
       targetEl = pool.add_element 'target'
       targetPathEl = targetEl.add_element 'path'
       targetPathEl.add_text target
+
+      if (targetOwner || targetGroup || targetMode)
+        targetPermissionsEl = targetEl.add_element 'permissions'
+
+        if targetOwner
+          targetPermissionsOwnerEl = targetPermissionsEl.add_element 'owner'
+          targetPermissionsOwnerEl.add_text targetOwner.to_s
+        end
+
+        if targetGroup
+          targetPermissionsGroupEl = targetPermissionsEl.add_element 'group'
+          targetPermissionsGroupEl.add_text targetGroup.to_s
+        end
+
+        if targetMode
+          targetPermissionsModeEl = targetPermissionsEl.add_element 'mode'
+          targetPermissionsModeEl.add_text targetMode.to_s
+        end
+      end
     end
 
     return root.to_s

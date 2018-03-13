@@ -9,13 +9,23 @@ Puppet::Type.newtype(:libvirt_pool) do
               ensure => absent
             }
 
-
             libvirt_pool { 'mydirpool' :
               ensure    => present,
               active    => true,
               autostart => true,
               type      => 'dir',
               target    => '/tmp/mypool',
+            }
+
+            libvirt_pool { 'mydirpool2' :
+              ensure       => present,
+              active       => true,
+              autostart    => true,
+              type         => 'dir',
+              target       => '/tmp/mypool2',
+              target_owner => 107,
+              target_group => 107,
+              target_mode  => '0755',
             }
 
             libvirt_pool { 'vm_storage':
@@ -92,6 +102,21 @@ Puppet::Type.newtype(:libvirt_pool) do
     newvalues(/(\/)?(\w)/)
   end
 
+  newparam(:target_owner) do
+    desc 'The owner of the target dir or filesystem'
+    newvalues(/^\S+$/)
+  end
+
+  newparam(:target_group) do
+    desc 'The group of the target dir or filesystem'
+    newvalues(/^\S+$/)
+  end
+
+  newparam(:target_mode) do
+    desc 'The mode of the target dir or filesystem'
+    newvalues(/^[0-7]{4}$/)
+  end
+
   newproperty(:active) do
     desc 'Whether the pool should be started.'
     defaultto(:true)
@@ -106,4 +131,10 @@ Puppet::Type.newtype(:libvirt_pool) do
     newvalues(:false)
   end
 
+  validate do
+    # https://libvirt.org/formatstorage.html#StoragePoolTarget
+    if (self[:target_owner] or self[:target_group] or self[:target_mode]) and ! [:fs, :dir].include?(self[:type])
+      Puppet.warning('target_(owner|group|mode) is currently only useful for directory or filesystem based pools')
+    end
+  end
 end

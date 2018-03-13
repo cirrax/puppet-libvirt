@@ -18,6 +18,9 @@ describe 'libvirt_pool' do
     it { is_expected.to be_valid_type.with_parameters('sourcename') }
     it { is_expected.to be_valid_type.with_parameters('sourceformat') }
     it { is_expected.to be_valid_type.with_parameters('target') }
+    it { is_expected.to be_valid_type.with_parameters('target_owner') }
+    it { is_expected.to be_valid_type.with_parameters('target_group') }
+    it { is_expected.to be_valid_type.with_parameters('target_mode') }
 
   end
 
