@@ -12,6 +12,9 @@
   <% if @bridge != '' -%>
   <bridge name='<%= @bridge %>'/>
   <% end -%>
+  <% if @ip_address and @ip_netmask -%>
+  <ip address='<%= @ip_address %>' netmask='<%= @ip_netmask %>'/>
+  <% end -%>
   <% if @virtualport_type -%>
   <virtualport type='<%= @virtualport_type %>'/>
   <% end -%>

@@ -31,6 +31,10 @@
 #    The interface to forward, useful in bridge and route mode
 # [*forward_interfaces*]
 #    An array of interfaces to forwad
+# [*ip_address*]
+#    The ip address for the device
+# [*ip_netmask*]
+#    The netmask for the ip address
 #
 define libvirt::network (
   $bridge             = '',
@@ -40,6 +44,8 @@ define libvirt::network (
   $virtualport_type   = undef,
   $portgroups         = [],
   $autostart          = true,
+  $ip_address         = undef,
+  $ip_netmask         = undef,
 ) {
 
   include ::libvirt
