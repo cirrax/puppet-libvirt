@@ -8,4 +8,7 @@ max-job-time = <%= scope['libvirt::max_job_time'] %>
 <% if scope['libvirt::suspend_multiplier'] -%>
 suspend_multiplier = <%= scope['libvirt::suspend_multiplier'] %>
 <% end -%>
+<% if scope['libvirt::migration_url_format'] -%>
+migration_url_format = <%= scope['migration_url_format'] %>
+<% end -%>
 

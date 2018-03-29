@@ -41,7 +41,7 @@ class ManageDomains(object):
         )
         self._args = arg_parser.parse_args()
 
-        self._config = SafeConfigParser({'max-job-time': '120', 'suspend-multiplier':'5'})
+        self._config = SafeConfigParser({'max-job-time': '120', 'suspend-multiplier':'5', 'migration_url_format':'ssh'})
         self._config.read(self._args.config)
 
         self._con = {}
@@ -58,7 +58,14 @@ class ManageDomains(object):
         except KeyError:
             if host == 'localhost':
                 url = ''
+            elif self._config.get('DEFAULT','migration_url_format') == 'alias':
+                # use /etc/libvirt.conf to specify aliases
+                url = host
+            elif self._config.get('DEFAULT','migration_url_format') == 'tls':
+                # use tls
+                url = 'qemu+tls://%s/system' % host
             else:
+                # default format is ssh
                 url = 'qemu+ssh://%s/system' % host
             self._con[host] = libvirt_open(url)
             return self._con[host]

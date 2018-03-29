@@ -59,6 +59,12 @@
 # [*suspend_multiplier*]
 #   Default suspend_multiplier for migrating domains with the manage-domains
 #   script. This can be overriden on a per domain basis. The default is 5.
+# [*migration_url_format*]
+#   url format for to use for migration. default is ssh
+#   possible values:
+#   ssh: gives an url: 'qemu+ssh://%s/system'
+#   tls: gives an url: 'qemu+tls://%s/system'
+#   alias: sepcify the url as an alias in /etc/libvirt.conf
 #
 # === Examples
 #
@@ -88,6 +94,7 @@ class libvirt (
   $evacuation            = 'migrate',
   $max_job_time          = '120',
   $suspend_multiplier    = '5',
+  $migration_url_format  = 'ssh',
 ) inherits libvirt::params {
 
   Anchor['libvirt::begin'] -> Class['Libvirt::Install'] -> Class['Libvirt::Config'] -> Class['Libvirt::Service'] -> Anchor['libvirt::installed'] -> Anchor['libvirt::end']
