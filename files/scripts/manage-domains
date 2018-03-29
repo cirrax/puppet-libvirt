@@ -174,7 +174,7 @@ class ManageDomains(object):
             except NoSectionError:
                 self._print_progress_start("Unable to distribute %s. No configuration found.\n" % domain.name(), i)
                 continue
-            if target == fqdn:
+            if ( target == fqdn ) or ( target == fqdn.split('.')[0] ):
                 self._print_progress_start("Not moving %s. Already on default host.\n" % domain.name(), i)
                 continue
 
