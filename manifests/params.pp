@@ -25,6 +25,10 @@ class libvirt::params {
           $libvirt_package_names  = ['libvirt-bin']
           $service_name           = 'libvirtd'
         }
+        'bionic': {
+          $libvirt_package_names  = ['libvirt-daemon-system', 'libvirt-clients']
+          $service_name           = 'libvirtd'
+        }
         default: {
           fail("${::lsbdistcodename} is currently not supported by the libvirt
                 module. Please add support for it and submit a patch!")
