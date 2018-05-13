@@ -24,7 +24,7 @@ disk_src_attrs = {
   </cpu>
   <% end -%>
   <os>
-    <type arch='x86_64'>hvm</type>
+    <type arch='x86_64' <% if @machine_type -%>machine='<%= @machine_type %>'<% end-%>>hvm</type>
     <% if @bootmenu -%>
     <bootmenu enable='yes' />
     <% end -%>
@@ -54,6 +54,9 @@ disk_src_attrs = {
     <memballoon model='virtio'>
       <alias name='balloon0'/>
     </memballoon>
+    <rng model='virtio'>
+      <backend model='random'>/dev/random</backend>
+    </rng>
     <serial type='pty'>
       <target port='0'/>
     </serial>
@@ -63,7 +66,7 @@ disk_src_attrs = {
     <% @disks.each_with_index do |disk,i| -%>
     <disk type='<%= disk['type'] %>' device='<%= disk['device'] %>'>
       <source <% disk_src_attrs[disk['type']].each do |attr| -%><%= attr %>='<%= disk['source'][attr] %>'<% end -%>/>
-      <target dev='vd<%= (i+97).chr %>' bus='<%= disk['bus'] %>'/>
+      <target dev='vd<%= (i+97).chr %>' bus='<%= disk.has_key?('bus') and disk['bus'] or 'virtio' %>'/>
       <% if disk.has_key?('driver') -%>
       <driver <% disk['driver'].each do |attr| -%><%= attr[0] %>='<%= attr[1] %>' <% end -%>/>
       <% else -%>
