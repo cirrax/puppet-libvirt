@@ -54,6 +54,9 @@ disk_src_attrs = {
     <memballoon model='virtio'>
       <alias name='balloon0'/>
     </memballoon>
+    <rng model='virtio'>
+      <backend model='random'>/dev/random</backend>
+    </rng>
     <serial type='pty'>
       <target port='0'/>
     </serial>
