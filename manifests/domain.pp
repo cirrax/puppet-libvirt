@@ -21,6 +21,10 @@
 # [*uuid*]
 #   UUID for the domain. The default is undef which means
 #   that libvirt will generate a UUID for the domain.
+# [*machine_type*]
+#   Machine type to use, i.e.
+#     * "pc" - Standard PC (i440FX + PIIX, 1996)
+#     * "q35" - Standard PC (Q35 + ICH9, 2009)
 # [*cpus*]
 #   Number of virtual CPUs for the domain. Defaults to '1'.
 # [*cpu_model*]
@@ -98,6 +102,7 @@ define libvirt::domain (
   $domain_title       = '',
   $description        = '',
   $uuid               = undef,
+  $machine_type       = '',
   $cpus               = '1',
   $cpu_model          = undef,
   $boot               = 'hd',
