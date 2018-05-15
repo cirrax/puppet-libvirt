@@ -42,7 +42,7 @@
 #                   'volume'.
 #     * device:     Disk device type exposed to the guest. Supported values are
 #                   'floppy', 'disk', 'cdrom' and 'lun'.
-#     * bus:        target bus (eg. 'virtio')
+#     * bus:        Target bus, defaults to 'virtio'.
 #     * source:     Hash of source parameters. The supported hash keys vary by the
 #                   type of disk:
 #                   file:    'file' key to specify the pathname of the source file
