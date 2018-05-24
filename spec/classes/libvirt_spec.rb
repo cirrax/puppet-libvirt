@@ -20,6 +20,8 @@ describe 'libvirt' do
 	:evacuation            => 'migrate',
 	:max_job_time          => '120',
 	:suspend_multiplier    => '5',
+        :uri_aliases           => [],
+        :uri_default           => '',
       }
   end
 
