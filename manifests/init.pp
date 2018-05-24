@@ -71,6 +71,10 @@
 # [*uri_default*]
 #   the default url to use.
 #   defaults to '' (which means the system default is used)
+# [*default_conf*]
+#   Hash to add config to /etc/default/libvirtd (Debian) or
+#   /etc/sysconfig/libvirtd (RedHat)
+#   Defaults to {}
 #
 # === Examples
 #
@@ -103,6 +107,7 @@ class libvirt (
   $migration_url_format  = 'ssh',
   $uri_aliases           = [],
   $uri_default           = '',
+  $default_conf          = {},
 ) inherits libvirt::params {
 
   Anchor['libvirt::begin'] -> Class['Libvirt::Install'] -> Class['Libvirt::Config'] -> Class['Libvirt::Service'] -> Anchor['libvirt::installed'] -> Anchor['libvirt::end']
