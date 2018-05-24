@@ -22,6 +22,7 @@ describe 'libvirt' do
 	:suspend_multiplier    => '5',
         :uri_aliases           => [],
         :uri_default           => '',
+        :default_conf          => {},
       }
   end
 

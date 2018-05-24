@@ -5,5 +5,7 @@ fixtures:
         repo: "https://github.com/puppetlabs/puppetlabs-concat.git"
     "stdlib":
         repo: "git://github.com/puppetlabs/puppetlabs-stdlib.git"
+    inifile:
+      repo: "https://github.com/puppetlabs/puppetlabs-inifile"
   symlinks:
     "libvirt": "#{source_dir}"

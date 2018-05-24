@@ -2,10 +2,11 @@
 #
 # Installs configuration files
 class libvirt::config (
-  $qemu_hook   = $libvirt::qemu_hook,
-  $qemu_conf   = $libvirt::qemu_conf,
-  $uri_aliases = $libvirt::uri_aliases,
-  $uri_default = $libvirt::uri_default,
+  $qemu_hook    = $libvirt::qemu_hook,
+  $qemu_conf    = $libvirt::qemu_conf,
+  $uri_aliases  = $libvirt::uri_aliases,
+  $uri_default  = $libvirt::uri_default,
+  $default_conf = $libvirt::default_conf,
 ) inherits libvirt {
 
   include ::libvirt::params
@@ -37,4 +38,9 @@ class libvirt::config (
     }
   }
 
+  $default_conf.each | String $key, String $value | {
+    libvirtd_default {
+      $key: value => $value;
+    }
+  }
 }
