@@ -24,7 +24,7 @@ class libvirt::config (
       owner   => 'root',
       group   => 'root',
       mode    => '0600',
-      content => template('libvirt/qemu.conf'),
+      content => template('libvirt/qemu.conf.erb'),
     }
   }
 
