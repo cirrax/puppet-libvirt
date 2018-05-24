@@ -65,6 +65,12 @@
 #   ssh: gives an url: 'qemu+ssh://%s/system'
 #   tls: gives an url: 'qemu+tls://%s/system'
 #   alias: sepcify the url as an alias in /etc/libvirt.conf
+# [*uri_aliases*]
+#   define aliases for a client to connect 
+#   defaults to []
+# [*uri_default*]
+#   the default url to use.
+#   defaults to '' (which means the system default is used)
 #
 # === Examples
 #
@@ -95,6 +101,8 @@ class libvirt (
   $max_job_time          = '120',
   $suspend_multiplier    = '5',
   $migration_url_format  = 'ssh',
+  $uri_aliases           = [],
+  $uri_default           = '',
 ) inherits libvirt::params {
 
   Anchor['libvirt::begin'] -> Class['Libvirt::Install'] -> Class['Libvirt::Config'] -> Class['Libvirt::Service'] -> Anchor['libvirt::installed'] -> Anchor['libvirt::end']
