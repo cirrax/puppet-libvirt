@@ -46,6 +46,8 @@ define libvirt::network (
   $autostart          = true,
   $ip_address         = undef,
   $ip_netmask         = undef,
+  $dhcp_start         = undef,
+  $dhcp_end           = undef,
 ) {
 
   include ::libvirt
