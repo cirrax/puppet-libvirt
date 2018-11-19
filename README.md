@@ -25,6 +25,8 @@ virtual machines.
 The module contains helper scripts to manage VMs on a 2 node cluster
 with disk replication over DRBD. But this is completely optional.
 
+Remark: For puppet 3 support use versions 2.x.x !
+
 ## Description
 
 This module tries to adhere to the Unix philosophy of doing one thing
