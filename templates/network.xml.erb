@@ -13,7 +13,13 @@
   <bridge name='<%= @bridge %>'/>
   <% end -%>
   <% if @ip_address and @ip_netmask -%>
-  <ip address='<%= @ip_address %>' netmask='<%= @ip_netmask %>'/>
+  <ip address='<%= @ip_address %>' netmask='<%= @ip_netmask %>'>
+    <% if @dhcp_start and @dhcp_end -%>
+    <dhcp>
+      <range start='<%= @dhcp_start %>' end='<%= @dhcp_end %>'/>
+    </dhcp>
+    <% end -%>
+  </ip>
   <% end -%>
   <% if @virtualport_type -%>
   <virtualport type='<%= @virtualport_type %>'/>
