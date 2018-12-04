@@ -28,6 +28,15 @@ disk_src_attrs = {
     <% if @bootmenu -%>
     <bootmenu enable='yes' />
     <% end -%>
+    <% if @kernel -%>
+    <kernel><%= @kernel %></kernel>
+    <% end -%>
+    <% if @initrd -%>
+    <initrd><%= @initrd %></initrd>
+    <% end -%>
+    <% if @cmdline -%>
+    <cmdline><%= @cmdline %></cmdline>
+    <% end -%>
     <% if @boot != 'per-device' -%>
     <boot dev='<%= @boot %>'/>
     <% end -%>
@@ -81,6 +90,9 @@ disk_src_attrs = {
     <interface type='network'>
       <% if iface.has_key?('mac') -%>
         <mac address='<%= iface['mac'] %>'/>
+      <% end -%>
+      <% if iface.has_key?('filter') -%>
+        <filterref filter='<%= iface['filter'] %>'/>
       <% end -%>
       <source network='<%= iface['network'] %>'<% if iface.has_key?('portgroup') %> portgroup='<%= iface['portgroup'] %>'<% end %>/>
       <model type='<%= iface.has_key?('type') and iface['type'] or 'virtio' %>'/>
