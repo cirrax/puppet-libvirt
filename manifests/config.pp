@@ -2,11 +2,12 @@
 #
 # Installs configuration files
 class libvirt::config (
-  $qemu_hook    = $libvirt::qemu_hook,
-  $qemu_conf    = $libvirt::qemu_conf,
-  $uri_aliases  = $libvirt::uri_aliases,
-  $uri_default  = $libvirt::uri_default,
-  $default_conf = $libvirt::default_conf,
+  $qemu_hook        = $libvirt::qemu_hook,
+  $qemu_conf        = $libvirt::qemu_conf,
+  $uri_aliases      = $libvirt::uri_aliases,
+  $uri_default      = $libvirt::uri_default,
+  $default_conf     = $libvirt::default_conf,
+  $drop_default_net = $libvirt::drop_default_net,
 ) inherits libvirt {
 
   include ::libvirt::params
@@ -41,6 +42,15 @@ class libvirt::config (
   $default_conf.each | String $key, String $value | {
     libvirtd_default {
       $key: value => $value;
+    }
+  }
+
+  if ( $drop_default_net ) {
+    file {"${libvirt::params::config_dir}/qemu/networks/autostart/default.xml":
+      ensure => absent,
+    }
+    file {"${libvirt::params::config_dir}/qemu/networks/default.xml":
+      ensure => absent,
     }
   }
 }

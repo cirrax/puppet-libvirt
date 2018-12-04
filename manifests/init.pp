@@ -75,6 +75,9 @@
 #   Hash to add config to /etc/default/libvirtd (Debian) or
 #   /etc/sysconfig/libvirtd (RedHat)
 #   Defaults to {}
+# [*drop_default_net*]
+#   Boolean, don't create default network and bridge (virbr0)
+#   Defaults to false
 #
 # === Examples
 #
@@ -108,6 +111,7 @@ class libvirt (
   $uri_aliases           = [],
   $uri_default           = '',
   $default_conf          = {},
+  $drop_default_net      = false,
 ) inherits libvirt::params {
 
   Anchor['libvirt::begin'] -> Class['Libvirt::Install'] -> Class['Libvirt::Config'] -> Class['Libvirt::Service'] -> Anchor['libvirt::installed'] -> Anchor['libvirt::end']
