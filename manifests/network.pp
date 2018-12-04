@@ -37,6 +37,7 @@
 #    The netmask for the ip address
 #
 define libvirt::network (
+  $ensure             = 'present',
   $bridge             = '',
   $forward_mode       = 'bridge',
   $forward_dev        = undef,
@@ -52,29 +53,51 @@ define libvirt::network (
 
   include ::libvirt
 
-  exec {"libvirt-network-${name}":
-    command  => join(['f=$(mktemp) && echo "',
-                      template('libvirt/network.xml.erb'),
-                      '" > $f && virsh net-define $f && rm $f']),
-    provider => 'shell',
-    creates  => "${libvirt::config_dir}/qemu/networks/${name}.xml",
-    require  => Anchor['libvirt::installed'],
-  }
-
-  if ($autostart) {
-    exec {"libvirt-network-autostart-${name}":
-      command  => "virsh net-autostart ${name}",
+  if ($ensure != 'absent') {
+    exec {"libvirt-network-${name}":
+      command  => join(['f=$(mktemp) && echo "',
+                        template('libvirt/network.xml.erb'),
+                        '" > $f && virsh net-define $f && rm $f']),
       provider => 'shell',
-      creates  => "${libvirt::config_dir}/qemu/networks/autostart/${name}.xml",
-      require  => Exec["libvirt-network-${name}"],
+      creates  => "${libvirt::config_dir}/qemu/networks/${name}.xml",
+      require  => Anchor['libvirt::installed'],
     }
 
-    exec {"libvirt-network-start-${name}":
-      command  => "virsh net-start ${name}",
+    if ($autostart) {
+      exec {"libvirt-network-autostart-${name}":
+        command  => "virsh net-autostart ${name}",
+        provider => 'shell',
+        creates  => "${libvirt::config_dir}/qemu/networks/autostart/${name}.xml",
+        require  => Exec["libvirt-network-${name}"],
+      }
+
+      exec {"libvirt-network-start-${name}":
+        command  => "virsh net-start ${name}",
+        provider => 'shell',
+        unless   => "virsh net-list | tail -n +3 | cut -d ' ' -f 2 | \
+                    grep -q ^${name}$",
+        require  => Exec["libvirt-network-${name}"],
+      }
+    }
+  } else {
+    exec {"libvirt-delete-network-${name}":
+      command  => "virsh net-destroy ${name}",
       provider => 'shell',
-      unless   => "virsh net-list | tail -n +3 | cut -d ' ' -f 2 | \
-                  grep -q ^${name}$",
-      require  => Exec["libvirt-network-${name}"],
+      onlyif   => "virsh net-list | tail -n +3 | cut -d ' ' -f 2 | \
+                    grep -q ^${name}$",
+      require  => Anchor['libvirt::installed'],
+    }
+    exec {"libvirt-network-disable-autostart-${name}":
+      command  => "virsh net-autostart ${name} --disable",
+      provider => 'shell',
+      onlyif   => "test -L /etc/libvirt/qemu/networks/autostart/${name}.xml",
+      require  => Exec["libvirt-delete-network-${name}"],
+    }
+    exec {"libvirt-undefine-network-${name}":
+      command  => "virsh net-undefine ${name}",
+      provider => 'shell',
+      onlyif   => "test -f /etc/libvirt/qemu/networks/${name}.xml",
+      require  => Exec["libvirt-network-disable-autostart-${name}"],
     }
   }
 }

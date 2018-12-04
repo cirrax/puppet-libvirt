@@ -93,6 +93,9 @@
 # [*manage_domains_config*]
 #   configuration file for managing domains.
 #   Defaults to '/etc/manage-domains.ini'
+# [*drop_default_net*]
+#   Boolean, don't create default network and bridge (virbr0)
+#   Defaults to false
 #
 # === Examples
 #
@@ -131,6 +134,7 @@ class libvirt (
   Hash    $default_conf          = {},
   String  $config_dir            = '/etc/libvirt',
   String  $manage_domains_config = '/etc/manage-domains.ini',
+  Boolean $drop_default_net      = false,
 ) {
 
   Anchor['libvirt::begin'] -> Class['Libvirt::Install'] -> Class['Libvirt::Config'] -> Class['Libvirt::Service'] -> Anchor['libvirt::installed'] -> Anchor['libvirt::end']
