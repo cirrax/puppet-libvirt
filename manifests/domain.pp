@@ -19,8 +19,8 @@
 # [*description*]
 #   Free text description of the domain. Defaults to ''.
 # [*uuid*]
-#   UUID for the domain. The default is undef which means
-#   that libvirt will generate a UUID for the domain.
+#   UUID for the domain. The default is the uuid, generated
+#   with puppet.
 # [*machine_type*]
 #   Machine type to use, i.e.
 #     * "pc" - Standard PC (i440FX + PIIX, 1996)
@@ -101,7 +101,7 @@ define libvirt::domain (
   $initial_memory     = $max_memory,
   $domain_title       = '',
   $description        = '',
-  $uuid               = undef,
+  $uuid               = libvirt_generate_uuid($name),
   $machine_type       = '',
   $cpus               = '1',
   $cpu_model          = undef,
