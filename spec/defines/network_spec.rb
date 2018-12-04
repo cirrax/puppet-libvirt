@@ -10,7 +10,8 @@ describe 'libvirt::network' do
   end
 
   let :default_params do
-    { :forward_mode       => 'bridge',
+    {
+      :forward_mode       => 'bridge',
       :forward_interfaces => [],
       :portgroups         => [],
       :autostart          => true,
@@ -22,10 +23,6 @@ describe 'libvirt::network' do
     it { is_expected.to compile.with_all_deps }
 
     it { is_expected.to contain_class('libvirt::params') }
-    it { is_expected.to contain_exec('libvirt-network-' + title )
-        .with_provider( 'shell' )
-        .with_creates( '/etc/libvirt/qemu/networks/' + title + '.xml' )
-    }
   end
 
   context 'whith defaults' do
@@ -37,6 +34,10 @@ describe 'libvirt::network' do
     end
     it_behaves_like 'libvirt::network shared examples'
 
+    it { is_expected.to contain_exec('libvirt-network-' + title )
+        .with_provider( 'shell' )
+        .with_creates( '/etc/libvirt/qemu/networks/' + title + '.xml' )
+    }
     it { is_expected.to contain_exec('libvirt-network-autostart-' + title )
 	.with_command( 'virsh net-autostart ' + title )
         .with_provider( 'shell' )
@@ -47,6 +48,7 @@ describe 'libvirt::network' do
 	.with_command( 'virsh net-start ' + title )
         .with_provider( 'shell' )
     }
+    it { is_expected.to_not contain_exec('libvirt-delete-network-' + title ) }
   end
 
   context 'whith no autostart' do
@@ -59,8 +61,28 @@ describe 'libvirt::network' do
       )
     end
     it_behaves_like 'libvirt::network shared examples'
+    it { is_expected.to contain_exec('libvirt-network-' + title )
+        .with_provider( 'shell' )
+        .with_creates( '/etc/libvirt/qemu/networks/' + title + '.xml' )
+    }
     it { is_expected.to_not contain_exec('libvirt-network-autostart-' + title ) }
     it { is_expected.to_not contain_exec('libvirt-network-start-' + title ) }
+    it { is_expected.to_not contain_exec('libvirt-delete-network-' + title ) }
+  end
+
+  context 'whith absent' do
+    let (:title) { 'mytitle' }
+
+    let :params do
+      default_params.merge(
+	:ensure => 'absent',
+      )
+    end
+    it_behaves_like 'libvirt::network shared examples'
+    it { is_expected.to_not contain_exec('libvirt-network-' + title ) }
+    it { is_expected.to contain_exec('libvirt-delete-network-' + title ) }
+    it { is_expected.to contain_exec('libvirt-network-disable-autostart-' + title ) }
+    it { is_expected.to contain_exec('libvirt-undefine-network-' + title ) }
   end
 end
 

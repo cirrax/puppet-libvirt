@@ -46,11 +46,8 @@ class libvirt::config (
   }
 
   if ( $drop_default_net ) {
-    file {"${libvirt::params::config_dir}/qemu/networks/autostart/default.xml":
-      ensure => absent,
-    }
-    file {"${libvirt::params::config_dir}/qemu/networks/default.xml":
-      ensure => absent,
+    libvirt::network { 'default':
+      ensure => 'absent',
     }
   }
 }
