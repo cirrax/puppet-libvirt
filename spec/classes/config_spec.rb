@@ -90,4 +90,15 @@ describe 'libvirt::config' do
       .with_mode('0644')
     }
   end
+
+  context 'with drop_default_net' do
+    let :params do
+      default_params.merge(
+        :drop_default_net => true
+      )
+    end
+    it_behaves_like 'libvirt::config shared examples'
+    it { is_expected.to contain_file('/etc/libvirt/qemu/networks/autostart/default.xml').with_ensure('absent') }
+    it { is_expected.to contain_file('/etc/libvirt/qemu/networks/default.xml').with_ensure('absent') }
+  end
 end
