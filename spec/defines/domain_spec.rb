@@ -29,7 +29,6 @@ describe 'libvirt::domain' do
     it { is_expected.to contain_class('libvirt::params') }
     it { is_expected.to contain_exec('libvirt-domain-' + title )
         .with_provider( 'shell' )
-        .with_creates( '/etc/libvirt/qemu/' + title + '.xml' )
     }
   end
 
@@ -46,7 +45,6 @@ describe 'libvirt::domain' do
     it { is_expected.to contain_exec('libvirt-domain-autostart-' + title )
 	.with_command( 'virsh autostart ' + title )
         .with_provider( 'shell' )
-        .with_creates( '/etc/libvirt/qemu/autostart/' + title + '.xml' )
     }
 
     it { is_expected.to contain_exec('libvirt-domain-start-' + title )
