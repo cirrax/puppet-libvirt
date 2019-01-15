@@ -32,7 +32,7 @@
 #   the special values 'host-model' and 'host-passthrough'. See
 #   http://libvirt.org/formatdomain.html#elementsCPU for details. Defaults to
 #   not set a CPU at all and let libvirt choose. The values 'host-model' and
-#   'host-passthroug' prevent migrations from working.
+#   'host-passthrough' prevent migrations from working.
 # [*boot*]
 #   Default boot device. Valid values are any accepted by libvirt or the string
 #   'per-device' to set individual boot orders on disks or interfaces.
