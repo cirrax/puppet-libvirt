@@ -12,7 +12,7 @@ describe 'libvirt' do
 
   let :default_params do
       { :service_name          => 'libvirtd',
-	:libvirt_package_names => ['libvirt-daemon-system', 'qemu'],
+	:libvirt_package_names => ['libvirt-daemon-system', 'qemu-kvm'],
 	:qemu_conf             => {},
 	:qemu_hook_packages    => {'drbd' => ['xmlstarlet','python-libvirt'], },
 	:create_networks       => {},

@@ -27,7 +27,7 @@ describe 'libvirt::install' do
     it { is_expected.to contain_package('libvirt-daemon-system')
       .with_ensure( 'installed' )
     }
-    it { is_expected.to contain_package('qemu')
+    it { is_expected.to contain_package('qemu-kvm')
       .with_ensure( 'installed' )
     }
   end
@@ -43,7 +43,7 @@ describe 'libvirt::install' do
     it { is_expected.to contain_package('libvirt-daemon-system')
       .with_ensure( 'actual' )
     }
-    it { is_expected.to contain_package('qemu')
+    it { is_expected.to contain_package('qemu-kvm')
       .with_ensure( 'actual' )
     }
   end

@@ -10,11 +10,11 @@ class libvirt::params {
           $service_name           = 'libvirt-bin'
         }
         'jessie': {
-          $libvirt_package_names  = ['libvirt-daemon-system', 'qemu']
+          $libvirt_package_names  = ['libvirt-daemon-system', 'qemu-kvm']
           $service_name           = 'libvirtd'
         }
         'stretch': {
-          $libvirt_package_names  = ['libvirt-daemon-system', 'qemu']
+          $libvirt_package_names  = ['libvirt-daemon-system', 'qemu-kvm']
           $service_name           = 'libvirtd'
         }
         'trusty', 'xenial': {
