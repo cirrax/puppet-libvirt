@@ -24,6 +24,10 @@
 #   Whether the service should be enabled.
 #   Defaults to true
 #
+# [*manage_service*]
+#   Whether the service should be managed by this module.
+#   Defaults to true
+#
 # [*libvirt_package_names*]
 #   Array of the libvirt packages to install.
 #   Defaults to $libvirt::params::libvirt_package_names
@@ -105,6 +109,7 @@ class libvirt (
   $service_name          = $libvirt::params::service_name,
   $service_ensure        = 'running',
   $service_enable        = true,
+  $manage_service        = true,
   $libvirt_package_names = $libvirt::params::libvirt_package_names,
   $qemu_conf             = {},
   $qemu_hook             = undef,
