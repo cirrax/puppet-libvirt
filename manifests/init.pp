@@ -16,6 +16,14 @@
 #   Only set this if your setup differs from the packages provided by
 #   your distribution.
 #
+# [*service_ensure*]
+#   Whether the service should be running.
+#   Defaults to 'running'
+#
+# [*service_enable*]
+#   Whether the service should be enabled.
+#   Defaults to true
+#
 # [*libvirt_package_names*]
 #   Array of the libvirt packages to install.
 #   Defaults to $libvirt::params::libvirt_package_names
@@ -95,6 +103,8 @@
 #
 class libvirt (
   $service_name          = $libvirt::params::service_name,
+  $service_ensure        = 'running',
+  $service_enable        = true,
   $libvirt_package_names = $libvirt::params::libvirt_package_names,
   $qemu_conf             = {},
   $qemu_hook             = undef,

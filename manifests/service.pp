@@ -18,8 +18,8 @@
 #
 class libvirt::service(
   $service_name   = $libvirt::service_name,
-  $service_ensure = 'running',
-  $service_enable = true,
+  $service_ensure = $libvirt::service_ensure,
+  $service_enable = $libvirt::service_enable,
 ) inherits libvirt {
 
   service {'libvirtd':
