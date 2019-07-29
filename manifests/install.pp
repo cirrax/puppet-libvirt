@@ -6,7 +6,7 @@
 #
 # [*qemu_hook*]
 #   QEMU hook to install. The only currently available hook is a script
-#   to setup DRBD resources. Valid values are 'drbd' or 'undef' (=no hook).
+#   to setup DRBD resources. Valid values are 'drbd' or '' (=no hook).
 #   Default inherited from ::libvirt class
 #
 # [*packages*]
@@ -22,10 +22,10 @@
 #   Defaults to 'installed'
 #
 class libvirt::install (
-  $qemu_hook          = $libvirt::qemu_hook,
-  $packages           = $libvirt::libvirt_package_names,
-  $qemu_hook_packages = $libvirt::qemu_hook_packages,
-  $package_ensure     = 'installed',
+  String $qemu_hook          = $libvirt::qemu_hook,
+  Array  $packages           = $libvirt::libvirt_package_names,
+  Hash   $qemu_hook_packages = $libvirt::qemu_hook_packages,
+  String $package_ensure     = 'installed',
 ) inherits libvirt {
 
   package { $packages:

@@ -41,8 +41,8 @@
 #
 # [*qemu_hook*]
 #   QEMU hook to install. The only currently available hook is a script
-#   to setup DRBD resources. Valid values are 'drbd' or 'undef' (=no hook).
-#   Defaults to 'undef'.
+#   to setup DRBD resources. Valid values are 'drbd' or '' (=no hook).
+#   Defaults to ''.
 #
 # [*qemu_hook_packages*]
 #   Hash of Arrays of hook specific packages to install
@@ -106,23 +106,23 @@
 # Copyright 2014 Cirrax GmbH
 #
 class libvirt (
-  $service_name          = $libvirt::params::service_name,
-  $service_ensure        = 'running',
-  $service_enable        = true,
-  $manage_service        = true,
-  $libvirt_package_names = $libvirt::params::libvirt_package_names,
-  $qemu_conf             = {},
-  $qemu_hook             = undef,
-  $qemu_hook_packages    = $libvirt::params::qemu_hook_packages,
-  $create_networks       = {},
-  $create_domains        = {},
-  $evacuation            = 'migrate',
-  $max_job_time          = '120',
-  $suspend_multiplier    = '5',
-  $migration_url_format  = 'ssh',
-  $uri_aliases           = [],
-  $uri_default           = '',
-  $default_conf          = {},
+  String  $service_name          = $libvirt::params::service_name,
+  String  $service_ensure        = 'running',
+  Boolean $service_enable        = true,
+  Boolean $manage_service        = true,
+  Array   $libvirt_package_names = $libvirt::params::libvirt_package_names,
+  Hash    $qemu_conf             = {},
+  String  $qemu_hook             = '',
+  Hash    $qemu_hook_packages    = $libvirt::params::qemu_hook_packages,
+  Hash    $create_networks       = {},
+  Hash    $create_domains        = {},
+  String  $evacuation            = 'migrate',
+  String  $max_job_time          = '120',
+  String  $suspend_multiplier    = '5',
+  String  $migration_url_format  = 'ssh',
+  Array   $uri_aliases           = [],
+  String  $uri_default           = '',
+  Hash    $default_conf          = {},
 ) inherits libvirt::params {
 
   Anchor['libvirt::begin'] -> Class['Libvirt::Install'] -> Class['Libvirt::Config'] -> Class['Libvirt::Service'] -> Anchor['libvirt::installed'] -> Anchor['libvirt::end']

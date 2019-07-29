@@ -21,10 +21,10 @@
 #   Defaults to true
 #
 class libvirt::service(
-  $service_name   = $libvirt::service_name,
-  $service_ensure = $libvirt::service_ensure,
-  $service_enable = $libvirt::service_enable,
-  $manage_service = $libvirt::manage_service,
+  String  $service_name   = $libvirt::service_name,
+  String  $service_ensure = $libvirt::service_ensure,
+  Boolean $service_enable = $libvirt::service_enable,
+  Boolean $manage_service = $libvirt::manage_service,
 ) inherits libvirt {
 
   if $manage_service {

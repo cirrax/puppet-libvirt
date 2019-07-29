@@ -11,7 +11,7 @@
 #   libvirt::domain define
 #
 class libvirt::manage_domains_config (
-  $manage_domains_config = $libvirt::params::manage_domains_config,
+  String $manage_domains_config = $libvirt::params::manage_domains_config,
 ) inherits ::libvirt {
 
 

@@ -2,16 +2,16 @@
 #
 # Installs configuration files
 class libvirt::config (
-  $qemu_hook    = $libvirt::qemu_hook,
-  $qemu_conf    = $libvirt::qemu_conf,
-  $uri_aliases  = $libvirt::uri_aliases,
-  $uri_default  = $libvirt::uri_default,
-  $default_conf = $libvirt::default_conf,
+  String $qemu_hook    = $libvirt::qemu_hook,
+  Hash   $qemu_conf    = $libvirt::qemu_conf,
+  Array  $uri_aliases  = $libvirt::uri_aliases,
+  String $uri_default  = $libvirt::uri_default,
+  Hash   $default_conf = $libvirt::default_conf,
 ) inherits libvirt {
 
   include ::libvirt::params
 
-  if ($qemu_hook) {
+  if ($qemu_hook != '') {
     file {"${libvirt::params::config_dir}/hooks/qemu":
       owner  => 'root',
       group  => 'root',
