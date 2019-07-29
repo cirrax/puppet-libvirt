@@ -12,14 +12,15 @@ describe 'libvirt' do
 
   let :default_params do
       { :service_name          => 'libvirtd',
-	:libvirt_package_names => ['libvirt-daemon-system', 'qemu'],
-	:qemu_conf             => {},
-	:qemu_hook_packages    => {'drbd' => ['xmlstarlet','python-libvirt'], },
-	:create_networks       => {},
-	:create_domains        => {},
-	:evacuation            => 'migrate',
-	:max_job_time          => '120',
-	:suspend_multiplier    => '5',
+        :manage_service        => true,
+        :libvirt_package_names => ['libvirt-daemon-system', 'qemu'],
+        :qemu_conf             => {},
+        :qemu_hook_packages    => {'drbd' => ['xmlstarlet','python-libvirt'], },
+        :create_networks       => {},
+        :create_domains        => {},
+        :evacuation            => 'migrate',
+        :max_job_time          => '120',
+        :suspend_multiplier    => '5',
         :uri_aliases           => [],
         :uri_default           => '',
         :default_conf          => {},
@@ -74,5 +75,15 @@ describe 'libvirt' do
     it { is_expected.to contain_libvirt__domain('mydom')
       .with_max_memory(2048)
     }
+  end
+
+  context 'with manage_service false' do
+    let :params do
+      default_params.merge(
+        :manage_service => false,
+      )
+    end
+    it_behaves_like 'libvirt shared examples'
+    it { is_expected.not_to contain_service('libvirtd') }
   end
 end
