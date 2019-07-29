@@ -134,6 +134,12 @@ define libvirt::domain (
     require  => Anchor['libvirt::end'],
   }
 
+  if $libvirt::diff_dir != '' {
+    file {"${libvirt::diff_dir}/domains/${name}.xml":
+      content => template('libvirt/domain.xml.erb'),
+    }
+  }
+
   if ($autostart) {
     exec {"libvirt-domain-autostart-${name}":
       command  => "virsh autostart ${name}",

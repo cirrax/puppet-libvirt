@@ -85,4 +85,33 @@ describe 'libvirt' do
     it_behaves_like 'libvirt shared examples'
     it { is_expected.not_to contain_service('libvirtd') }
   end
+
+  context 'with diff_dir' do
+    let :params do
+      default_params.merge(
+        :diff_dir => '/tmp/test',
+      )
+    end
+    it_behaves_like 'libvirt shared examples'
+    it { is_expected.to contain_file('/tmp/test')
+      .with_ensure('directory')
+      .with_purge(true)
+      .with_recurse(true)
+    }
+    it { is_expected.to contain_file('/tmp/test/domains')
+      .with_ensure('directory')
+      .with_purge(true)
+      .with_recurse(true)
+    }
+    it { is_expected.to contain_file('/tmp/test/networks')
+      .with_ensure('directory')
+      .with_purge(true)
+      .with_recurse(true)
+    }
+    it { is_expected.to contain_file('/tmp/test/nwfilters')
+      .with_ensure('directory')
+      .with_purge(true)
+      .with_recurse(true)
+    }
+  end
 end

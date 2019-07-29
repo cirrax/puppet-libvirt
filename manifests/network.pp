@@ -63,6 +63,12 @@ define libvirt::network (
       require  => Anchor['libvirt::installed'],
     }
 
+    if $libvirt::diff_dir != '' {
+      file {"${libvirt::diff_dir}/networks/${name}.xml":
+        content => template('libvirt/network.xml.erb'),
+      }
+    }
+
     if ($autostart) {
       exec {"libvirt-network-autostart-${name}":
         command  => "virsh net-autostart ${name}",

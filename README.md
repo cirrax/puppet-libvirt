@@ -64,6 +64,10 @@ Install including the DRBD hook:
       qemu_hook => 'drbd',
     }
 
+If you want to see the diffs of the xml file generated, set libvirt::diff_dir to a 
+directory. As a result all generated XML files are stored there, and diffs are
+visible.
+
 Define a network (basic linux bridge example):
 
     libvirt::network { 'net-simple':

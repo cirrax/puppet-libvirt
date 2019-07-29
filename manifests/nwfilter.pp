@@ -45,4 +45,10 @@ define libvirt::nwfilter (
     provider => 'shell',
     require  => Anchor['libvirt::end'],
   }
+
+  if $libvirt::diff_dir != '' {
+    file {"${libvirt::diff_dir}/nwfilters/${name}.xml":
+      content => template('libvirt/nwfilter.xml.erb'),
+    }
+  }
 }

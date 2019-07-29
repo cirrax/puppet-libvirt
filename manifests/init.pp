@@ -100,6 +100,12 @@
 # [*drop_default_net*]
 #   Boolean, don't create default network and bridge (virbr0)
 #   Defaults to false
+# [*diff_dir*]
+#   if this is set to a path, the directory is created and
+#   the xmls generated for the domains are kept and diffs
+#   are shown on changes by puppet.
+#   usefull for development (or on upgrade)
+#   defaults to '' (== disabled)
 #
 # === Examples
 #
@@ -140,6 +146,7 @@ class libvirt (
   String  $config_dir            = '/etc/libvirt',
   String  $manage_domains_config = '/etc/manage-domains.ini',
   Boolean $drop_default_net      = false,
+  String  $diff_dir              = '',
 ) {
 
   Anchor['libvirt::begin'] -> Class['Libvirt::Install'] -> Class['Libvirt::Config'] -> Class['Libvirt::Service'] -> Anchor['libvirt::installed'] -> Anchor['libvirt::end']
@@ -156,6 +163,14 @@ class libvirt (
   # libvirt::domains
   if ($qemu_hook == 'drbd') {
     include ::libvirt::manage_domains_config
+  }
+
+  if $diff_dir != '' {
+    file{ [ $diff_dir, "${diff_dir}/domains", "${diff_dir}/networks", "${diff_dir}/nwfilters" ]:
+      ensure  => directory,
+      purge   => true,
+      recurse => true,
+    }
   }
 
   create_resources('::libvirt::network', $create_networks)
