@@ -34,8 +34,6 @@ class libvirt::params {
                 module. Please add support for it and submit a patch!")
         }
       }
-      $config_dir             = '/etc/libvirt'
-      $manage_domains_config  = '/etc/manage-domains.ini'
       $qemu_hook_packages     = {'drbd' => ['xmlstarlet','python-libvirt'], }
     }
 
@@ -50,8 +48,6 @@ class libvirt::params {
                Please add support for it and submit a patch!")
         }
       }
-      $config_dir             = '/etc/libvirt'
-      $manage_domains_config  = '/etc/manage-domains.ini'
       $qemu_hook_packages     = { }
     }
 

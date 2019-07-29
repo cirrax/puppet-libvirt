@@ -7,12 +7,13 @@ class libvirt::config (
   Array  $uri_aliases  = $libvirt::uri_aliases,
   String $uri_default  = $libvirt::uri_default,
   Hash   $default_conf = $libvirt::default_conf,
+  String $config_dir   = $libvirt::config_dir,
 ) inherits libvirt {
 
   include ::libvirt::params
 
   if ($qemu_hook != '') {
-    file {"${libvirt::params::config_dir}/hooks/qemu":
+    file {"${config_dir}/hooks/qemu":
       owner  => 'root',
       group  => 'root',
       mode   => '0755',
@@ -21,7 +22,7 @@ class libvirt::config (
   }
 
   if ($qemu_conf != {}) {
-    file {"${libvirt::params::config_dir}/qemu.conf":
+    file {"${config_dir}/qemu.conf":
       owner   => 'root',
       group   => 'root',
       mode    => '0600',
@@ -30,7 +31,7 @@ class libvirt::config (
   }
 
   if ( $uri_default != '' ) or ( $uri_aliases != [] ) {
-    file {"${libvirt::params::config_dir}/libvirt.conf":
+    file {"${config_dir}/libvirt.conf":
       owner   => 'root',
       group   => 'root',
       mode    => '0644',

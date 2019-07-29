@@ -57,7 +57,7 @@ define libvirt::network (
                       template('libvirt/network.xml.erb'),
                       '" > $f && virsh net-define $f && rm $f']),
     provider => 'shell',
-    creates  => "${libvirt::params::config_dir}/qemu/networks/${name}.xml",
+    creates  => "${libvirt::config_dir}/qemu/networks/${name}.xml",
     require  => Anchor['libvirt::installed'],
   }
 
@@ -65,7 +65,7 @@ define libvirt::network (
     exec {"libvirt-network-autostart-${name}":
       command  => "virsh net-autostart ${name}",
       provider => 'shell',
-      creates  => "${libvirt::params::config_dir}/qemu/networks/autostart/${name}.xml",
+      creates  => "${libvirt::config_dir}/qemu/networks/autostart/${name}.xml",
       require  => Exec["libvirt-network-${name}"],
     }
 

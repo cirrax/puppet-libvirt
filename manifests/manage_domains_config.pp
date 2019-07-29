@@ -6,12 +6,12 @@
 #
 # [*manage_domains_config*]
 #   file where the manage_domains configuration is.
-#   Defaults to $libvirt::params::manage_domains_config
+#   Defaults to $libvirt::manage_domains_config
 #   Remark: if you change this, you also have to change in
 #   libvirt::domain define
 #
 class libvirt::manage_domains_config (
-  String $manage_domains_config = $libvirt::params::manage_domains_config,
+  String $manage_domains_config = $libvirt::manage_domains_config,
 ) inherits ::libvirt {
 
 

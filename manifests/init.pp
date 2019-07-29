@@ -87,6 +87,12 @@
 #   Hash to add config to /etc/default/libvirtd (Debian) or
 #   /etc/sysconfig/libvirtd (RedHat)
 #   Defaults to {}
+# [*config_dir*]
+#   the directory for configurations.
+#   Defaults to '/etc/libvirt'
+# [*manage_domains_config*]
+#   configuration file for managing domains.
+#   Defaults to '/etc/manage-domains.ini'
 #
 # === Examples
 #
@@ -123,6 +129,8 @@ class libvirt (
   Array   $uri_aliases           = [],
   String  $uri_default           = '',
   Hash    $default_conf          = {},
+  String  $config_dir            = '/etc/libvirt',
+  String  $manage_domains_config = '/etc/manage-domains.ini',
 ) inherits libvirt::params {
 
   Anchor['libvirt::begin'] -> Class['Libvirt::Install'] -> Class['Libvirt::Config'] -> Class['Libvirt::Service'] -> Anchor['libvirt::installed'] -> Anchor['libvirt::end']

@@ -130,7 +130,7 @@ define libvirt::domain (
                       template('libvirt/domain.xml.erb'),
                       '" > $f && virsh define $f && rm $f']),
     provider => 'shell',
-    creates  => "${libvirt::params::config_dir}/qemu/${name}.xml",
+    creates  => "${libvirt::config_dir}/qemu/${name}.xml",
     require  => Anchor['libvirt::end'],
   }
 
@@ -138,7 +138,7 @@ define libvirt::domain (
     exec {"libvirt-domain-autostart-${name}":
       command  => "virsh autostart ${name}",
       provider => 'shell',
-      creates  => "${libvirt::params::config_dir}/qemu/autostart/${name}.xml",
+      creates  => "${libvirt::config_dir}/qemu/autostart/${name}.xml",
       require  => Exec["libvirt-domain-${name}"],
     }
 
@@ -152,7 +152,7 @@ define libvirt::domain (
 
   if ($libvirt::qemu_hook=='drbd') {
     concat::fragment { $name:
-      target  => $libvirt::params::manage_domains_config,
+      target  => $libvirt::manage_domains_config,
       content => template('libvirt/manage-domains.ini.domain.erb'),
       order   => '10',
     }
