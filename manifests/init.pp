@@ -56,6 +56,10 @@
 #   Hash of domains to create with libvirt::domain
 #   Defaults to {}
 #
+# [*create_nwfilters*]
+#   Hash of nwfilters to create with libvirt::nwfilter
+#   Defaults to {}
+#
 # The following values are only useful together with the drbd qemu_hook in
 # setups of two redundant virtualization hosts synchronized over DRBD. They
 # have no effect if qemu_hook is not set to drbd.
@@ -125,6 +129,7 @@ class libvirt (
   Hash    $qemu_hook_packages    = {},
   Hash    $create_networks       = {},
   Hash    $create_domains        = {},
+  Hash    $create_nwfilters      = {},
   String  $evacuation            = 'migrate',
   String  $max_job_time          = '120',
   String  $suspend_multiplier    = '5',
@@ -155,4 +160,5 @@ class libvirt (
 
   create_resources('::libvirt::network', $create_networks)
   create_resources('::libvirt::domain', $create_domains)
+  create_resources('::libvirt::nwfilter', $create_nwfilters)
 }
