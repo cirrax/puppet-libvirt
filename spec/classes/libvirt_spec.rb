@@ -30,7 +30,6 @@ describe 'libvirt' do
   shared_examples 'libvirt shared examples' do
     it { is_expected.to compile.with_all_deps }
 
-    it { is_expected.to contain_class('libvirt::params') }
   end
 
   context 'with defaults' do

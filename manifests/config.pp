@@ -10,8 +10,6 @@ class libvirt::config (
   String $config_dir   = $libvirt::config_dir,
 ) inherits libvirt {
 
-  include ::libvirt::params
-
   if ($qemu_hook != '') {
     file {"${config_dir}/hooks/qemu":
       owner  => 'root',

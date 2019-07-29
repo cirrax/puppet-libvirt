@@ -1,0 +1,11 @@
+---
+# defaults for Debian Operating system
+
+libvirt::libvirt_package_names:
+  - 'libvirt-daemon-system'
+  - 'qemu'
+
+libvirt::qemu_hook_packages:
+   drbd:
+     - 'xmlstarlet'
+     - 'python-libvirt'

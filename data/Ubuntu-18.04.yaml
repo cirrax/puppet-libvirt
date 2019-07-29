@@ -1,0 +1,7 @@
+---
+# Defaults for Ubuntu 18.04 (Bionic Beaver)
+
+libvirt::libvirt_package_names:
+  - 'libvirt-daemon-system'
+  - 'libvirt-clients'
+  - 'qemu-kvm'

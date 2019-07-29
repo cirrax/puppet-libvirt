@@ -21,7 +21,6 @@ describe 'libvirt::network' do
 
     it { is_expected.to compile.with_all_deps }
 
-    it { is_expected.to contain_class('libvirt::params') }
     it { is_expected.to contain_exec('libvirt-network-' + title )
         .with_provider( 'shell' )
         .with_creates( '/etc/libvirt/qemu/networks/' + title + '.xml' )

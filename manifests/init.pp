@@ -30,11 +30,11 @@
 #
 # [*libvirt_package_names*]
 #   Array of the libvirt packages to install.
-#   Defaults to $libvirt::params::libvirt_package_names
+#   Required, see hiera data directory for defaults
 #
 # [*qemu_hook_packages*]
 #   Hash of Arrays of hook specific packages to install
-#   Defaults to $libvirt::params::qemu_hook_packages
+#   Defaults to {}
 #
 # [*qemu_conf*]
 #   Hash of key/value pairs you want to put in qemu.conf file.
@@ -46,7 +46,7 @@
 #
 # [*qemu_hook_packages*]
 #   Hash of Arrays of hook specific packages to install
-#   Defaults to $libvirt::params::qemu_hook_packages
+#   see hiera data directory for defaults
 #
 # [*create_networks*]
 #   Hash of networks to create with libvirt::network
@@ -112,14 +112,14 @@
 # Copyright 2014 Cirrax GmbH
 #
 class libvirt (
-  String  $service_name          = $libvirt::params::service_name,
+  Array   $libvirt_package_names,
+  String  $service_name          = 'libvirtd',
   String  $service_ensure        = 'running',
   Boolean $service_enable        = true,
   Boolean $manage_service        = true,
-  Array   $libvirt_package_names = $libvirt::params::libvirt_package_names,
   Hash    $qemu_conf             = {},
   String  $qemu_hook             = '',
-  Hash    $qemu_hook_packages    = $libvirt::params::qemu_hook_packages,
+  Hash    $qemu_hook_packages    = {},
   Hash    $create_networks       = {},
   Hash    $create_domains        = {},
   String  $evacuation            = 'migrate',
@@ -131,7 +131,7 @@ class libvirt (
   Hash    $default_conf          = {},
   String  $config_dir            = '/etc/libvirt',
   String  $manage_domains_config = '/etc/manage-domains.ini',
-) inherits libvirt::params {
+) {
 
   Anchor['libvirt::begin'] -> Class['Libvirt::Install'] -> Class['Libvirt::Config'] -> Class['Libvirt::Service'] -> Anchor['libvirt::installed'] -> Anchor['libvirt::end']
 
