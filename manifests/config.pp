@@ -2,12 +2,13 @@
 #
 # Installs configuration files
 class libvirt::config (
-  String  $qemu_hook    = $libvirt::qemu_hook,
-  Hash    $qemu_conf    = $libvirt::qemu_conf,
-  Array   $uri_aliases  = $libvirt::uri_aliases,
-  String  $uri_default  = $libvirt::uri_default,
-  Hash    $default_conf = $libvirt::default_conf,
-  String  $config_dir   = $libvirt::config_dir,
+  String  $qemu_hook        = $libvirt::qemu_hook,
+  Hash    $qemu_conf        = $libvirt::qemu_conf,
+  Hash    $libvirtd_conf    = $libvirt::libvirtd_conf,
+  Array   $uri_aliases      = $libvirt::uri_aliases,
+  String  $uri_default      = $libvirt::uri_default,
+  Hash    $default_conf     = $libvirt::default_conf,
+  String  $config_dir       = $libvirt::config_dir,
   Boolean $drop_default_net = $libvirt::drop_default_net,
 ) inherits libvirt {
 
@@ -26,6 +27,15 @@ class libvirt::config (
       group   => 'root',
       mode    => '0600',
       content => template('libvirt/qemu.conf.erb'),
+    }
+  }
+
+  if ($libvirtd_conf != {}) {
+    file {"${config_dir}/libvirtd.conf":
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0600',
+      content => template('libvirt/libvirtd.conf.erb'),
     }
   }
 
