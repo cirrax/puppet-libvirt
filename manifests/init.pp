@@ -60,6 +60,9 @@
 #   Hash of nwfilters to create with libvirt::nwfilter
 #   Defaults to {}
 #
+# [*libvirtd_conf*]
+#   Hash of key/value pairs you want to put in libvirtd.conf file.
+#
 # The following values are only useful together with the drbd qemu_hook in
 # setups of two redundant virtualization hosts synchronized over DRBD. They
 # have no effect if qemu_hook is not set to drbd.
@@ -136,6 +139,7 @@ class libvirt (
   Hash    $create_networks       = {},
   Hash    $create_domains        = {},
   Hash    $create_nwfilters      = {},
+  Hash    $libvirtd_conf         = {},
   String  $evacuation            = 'migrate',
   String  $max_job_time          = '120',
   String  $suspend_multiplier    = '5',
