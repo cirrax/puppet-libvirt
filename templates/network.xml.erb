@@ -9,34 +9,34 @@
       </forward>
     <%- end -%>
   <%- end -%>
-  <% if @bridge != '' -%>
+  <%- if @bridge != '' -%>
   <bridge name='<%= @bridge %>'/>
-  <% end -%>
-  <% if @ip_address and @ip_netmask -%>
+  <%- end -%>
+  <%- if @ip_address and @ip_netmask -%>
   <ip address='<%= @ip_address %>' netmask='<%= @ip_netmask %>'>
-    <% if @dhcp_start and @dhcp_end -%>
+    <%- if @dhcp_start and @dhcp_end -%>
     <dhcp>
       <range start='<%= @dhcp_start %>' end='<%= @dhcp_end %>'/>
     </dhcp>
-    <% end -%>
+    <%- end -%>
   </ip>
-  <% end -%>
-  <% if @virtualport_type -%>
+  <%- end -%>
+  <%- if @virtualport_type -%>
   <virtualport type='<%= @virtualport_type %>'/>
-  <% end -%>
-  <% @portgroups.each do |pg| -%>
+  <%- end -%>
+  <%- @portgroups.each do |pg| -%>
   <portgroup name='<%= pg['name'] %>'>
-    <% if pg['trunk'] -%>
+    <%- if pg['trunk'] -%>
     <vlan trunk='yes'>
       <% pg['vlan_tag'].each do |tag| %>
       <tag id='<%= tag %>'/>
       <% end -%>
     </vlan>
-    <% else -%>
+    <%- else -%>
     <vlan>
       <tag id='<%= pg['vlan_tag'] %>'/>
     </vlan>
-    <% end -%>
+    <%- end -%>
   </portgroup>
-  <% end -%>
+  <%- end -%>
 </network>
