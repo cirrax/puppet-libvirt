@@ -24,33 +24,33 @@
     <tcp state='NEW'/>
   </rule>
 
-  <% @publictcpservices.each do |ptservice| -%>
+  <%- @publictcpservices.each do |ptservice| -%>
   <rule action='accept' direction='in'>
     <tcp dstipaddr='<%= @ip %>' dstportstart='<%= ptservice %>' state='NEW'/>
   </rule>
-  <% end -%>
+  <%- end -%>
 
-  <% @customtcprules.each do |tcrule| -%>
-  <% tcrule.each do |tfromip,ttoport| -%>
+  <%- @customtcprules.each do |tcrule| -%>
+  <%- tcrule.each do |tfromip,ttoport| -%>
   <rule action='accept' direction='in'>
     <tcp srcipaddr='<%= tfromip %>' dstipaddr='<%= @ip %>' dstportstart='<%= ttoport %>' state='NEW'/>
   </rule>
-  <% end -%>
-  <% end -%>
+  <%- end -%>
+  <%- end -%>
 
-  <% @publicudpservices.each do |puservice| -%>
+  <%- @publicudpservices.each do |puservice| -%>
   <rule action='accept' direction='in'>
     <udp dstipaddr='<%= @ip %>' dstportstart='<%= puservice %>' state='NEW'/>
   </rule>
-  <% end -%>
+  <%- end -%>
 
-  <% @customudprules.each do |ucrule| -%>
-  <% ucrule.each do |ufromip,utoport| -%>
+  <%- @customudprules.each do |ucrule| -%>
+  <%- ucrule.each do |ufromip,utoport| -%>
   <rule action='accept' direction='in'>
     <tcp srcipaddr='<%= ufromip %>' dstipaddr='<%= @ip %>' dstportstart='<%= utoport %>' state='NEW'/>
   </rule>
-  <% end -%>
-  <% end -%>
+  <%- end -%>
+  <%- end -%>
 
   <rule action='drop' direction='in'>
     <all/>
