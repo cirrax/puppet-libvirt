@@ -21,6 +21,7 @@ Puppet module to install libvirt and create virtual domain
 configuration. This module has very minimal external dependencies and
 tries to not make any assumptions about how you want to setup your
 virtual machines.
+Certain profiles can be defined and used for a set of VM's
 
 The module contains helper scripts to manage VMs on a 2 node cluster
 with disk replication over DRBD. But this is completely optional.
@@ -132,6 +133,47 @@ Complete documentation is included in puppet doc format in the
 manifest files.
 
 ## Reference
+### Profiles
+Profiles are a set of values to add to the configuration, eg. some devices you like to add
+to all VM's (keyboard etc.)
+
+The default profile used is defined in hiera in the data/profiles directory.
+The profiles in hiera are hash merged, so you can define you're own profiles easily.
+Here is an example:
+
+    libvirt::profiles::devices:
+      myprofile:
+        hostdev:
+          attrs:
+            mode: 'capabilities'
+            type: 'misc'
+          values:
+            source:
+               values: '/dev/input/event3'
+
+will result in a device (without the default devices...):
+    <hostdev mode='capabilities' type='misc'>
+      <source>
+        <char>/dev/input/event3</char>
+      </source>
+    </hostdev>
+
+To not repeat all profile values you can 'inherit' a profile, meaning you set a base profile with wich the profile will be merged.
+Let's take enlarge our profile:
+
+    libvirt::profiles::devices:
+      myprofile:
+        profileconfig:
+          base: 'default'
+          merge: 'merge'
+        hostdev:
+          ...
+
+which results in the hostdev been added to the default profile. Merge parameter in profileconfig defines how to merge,
+valid values are merge (default) or deep for a deep merge.
+
+Hint: To better see what is changing you can set libvirt::diff_dir to a directory.
+
 ### Functions
 
 #### libvirt_generate_mac
@@ -141,6 +183,12 @@ Returns a MAC address in the QEMU/KVM MAC OID (52:54:00:...)
 Generates MAC addresses for all interfaces in the array which do not yet have an
 address specified. The MAC addresses are based on the domain name, network and
 portgroup.
+
+#### libvirt_generate_uuid
+Return a uuid for a VM.
+
+#### libvirt::get_merged_profile
+Returns the merged profile accoring to definition. The profileconfig section is removed.
 
 ### Types
 
