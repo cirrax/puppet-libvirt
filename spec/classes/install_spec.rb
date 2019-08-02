@@ -11,7 +11,9 @@ describe 'libvirt::install' do
   end
 
   let :default_params do
-      { }
+    { 
+      :packages => ['qemu','libvirt-daemon-system'],
+    }
   end
 
   shared_examples 'libvirt::install shared examples' do
