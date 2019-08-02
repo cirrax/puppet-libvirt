@@ -66,13 +66,13 @@ describe 'libvirt' do
   context 'with create_domain' do
     let :params do
       default_params.merge(
-        :create_domains => { 'mydom' => { 'max_memory' => 2048 }},
+        :create_domains => { 'mydom' => { 'devices_profile' => 'myprofile' }},
       )
     end
     it_behaves_like 'libvirt shared examples'
 
     it { is_expected.to contain_libvirt__domain('mydom')
-      .with_max_memory(2048)
+      .with_devices_profile('myprofile')
     }
   end
 

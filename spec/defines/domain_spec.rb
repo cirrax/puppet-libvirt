@@ -13,9 +13,7 @@ describe 'libvirt::domain' do
   let :default_params do
     { :domain_title       => '',
       :description        => '',
-      :cpus               => '1',
       :boot               => 'hd',
-      :bootmenu           => true,
       :disks              => [],
       :interfaces         => [],
       :autostart          => true,
@@ -36,10 +34,10 @@ describe 'libvirt::domain' do
     let (:title) { 'mytitle' }
     let :params do
       default_params.merge(
-	:max_memory     => 1024,
-	:initial_memory => 1024,
+	:autostart      => true,
       )
     end
+
     it_behaves_like 'libvirt::domain shared examples'
 
     it { is_expected.to contain_exec('libvirt-domain-autostart-' + title )
@@ -59,8 +57,6 @@ describe 'libvirt::domain' do
 
     let :params do
       default_params.merge(
-	:max_memory     => 1024,
-	:initial_memory => 1024,
 	:autostart      => false,
       )
     end
