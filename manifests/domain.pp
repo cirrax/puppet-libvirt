@@ -10,10 +10,6 @@
 # domain XML definition. See http://libvirt.org/formatdomain.html
 # for more information.
 #
-# [*max_memory*]
-#   Maximum amount of memory that can be allocated to the domain.
-# [*initial_memory*]
-#   Initial memory allocation for the domain. Defaults to max_memory.
 # [*type*]
 #   Specify the hypervisor used for running the domain.
 #   The allowed values are driver specific, but include "xen", "kvm", "qemu" and "lxc"
@@ -25,24 +21,10 @@
 # [*uuid*]
 #   UUID for the domain. The default is the uuid, generated
 #   with puppet.
-# [*machine_type*]
-#   Machine type to use, i.e.
-#     * "pc" - Standard PC (i440FX + PIIX, 1996)
-#     * "q35" - Standard PC (Q35 + ICH9, 2009)
-# [*cpus*]
-#   Number of virtual CPUs for the domain. Defaults to '1'.
-# [*cpu_model*]
-#   CPU model to emulate. Valid values are any cpu model accepted by libvirt or
-#   the special values 'host-model' and 'host-passthrough'. See
-#   http://libvirt.org/formatdomain.html#elementsCPU for details. Defaults to
-#   not set a CPU at all and let libvirt choose. The values 'host-model' and
-#   'host-passthrough' prevent migrations from working.
 # [*boot*]
 #   Default boot device. Valid values are any accepted by libvirt or the string
 #   'per-device' to set individual boot orders on disks or interfaces.
 #   Defaults to 'hd'.
-# [*bootmenu*]
-#   Wheter the boot menu option should be available or not. Defaults to true.
 # [*disks*]
 #   Array of hashes defining the disks of this domain. Defaults to no disks
 #   at all. The hashes support the following keys:
@@ -80,6 +62,18 @@
 # [*autostart*]
 #   Wheter the libvirt autostart flag should be set. Defaults to true. Autostart
 #   domains are started if the host is booted.
+# [*dom_profile*]
+#   profile to use for $domconf.
+#   Defaults to 'default' which is defined in data/profiles/xxx.yaml
+#   A profile is a predefined set of parameters for a vm.
+#   see class libvirt::profiles for additional information.
+# [*domconf*]
+#   the generic domain configuration to activate for vm.
+#   this parameter is merged with the choosen profile,
+#   ($libvirt::profiles::domconf)
+#   to generate the final configuration.
+#   Defaults to {} which does not change the profile.
+#   see also libvirt::profiles for how to use profiles
 # [*devices_profile*]
 #   profile to use for $devices.
 #   Defaults to 'default' which is defined in data/profiles/xxx.yaml
@@ -116,22 +110,115 @@
 #   suspend_multiplier for migrating domains with the manage-domains
 #   script. The default is to not set a value and to use the global default.
 #
+# == Deprecated parameters:
+# [*max_memory*]
+#   Maximum amount of memory that can be allocated to the domain.
+#   Example (yaml):
+#     domconf:
+#       memory:
+#         attrs:
+#           unit: 'MiB'
+#         values: 2000
+# [*initial_memory*]
+#   Initial memory allocation for the domain. Defaults to max_memory.
+#   Deprecation notice: use $domconf (or profile) to set.
+#   Example (yaml):
+#     domconf:
+#       currentMemory:
+#         attrs:
+#           unit: 'MiB'
+#         values: 1000
+# [*cpus*]
+#   Number of virtual CPUs for the domain. Defaults to '1'.
+#   Deprecation notice: use $domconf (or profile) to set.
+#   Example (yaml):
+#     domconf:
+#       vcpu:
+#         values: 1
+# [*bootmenu*]
+#   Wheter the boot menu option should be available or not. Defaults to true.
+#   Deprecation notice: use $domconf if you want to disable the bootmenu
+#   Example (yaml):
+#     domconf:
+#       os:
+#         bootmenu:
+#           attrs: 
+#             enable: 'no'
+# [*machine_type*]
+#   Machine type to use, i.e.
+#     * "pc" - Standard PC (i440FX + PIIX, 1996)
+#     * "q35" - Standard PC (Q35 + ICH9, 2009)
+#   Deprecation notice: use $domconf if you want to set the machine type
+# [*cpu_model*]
+#   CPU model to emulate. Valid values are any cpu model accepted by libvirt or
+#   the special values 'host-model' and 'host-passthrough'. See
+#   http://libvirt.org/formatdomain.html#elementsCPU for details. Defaults to
+#   not set a CPU at all and let libvirt choose. The values 'host-model' and
+#   'host-passthrough' prevent migrations from working.
+#   Deprecation notice: use $domconf (or profile) if you want to set the machine type
+#   Example (yaml):
+#     domconf:
+#       cpu:
+#         attrs:
+#           mode: 'custom'
+#         values:
+#           model: 'SandyBridge'
+
 define libvirt::domain (
+  String            $type               = 'kvm',
+  String            $domain_title       = '',
+  String            $description        = '',
+  String            $uuid               = libvirt_generate_uuid($name),
+  String            $boot               = 'hd',
+  Array             $disks              = [],
+  Array             $interfaces         = [],
+  Boolean           $autostart          = true,
+  String            $dom_profile        = 'default',
+  Hash              $domconf            = {},
   String            $devices_profile    = 'default',
   Hash              $devices            = {},
   Hash              $additionaldevices  = {},
+  Optional[String]  $default_host       = undef,
+  Optional[String]  $evacuation         = undef,
+  Optional[String]  $max_job_time       = undef,
+  Optional[String]  $suspend_multiplier = undef,
+  # deprecated parameters:
+  Optional[Any]     $max_memory         = undef,
+  Optional[Any]     $initial_memory     = undef,
+  Optional[Any]     $cpus               = undef,
+  Optional[Any]     $cpu_model          = undef,
+  Optional[Any]     $bootmenu           = undef,
+  Optional[Any]     $machine_type       = undef,
 ) {
+  if $max_memory != undef {
+    fail("deprecation: libvirt::domain, ${title}: max_memory parameter is deprecated, use domconf Hash or profile instead")
+  }
+  if $initial_memory != undef {
+    fail("deprecation: libvirt::domain, ${title}: initial_memory parameter is deprecated, use domconf Hash or profile instead")
+  }
+  if $cpus != undef {
+    fail("deprecation: libvirt::domain, ${title}: cpus parameter is deprecated, use domconf Hash or profile instead")
+  }
+  if $cpu_model != undef {
+    fail("deprecation: libvirt::domain, ${title}: cpu_model parameter is deprecated, use domconf Hash or profile instead")
+  }
+  if $bootmenu != undef {
+    fail("deprecation: libvirt::domain, ${title}: bootmenu is deprecated, use domconf Hash or profile instead")
+  }
+  if $machine_type != undef {
+    warning("deprecation: libvirt::domain, ${title}: machine_type parameter is deprecated, use domconf Hash or profile Hash instead")
+  }
 
   include ::libvirt
   include ::libvirt::profiles
 
   $devices_real  = $devices + libvirt::get_merged_profile($libvirt::profiles::devices, $devices_profile)
 
-  # set $cpu_mode variable, used in domain XML template
-  if ($cpu_model == 'host-model' or $cpu_model == 'host-passthrough') {
-    $cpu_mode = $cpu_model
+  if $boot == 'per-device' {
+    $domconf_real  = $domconf + libvirt::get_merged_profile($libvirt::profiles::domconf, $dom_profile)
   } else {
-    $cpu_mode = 'custom'
+    $_domconf = $domconf + libvirt::get_merged_profile($libvirt::profiles::domconf, $dom_profile)
+    $domconf_real = deep_merge($_domconf,{'os' => {'boot' => { 'attrs' => { 'dev' => $boot }}}})
   }
 
   exec {"libvirt-domain-${name}":

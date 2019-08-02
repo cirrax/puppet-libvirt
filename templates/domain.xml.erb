@@ -14,34 +14,7 @@ disk_src_attrs = {
   <uuid><%= @uuid %></uuid>
   <%- end -%>
   <description><%= @description %></description>
-  <memory unit='MiB'><%= @max_memory %></memory>
-  <currentMemory unit='MiB'><%= @initial_memory %></currentMemory>
-  <vcpu><%= @cpus %></vcpu>
-  <% if @cpu_model -%>
-  <cpu mode='<%= @cpu_mode %>'>
-    <% if @cpu_mode == 'custom' -%>
-    <model><%= @cpu_model %></model>
-    <% end -%>
-  </cpu>
-  <% end -%>
-  <os>
-    <type arch='x86_64' <% if @machine_type -%>machine='<%= @machine_type %>'<% end-%>>hvm</type>
-    <% if @bootmenu -%>
-    <bootmenu enable='yes' />
-    <% end -%>
-    <% if @boot != 'per-device' -%>
-    <boot dev='<%= @boot %>'/>
-    <% end -%>
-  </os>
-  <features>
-    <acpi/>
-    <apic/>
-    <pae/>
-  </features>
-  <clock offset='utc'/>
-  <on_poweroff>destroy</on_poweroff>
-  <on_reboot>restart</on_reboot>
-  <on_crash>restart</on_crash>
+  <%- %><%= scope.call_function('epp', ["libvirt/domain/generic.epp", { 'elements'=>@domconf_real, 'trim'=>2 }]) -%>
   <devices>
     <%- %><%= scope.call_function('epp', ["libvirt/domain/generic.epp", { 'elements'=>@devices_real, 'trim'=>4 }]) -%>
     <%- %><%= scope.call_function('epp', ["libvirt/domain/generic.epp", { 'elements'=>@additionaldevices, 'trim'=>4 }]) -%>
