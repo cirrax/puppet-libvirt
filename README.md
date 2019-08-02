@@ -15,6 +15,12 @@
 4. [Limitations - OS compatibility, etc.](#limitations)
 5. [Development - Guide for contributing to the module](#development)
 
+## Upgrade warning:
+Upgrade to version 4.x.x will probably break any existing setup (puppet run fails),
+since several parameters of libvirt::domain are now deprecated in favor of using
+profiles. To make upgrade easier (and see what happens), upgrade to version 3.1.x and
+set libvirt::diff_dir. Like this you can see the changes to be applied after the upgrade.
+
 ## Overview
 
 Puppet module to install libvirt and create virtual domain
@@ -98,24 +104,24 @@ Define a network (advanced openvswitch example):
 Define a domain (VM):
 
     libvirt::domain { 'my-domain':
-      max_memory     => '2000',
-      cpus           => 2,
-      boot           => 'hd',
-      disks          => [{'type' => 'block',
-                          'device' => 'disk',
-                          'source' => {'dev' => '/dev/vm-pool/my-domain.img'},
-                          },
-                         {'type'   => 'file',
-                          'device' => 'disk',
-                          'source' => {'dev' => '/var/lib/libvirt/images/my-disk.qcow2'},
-                          'bus'    => 'virtio',
-                          'driver' => {'name'  => 'qemu',
-                                       'type'  => 'qcow2',
-                                       'cache' => 'none',
-                                       },
-                         ],
-      interfaces     => [{'network' => 'net-simple'},],
-      autostart      => true,
+      devices_profile => 'default',
+      dom_profile     => 'default',
+      boot            => 'hd',
+      disks           => [{'type' => 'block',
+                           'device' => 'disk',
+                           'source' => {'dev' => '/dev/vm-pool/my-domain.img'},
+                           },
+                          {'type'   => 'file',
+                           'device' => 'disk',
+                           'source' => {'dev' => '/var/lib/libvirt/images/my-disk.qcow2'},
+                           'bus'    => 'virtio',
+                           'driver' => {'name'  => 'qemu',
+                                        'type'  => 'qcow2',
+                                        'cache' => 'none',
+                                        },
+                          ],
+      interfaces      => [{'network' => 'net-simple'},],
+      autostart       => true,
     }
 
 Define a storage pool:
