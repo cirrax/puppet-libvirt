@@ -341,10 +341,7 @@ The mode of the target dir or filesystem
 
 Things currently not supported:
 * Operating Systems other than Debian, Ubuntu or RedHat. Adding support for other
-  systems is a matter of defining the relevant parameters in
-  params.pp. So this is really easy for someone with access to such a
-  system.
-* Network interfaces not attached to a libvirt network
+  systems is a matter of defining the relevant parameters in hiera.
 
 Patches to support any of these (or other) missing features are welcome.
 
