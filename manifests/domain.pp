@@ -14,6 +14,10 @@
 #   Maximum amount of memory that can be allocated to the domain.
 # [*initial_memory*]
 #   Initial memory allocation for the domain. Defaults to max_memory.
+# [*type*]
+#   Specify the hypervisor used for running the domain.
+#   The allowed values are driver specific, but include "xen", "kvm", "qemu" and "lxc"
+#   Defaults to 'kvm'
 # [*domain_title*]
 #   Free text title of the domain. Defaults to ''.
 # [*description*]
@@ -98,6 +102,7 @@
 #
 define libvirt::domain (
   $max_memory,
+  $type               = 'kvm',
   $initial_memory     = $max_memory,
   $domain_title       = '',
   $description        = '',

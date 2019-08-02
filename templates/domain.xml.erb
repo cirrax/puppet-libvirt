@@ -6,7 +6,8 @@ disk_src_attrs = {
   'volume'  => ['pool','volume'],
 }
 -%>
-<domain type='kvm'>
+
+<domain type='<%= @type %>'>
   <name><%= @name %></name>
   <title><%= @domain_title %></title>
   <% if @uuid -%>
