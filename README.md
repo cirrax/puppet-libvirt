@@ -342,6 +342,8 @@ The mode of the target dir or filesystem
 Things currently not supported:
 * Operating Systems other than Debian, Ubuntu or RedHat. Adding support for other
   systems is a matter of defining the relevant parameters in hiera.
+* Documentation always needs some love ;) I would especially appreciate some examples of 
+  profiles you are using.
 
 Patches to support any of these (or other) missing features are welcome.
 
