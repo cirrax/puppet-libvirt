@@ -35,20 +35,23 @@
 #    The ip address for the device
 # [*ip_netmask*]
 #    The netmask for the ip address
+# [*dhcp_start*]
+# [*dhcp_end*]
+#    Optional dhcp range
 #
 define libvirt::network (
-  $ensure             = 'present',
-  $bridge             = '',
-  $forward_mode       = 'bridge',
-  $forward_dev        = undef,
-  $forward_interfaces = [],
-  $virtualport_type   = undef,
-  $portgroups         = [],
-  $autostart          = true,
-  $ip_address         = undef,
-  $ip_netmask         = undef,
-  $dhcp_start         = undef,
-  $dhcp_end           = undef,
+  String           $ensure             = 'present',
+  String           $bridge             = '',
+  String           $forward_mode       = 'bridge',
+  Optional[String] $forward_dev        = undef,
+  Array            $forward_interfaces = [],
+  Optional[String] $virtualport_type   = undef,
+  Array            $portgroups         = [],
+  Boolean          $autostart          = true,
+  Optional[String] $ip_address         = undef,
+  Optional[String] $ip_netmask         = undef,
+  Optional[String] $dhcp_start         = undef,
+  Optional[String] $dhcp_end           = undef,
 ) {
 
   include ::libvirt
