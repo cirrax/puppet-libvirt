@@ -115,7 +115,7 @@
 # Copyright 2014 Cirrax GmbH
 #
 class libvirt (
-  Array   $libvirt_package_names,
+  Array   $libvirt_package_names = [],
   String  $service_name          = 'libvirtd',
   String  $service_ensure        = 'running',
   Boolean $service_enable        = true,
