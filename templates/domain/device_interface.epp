@@ -1,0 +1,16 @@
+<%- |  Hash   $iface,
+       String $boot,
+    | -%>
+    <interface type='network'>
+<%- if $iface.has_key('mac') { -%>
+      <mac address='<%= $iface['mac'] %>'/>
+<%- } -%>
+<%- if $iface.has_key('filter') { -%>
+      <filterref filter='<%= $iface['filter'] %>'/>
+<%- } -%>
+      <source network='<%= $iface['network'] %>'<% if $iface.has_key('portgroup') { %> portgroup='<%= $iface['portgroup'] %>'<% } %>/>
+      <model type='<% if $iface.has_key('type') { %><%= $iface['type'] %><% }else{ %>virtio<% } %>'/>
+<%- if $boot == 'per-device' and $iface.has_key('boot_order') { -%>
+      <boot order='<%= $iface['boot_order'] %>'/>
+<%- } -%>
+    </interface>

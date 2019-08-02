@@ -63,23 +63,11 @@ disk_src_attrs = {
     <console type='pty'>
       <target type='serial' port='0'/>
     </console>
-    <% @interfaces.each do |iface| -%>
-    <interface type='network'>
-      <% if iface.has_key?('mac') -%>
-        <mac address='<%= iface['mac'] %>'/>
-      <% end -%>
-      <% if iface.has_key?('filter') -%>
-        <filterref filter='<%= iface['filter'] %>'/>
-      <% end -%>
-      <source network='<%= iface['network'] %>'<% if iface.has_key?('portgroup') %> portgroup='<%= iface['portgroup'] %>'<% end %>/>
-      <model type='<%= iface.has_key?('type') and iface['type'] or 'virtio' %>'/>
-      <% if @boot == 'per-device' && iface.has_key?('boot_order') -%>
-      <boot order='<%= iface['boot_order'] %>'/>
-      <% end -%>
-    </interface>
-    <% end -%>
     <%- @disks.each_with_index do | disk, i | -%>
       <%- %><%= scope.call_function('epp', ["libvirt/domain/device_disk.epp", { 'disk'=>disk, 'ind'=>(i+97).chr, 'disk_src_attrs'=>disk_src_attrs, 'boot'=>@boot }]) -%>
+    <%- end -%>
+    <%- @interfaces.each do | iface | -%>
+      <%- %><%= scope.call_function('epp', ["libvirt/domain/device_interface.epp", { 'iface'=>iface, 'boot'=>@boot } ]) -%>
     <%- end -%>
   </devices>
 </domain>
