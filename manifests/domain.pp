@@ -80,6 +80,22 @@
 # [*autostart*]
 #   Wheter the libvirt autostart flag should be set. Defaults to true. Autostart
 #   domains are started if the host is booted.
+# [*devices_profile*]
+#   profile to use for $devices.
+#   Defaults to 'default' which is defined in data/profiles/xxx.yaml
+#   A profile is a predefined set of parameters for a vm.
+#   see class libvirt::profiles for additional information.
+# [*devices*]
+#   devices to attach to the vm
+#   this parameter is merged with the choosen profile,
+#   ($libvirt::profiles::devices)
+#   to generate the final configuration.
+#   Defaults to {} which does not change the profile.
+#   see also libvirt::profiles for how to use profiles
+# [*additionaldevices*]
+#   additional devices to attach to the vm
+#   Same format as $devices, but without merging.
+#   Defaults to {}
 #
 # The following values are only useful together with the drbd qemu_hook in
 # setups of two redundant virtualization hosts synchronized over DRBD. They
@@ -101,27 +117,15 @@
 #   script. The default is to not set a value and to use the global default.
 #
 define libvirt::domain (
-  $max_memory,
-  $type               = 'kvm',
-  $initial_memory     = $max_memory,
-  $domain_title       = '',
-  $description        = '',
-  $uuid               = libvirt_generate_uuid($name),
-  $machine_type       = '',
-  $cpus               = '1',
-  $cpu_model          = undef,
-  $boot               = 'hd',
-  $bootmenu           = true,
-  $disks              = [],
-  $interfaces         = [],
-  $autostart          = true,
-  $default_host       = undef,
-  $evacuation         = undef,
-  $max_job_time       = undef,
-  $suspend_multiplier = undef,
+  String            $devices_profile    = 'default',
+  Hash              $devices            = {},
+  Hash              $additionaldevices  = {},
 ) {
 
   include ::libvirt
+  include ::libvirt::profiles
+
+  $devices_real  = $devices + libvirt::get_merged_profile($libvirt::profiles::devices, $devices_profile)
 
   # set $cpu_mode variable, used in domain XML template
   if ($cpu_model == 'host-model' or $cpu_model == 'host-passthrough') {

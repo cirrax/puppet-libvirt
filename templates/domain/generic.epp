@@ -1,0 +1,42 @@
+<%- |  Hash $elements,
+       Integer $trim,
+    | -%>
+<%- $elements.each | $key, $element | { -%>
+  <%- if $element =~ Array { -%>
+    <%- $element.each | $ele | { -%>
+      <%- %><%= epp('libvirt/domain/generic.epp', { 'elements'=>{$key=>$ele}, 'trim'=>$trim}) -%>
+    <%- } -%>
+  <%- } elsif $element =~ Hash { -%>
+    <%- if $element.has_key('values') { -%>
+      <%- if $element.has_key('attrs') { -%>
+        <%- %><%= String('', "%${trim}s") %><<%= $key -%>
+        <%- if $element['values'] =~ Hash { -%>
+          <%- $element['attrs'].each | $attrname, $attr | { %> <%= $attrname %>='<%= $attr %>'<%- } -%>>
+          <%- %><%= epp('libvirt/domain/generic.epp', { 'elements'=>$element['values'], 'trim'=>2+$trim}) -%>
+          <%- %><%= String('', "%${trim}s") %></<%= $key %>>
+        <%- } else { -%>
+          <%- $element['attrs'].each | $attrname, $attr | { %> <%= $attrname %>='<%= $attr %>'<%- } -%>><% -%>
+          <%- %><%= $element['values'] %></<%= $key %>>
+        <%- } -%>
+      <%- } else { -%>
+        <%- if $element['values'] =~ Hash { -%>
+          <%- %><%= String('', "%${trim}s") %><<%= $key %>>
+          <%- %><%= epp('libvirt/domain/generic.epp', { 'elements'=>$element['values'], 'trim'=>2+$trim}) -%>
+          <%- %><%= String('', "%${trim}s") %></<%= $key %>>
+        <%- } else { -%>
+          <%- %><%= String('', "%${trim}s") %><<%= $key %>><% -%>
+          <%- %><%= $element['values'] %></<%= $key %>>
+        <%- } -%>
+      <%- } -%>
+    <%- } else { -%>
+      <%- if $element.has_key('attrs') { -%>
+        <%- %><%= String('', "%${trim}s") %><<%= $key -%>
+        <%- $element['attrs'].each | $attrname, $attr | { %> <%= $attrname %>='<%= $attr %>'<% } -%>/>
+      <%- } else { -%>
+        <%- %><%= String('', "%${trim}s") %><<%= $key %>/>
+      <%- } -%>
+    <%- } -%>
+  <%- } else { -%>
+     <%- %><%= String('', "%${trim}s") %><<%= $key %>><%= $element %></<%= $key %>>
+  <%- } -%>
+<%- } -%>

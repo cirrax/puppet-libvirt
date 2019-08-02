@@ -43,27 +43,8 @@ disk_src_attrs = {
   <on_reboot>restart</on_reboot>
   <on_crash>restart</on_crash>
   <devices>
-    <input type='mouse' bus='ps2'/>
-    <input type='keyboard' bus='ps2'/>
-    <graphics type='vnc' autoport='yes' listen='127.0.0.1'>
-      <listen type='address' address='127.0.0.1'/>
-    </graphics>
-    <video>
-      <model type='cirrus' vram='9216' heads='1'/>
-      <alias name='video0'/>
-    </video>
-    <memballoon model='virtio'>
-      <alias name='balloon0'/>
-    </memballoon>
-    <rng model='virtio'>
-      <backend model='random'>/dev/random</backend>
-    </rng>
-    <serial type='pty'>
-      <target port='0'/>
-    </serial>
-    <console type='pty'>
-      <target type='serial' port='0'/>
-    </console>
+    <%- %><%= scope.call_function('epp', ["libvirt/domain/generic.epp", { 'elements'=>@devices_real, 'trim'=>4 }]) -%>
+    <%- %><%= scope.call_function('epp', ["libvirt/domain/generic.epp", { 'elements'=>@additionaldevices, 'trim'=>4 }]) -%>
     <%- @disks.each_with_index do | disk, i | -%>
       <%- %><%= scope.call_function('epp', ["libvirt/domain/device_disk.epp", { 'disk'=>disk, 'ind'=>(i+97).chr, 'disk_src_attrs'=>disk_src_attrs, 'boot'=>@boot }]) -%>
     <%- end -%>
