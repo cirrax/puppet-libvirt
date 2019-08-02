@@ -1,7 +1,7 @@
 ---
 # Defaults for Debian wheezy
 
-libvirt::libvirt_package_names 
+libvirt::libvirt_package_names:
   - 'libvirt-bin'
   - 'qemu'
 
