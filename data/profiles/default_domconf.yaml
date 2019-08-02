@@ -1,0 +1,28 @@
+---
+# profiles/domconf_default.yaml for puppet-libvirt
+
+libvirt::profiles::domconf:
+  default:
+    os:
+      values:
+        type:
+          attrs:
+            arch: 'x86_64'
+          values: 'hvm'
+        bootmenu:
+          attrs:
+            enable: 'yes'
+        boot:
+          attrs:
+            dev: 'hd'
+    features:
+      values:
+        acpi: {}
+        apic: {}
+        pae: {}
+    clock:
+      attrs:
+        offset: 'utc'
+    on_poweroff: 'destroy'
+    on_reboot: 'restart'
+    on_crash: 'restart'

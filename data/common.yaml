@@ -1,0 +1,10 @@
+---
+# common settings for puppet-libvirt
+#
+
+lookup_options:
+  libvirt::profiles::devices:
+    merge: 'hash'
+  libvirt::profiles::domconf:
+    merge: 'hash'
+

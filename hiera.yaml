@@ -15,5 +15,8 @@ hierarchy:
   - name: 'Operating System Family'
     path: '%{facts.os.family}-family.yaml'
 
+  - name: 'libvirt profiles'
+    glob: "profiles/*.yaml"
+
   - name: 'common'
     path: 'common.yaml'

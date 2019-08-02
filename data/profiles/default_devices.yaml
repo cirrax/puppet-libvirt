@@ -1,0 +1,62 @@
+---
+# profiles/devices.yaml for puppet-libvirt
+
+libvirt::profiles::devices:
+  default:
+    input:
+      - attrs:
+          type: 'mouse'
+          bus: 'ps2'
+      - attrs:
+          type: 'keyboard'
+          bus: 'ps2'
+    graphics:
+      attrs:
+        type: 'vnc'
+        autoport: 'yes'
+        listen: '127.0.0.1'
+      values:
+        listen:
+          attrs:
+            type: 'address'
+            address: '127.0.0.1'
+    video:
+      values:
+        model:
+          attrs:
+            type: 'cirrus'
+            vram: '9216'
+            heads: '1'
+        alias:
+          attrs:
+            name: 'video0'
+    memballoon:
+      attrs:
+        model: 'virtio'
+      values:
+        alias:
+          attrs:
+            name: 'balloon0'
+    rng:
+      attrs:
+        model: 'virtio'
+      values:
+        backend:
+          attrs:
+            model: 'random'
+          values: '/dev/random'
+    serial:
+      attrs:
+        type: 'pty'
+      values:
+        target:
+          attrs:
+            port: '0'
+    console:
+      attrs:
+        type: 'pty'
+      values:
+        target:
+          attrs:
+            type: 'serial'
+            port: '0'
