@@ -10,9 +10,9 @@ disk_src_attrs = {
 <domain type='<%= @type %>'>
   <name><%= @name %></name>
   <title><%= @domain_title %></title>
-  <% if @uuid -%>
+  <%- if @uuid -%>
   <uuid><%= @uuid %></uuid>
-  <% end -%>
+  <%- end -%>
   <description><%= @description %></description>
   <memory unit='MiB'><%= @max_memory %></memory>
   <currentMemory unit='MiB'><%= @initial_memory %></currentMemory>
