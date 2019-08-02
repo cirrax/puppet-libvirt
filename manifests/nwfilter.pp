@@ -28,12 +28,12 @@
 #
 
 define libvirt::nwfilter (
-  $uuid              = libvirt_generate_uuid($name),
-  $ip                = undef,
-  $publictcpservices = [],
-  $publicudpservices = [],
-  $customtcprules    = [],
-  $customudprules    = [],
+  String           $uuid              = libvirt_generate_uuid($name),
+  Optional[String] $ip                = undef,
+  Array            $publictcpservices = [],
+  Array            $publicudpservices = [],
+  Array            $customtcprules    = [],
+  Array            $customudprules    = [],
 ) {
 
   include ::libvirt
