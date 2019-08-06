@@ -63,6 +63,29 @@ describe 'libvirt::config' do
     }
   end
 
+  context 'with libvirtd.conf' do
+    let :params do
+      default_params.merge(
+        :libvirtd_conf => {
+          'string'  => 'test',
+          'integer' => 2,
+          'int_str' => '"2"',
+          'array'   => ['A','B']
+        },
+      )
+    end
+    it_behaves_like 'libvirt::config shared examples'
+    it { is_expected.to contain_file('/etc/libvirt/libvirtd.conf')
+      .with_owner('root')
+      .with_group('root')
+      .with_mode('0600')
+      .with_content(/^string = "test"$/)
+      .with_content(/^integer = 2$/)
+      .with_content(/^int_str = "2"$/)
+      .with_content(/^array = \["A", "B"\]$/)
+    }
+  end
+
   context 'with uri_aliases' do
     let :params do
       default_params.merge(
