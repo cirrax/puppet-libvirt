@@ -18,6 +18,7 @@ describe 'libvirt' do
         :qemu_hook_packages    => {'drbd' => ['xmlstarlet','python-libvirt'], },
         :create_networks       => {},
         :create_domains        => {},
+        :libvirtd_conf         => {},
         :evacuation            => 'migrate',
         :max_job_time          => '120',
         :suspend_multiplier    => '5',
