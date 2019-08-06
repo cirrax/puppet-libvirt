@@ -12,6 +12,7 @@ describe 'libvirt::config' do
 
   let :default_params do
       { :qemu_conf    => {},
+        :libvirtd_conf => {},
         :uri_aliases  => [],
         :uri_default  => '',
         :default_conf => {},
