@@ -77,12 +77,12 @@ Puppet::Type.newtype(:libvirt_pool) do
 
   newparam(:sourcepath) do
     desc 'The source path.'
-    newvalues(/(\/)?(\w)/)
+    newvalues(%r{(\/)?(\w)})
   end
 
   newparam(:sourcedev) do
     desc 'The source device.'
-    newvalues(/(\/)?(\w)/)
+    newvalues(%r{(\/)?(\w)})
   end
 
   newparam(:sourcename) do
@@ -97,7 +97,7 @@ Puppet::Type.newtype(:libvirt_pool) do
 
   newparam(:target) do
     desc 'The target.'
-    newvalues(/(\/)?(\w)/)
+    newvalues(%r{(\/)?(\w)})
   end
 
   newparam(:target_owner) do
