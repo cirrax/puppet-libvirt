@@ -1,6 +1,5 @@
 module Puppet::Parser::Functions
-  newfunction(:libvirt_generate_uuid, :type => :rvalue) do |args|
-
+  newfunction(:libvirt_generate_uuid, type: :rvalue) do |args|
     # compute sha1 hash of all keys concatenated
     sha1 = Digest::SHA1.hexdigest(args.join(''))
 

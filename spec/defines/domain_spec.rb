@@ -2,31 +2,29 @@
 require 'spec_helper'
 
 describe 'libvirt::domain' do
-
   let :facts do
     {
-      :osfamily               => 'Debian',
-      :lsbdistcodename        => 'stretch',
+      osfamily: 'Debian',
+      lsbdistcodename: 'stretch',
     }
   end
 
   let :default_params do
-    { :domain_title       => '',
-      :description        => '',
-      :boot               => 'hd',
-      :disks              => [],
-      :interfaces         => [],
-      :autostart          => true,
-    }
+    { domain_title: '',
+      description: '',
+      boot: 'hd',
+      disks: [],
+      interfaces: [],
+      autostart: true }
   end
 
   shared_examples 'libvirt::domain shared examples' do
-
     it { is_expected.to compile.with_all_deps }
 
-    it { is_expected.to contain_exec('libvirt-domain-' + title )
-        .with_provider( 'shell' )
-        .with_creates( '/etc/libvirt/qemu/' + title + '.xml' )
+    it {
+      is_expected.to contain_exec('libvirt-domain-' + title)
+        .with_provider('shell')
+        .with_creates('/etc/libvirt/qemu/' + title + '.xml')
     }
   end
 
@@ -34,21 +32,23 @@ describe 'libvirt::domain' do
     let (:title) { 'mytitle' }
     let :params do
       default_params.merge(
-	:autostart      => true,
+        autostart: true,
       )
     end
 
     it_behaves_like 'libvirt::domain shared examples'
 
-    it { is_expected.to contain_exec('libvirt-domain-autostart-' + title )
-	.with_command( 'virsh autostart ' + title )
-        .with_provider( 'shell' )
-        .with_creates( '/etc/libvirt/qemu/autostart/' + title + '.xml' )
+    it {
+      is_expected.to contain_exec('libvirt-domain-autostart-' + title)
+        .with_command('virsh autostart ' + title)
+        .with_provider('shell')
+        .with_creates('/etc/libvirt/qemu/autostart/' + title + '.xml')
     }
 
-    it { is_expected.to contain_exec('libvirt-domain-start-' + title )
-	.with_command( 'virsh start ' + title )
-        .with_provider( 'shell' )
+    it {
+      is_expected.to contain_exec('libvirt-domain-start-' + title)
+        .with_command('virsh start ' + title)
+        .with_provider('shell')
     }
   end
 
@@ -57,12 +57,12 @@ describe 'libvirt::domain' do
 
     let :params do
       default_params.merge(
-	:autostart      => false,
+        autostart: false,
       )
     end
+
     it_behaves_like 'libvirt::domain shared examples'
-    it { is_expected.to_not contain_exec('libvirt-domain-autostart-' + title ) }
-    it { is_expected.to_not contain_exec('libvirt-domain-start-' + title ) }
+    it { is_expected.not_to contain_exec('libvirt-domain-autostart-' + title) }
+    it { is_expected.not_to contain_exec('libvirt-domain-start-' + title) }
   end
 end
-

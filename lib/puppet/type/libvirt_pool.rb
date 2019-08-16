@@ -2,45 +2,44 @@
 # Kudos to Thias for it :)
 #
 Puppet::Type.newtype(:libvirt_pool) do
-@doc = %q{Manages libvirt pools
+  @doc = "Manages libvirt pools
 
-          Example :
-            libvirt_pool { 'default' :
-              ensure => absent
-            }
+            Example :
+              libvirt_pool { 'default' :
+                ensure => absent
+              }
 
-            libvirt_pool { 'mydirpool' :
-              ensure    => present,
-              active    => true,
-              autostart => true,
-              type      => 'dir',
-              target    => '/tmp/mypool',
-            }
+              libvirt_pool { 'mydirpool' :
+                ensure    => present,
+                active    => true,
+                autostart => true,
+                type      => 'dir',
+                target    => '/tmp/mypool',
+              }
 
-            libvirt_pool { 'mydirpool2' :
-              ensure       => present,
-              active       => true,
-              autostart    => true,
-              type         => 'dir',
-              target       => '/tmp/mypool2',
-              target_owner => 107,
-              target_group => 107,
-              target_mode  => '0755',
-            }
+              libvirt_pool { 'mydirpool2' :
+                ensure       => present,
+                active       => true,
+                autostart    => true,
+                type         => 'dir',
+                target       => '/tmp/mypool2',
+                target_owner => 107,
+                target_group => 107,
+                target_mode  => '0755',
+              }
 
-            libvirt_pool { 'vm_storage':
-              ensure    => 'present',
-              active    => 'true',
-              type      => 'logical',
-              sourcedev => ['/dev/sdb', '/dev/sdc'],
-              target    => '/dev/vg0'
-            }
+              libvirt_pool { 'vm_storage':
+                ensure    => 'present',
+                active    => 'true',
+                type      => 'logical',
+                sourcedev => ['/dev/sdb', '/dev/sdc'],
+                target    => '/dev/vg0'
+              }
 
 
-        }
+          "
 
   ensurable do
-
     desc 'Manages the creation or the removal of a pool
     `present` means that the pool will be defined and created
     `absent` means that the pool will be purged from the system'
@@ -51,7 +50,7 @@ Puppet::Type.newtype(:libvirt_pool) do
     end
 
     newvalue(:absent) do
-      if (provider.exists?)
+      if provider.exists?
         provider.destroy
       end
     end
@@ -59,12 +58,11 @@ Puppet::Type.newtype(:libvirt_pool) do
     def retrieve
       provider.status
     end
-
   end
 
-  newparam(:name, :namevar => true) do
+  newparam(:name, namevar: true) do
     desc 'The pool name.'
-    newvalues(/^\S+$/)
+    newvalues(%r{^\S+$})
   end
 
   newparam(:type) do
@@ -74,7 +72,7 @@ Puppet::Type.newtype(:libvirt_pool) do
 
   newparam(:sourcehost) do
     desc 'The source host.'
-    newvalues(/^\S+$/)
+    newvalues(%r{^\S+$})
   end
 
   newparam(:sourcepath) do
@@ -89,7 +87,7 @@ Puppet::Type.newtype(:libvirt_pool) do
 
   newparam(:sourcename) do
     desc 'The source name.'
-    newvalues(/^\S+$/)
+    newvalues(%r{^\S+$})
   end
 
   newparam(:sourceformat) do
@@ -104,17 +102,17 @@ Puppet::Type.newtype(:libvirt_pool) do
 
   newparam(:target_owner) do
     desc 'The owner of the target dir or filesystem'
-    newvalues(/^\S+$/)
+    newvalues(%r{^\S+$})
   end
 
   newparam(:target_group) do
     desc 'The group of the target dir or filesystem'
-    newvalues(/^\S+$/)
+    newvalues(%r{^\S+$})
   end
 
   newparam(:target_mode) do
     desc 'The mode of the target dir or filesystem'
-    newvalues(/^[0-7]{4}$/)
+    newvalues(%r{^[0-7]{4}$})
   end
 
   newproperty(:active) do
@@ -133,7 +131,7 @@ Puppet::Type.newtype(:libvirt_pool) do
 
   validate do
     # https://libvirt.org/formatstorage.html#StoragePoolTarget
-    if (self[:target_owner] or self[:target_group] or self[:target_mode]) and ! [:fs, :dir].include?(self[:type])
+    if (self[:target_owner] || self[:target_group] || self[:target_mode]) && ![:fs, :dir].include?(self[:type])
       Puppet.warning('target_(owner|group|mode) is currently only useful for directory or filesystem based pools')
     end
   end

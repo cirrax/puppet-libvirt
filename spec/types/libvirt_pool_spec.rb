@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe 'libvirt_pool' do
-
   let (:title) { 'vnet1' }
-  context "with default provider" do
+
+  context 'with default provider' do
     it { is_expected.to be_valid_type.with_provider(:virsh) }
 
     it { is_expected.to be_valid_type.with_properties('ensure') }
@@ -21,7 +21,5 @@ describe 'libvirt_pool' do
     it { is_expected.to be_valid_type.with_parameters('target_owner') }
     it { is_expected.to be_valid_type.with_parameters('target_group') }
     it { is_expected.to be_valid_type.with_parameters('target_mode') }
-
   end
-
 end

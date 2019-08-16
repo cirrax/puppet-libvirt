@@ -1,6 +1,5 @@
 module Puppet::Parser::Functions
-  newfunction(:libvirt_generate_mac, :type => :rvalue) do |args|
-
+  newfunction(:libvirt_generate_mac, type: :rvalue) do |args|
     # compute sha1 hash of all keys concatenated, only the first 6
     # hex digits will be used
     sha1 = Digest::SHA1.hexdigest(args.join(''))
