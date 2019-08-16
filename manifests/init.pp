@@ -149,7 +149,12 @@ class libvirt (
   String  $diff_dir              = '',
 ) {
 
-  Anchor['libvirt::begin'] -> Class['Libvirt::Install'] -> Class['Libvirt::Config'] -> Class['Libvirt::Service'] -> Anchor['libvirt::installed'] -> Anchor['libvirt::end']
+  Anchor['libvirt::begin']
+  -> Class['Libvirt::Install']
+  -> Class['Libvirt::Config']
+  -> Class['Libvirt::Service']
+  -> Anchor['libvirt::installed']
+  -> Anchor['libvirt::end']
 
   anchor { 'libvirt::begin': }
   include ::libvirt::install
