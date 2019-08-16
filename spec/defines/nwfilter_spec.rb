@@ -24,7 +24,7 @@ describe 'libvirt::nwfilter' do
   end
 
   context 'whith defaults' do
-    let (:title) { 'mytitle' }
+    let(:title) { 'mytitle' }
     let :params do
       default_params.merge(
         ip: '123.123.123.123',

@@ -23,7 +23,7 @@ describe 'libvirt::network' do
   end
 
   context 'whith defaults' do
-    let (:title) { 'mytitle' }
+    let(:title) { 'mytitle' }
     let :params do
       default_params.merge(
         bridge: 'test',
@@ -53,7 +53,7 @@ describe 'libvirt::network' do
   end
 
   context 'whith no autostart' do
-    let (:title) { 'mytitle' }
+    let(:title) { 'mytitle' }
 
     let :params do
       default_params.merge(
@@ -74,7 +74,7 @@ describe 'libvirt::network' do
   end
 
   context 'whith absent' do
-    let (:title) { 'mytitle' }
+    let(:title) { 'mytitle' }
 
     let :params do
       default_params.merge(

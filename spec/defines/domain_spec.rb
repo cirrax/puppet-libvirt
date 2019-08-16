@@ -29,7 +29,7 @@ describe 'libvirt::domain' do
   end
 
   context 'whith defaults' do
-    let (:title) { 'mytitle' }
+    let(:title) { 'mytitle' }
     let :params do
       default_params.merge(
         autostart: true,
@@ -53,7 +53,7 @@ describe 'libvirt::domain' do
   end
 
   context 'whith no autostart' do
-    let (:title) { 'mytitle' }
+    let(:title) { 'mytitle' }
 
     let :params do
       default_params.merge(

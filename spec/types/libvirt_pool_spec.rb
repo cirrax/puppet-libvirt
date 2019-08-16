@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'libvirt_pool' do
-  let (:title) { 'vnet1' }
+  let(:title) { 'vnet1' }
 
   context 'with default provider' do
     it { is_expected.to be_valid_type.with_provider(:virsh) }
