@@ -34,14 +34,14 @@ Puppet::Type.type(:libvirt_pool).provide(:virsh) do
   def self.prefetch(resources)
     pools = instances
     resources.keys.each do |name|
-      if provider = pools.find { |pool| pool.name == name }
+      if provider == pools.find { |pool| pool.name == name }
         resources[name].provider = provider
       end
     end
   end
 
   def create
-    defined = definePool
+    defined = definepool
     unless defined
       # for some reason the pool has not been defined
       # malformed xml
@@ -49,7 +49,7 @@ Puppet::Type.type(:libvirt_pool).provide(:virsh) do
       # or ?
       raise Puppet::Error, 'Unable to define the pool'
     end
-    buildPool
+    buildpool
 
     @property_hash[:ensure] = :present
     should_active = @resource.should(:active)
@@ -63,27 +63,27 @@ Puppet::Type.type(:libvirt_pool).provide(:virsh) do
   end
 
   def destroy
-    destroyPool
+    destroypool
     @property_hash.clear
   end
 
-  def definePool
+  def definepool
     result = false
     begin
-      tmpFile = Tempfile.new("pool.#{resource[:name]}")
-      xml = buildPoolXML resource
-      tmpFile.write(xml)
-      tmpFile.rewind
-      virsh('pool-define', tmpFile.path)
+      tmpfile = Tempfile.new("pool.#{resource[:name]}")
+      xml = buildpoolxml resource
+      tmpfile.write(xml)
+      tmpfile.rewind
+      virsh('pool-define', tmpfile.path)
       result = true
     ensure
-      tmpFile.close
-      tmpFile.unlink
+      tmpfile.close
+      tmpfile.unlink
     end
     result
   end
 
-  def buildPool
+  def buildpool
     virsh('pool-build', '--pool', resource[:name])
   rescue
     # Unable to build the pool maybe because
@@ -95,7 +95,7 @@ Puppet::Type.type(:libvirt_pool).provide(:virsh) do
     notice('Unable to build the pool')
   end
 
-  def destroyPool
+  def destroypool
     begin
       virsh('pool-destroy', resource[:name])
     rescue Puppet::ExecutionFailure => e
@@ -136,66 +136,66 @@ Puppet::Type.type(:libvirt_pool).provide(:virsh) do
     @property_hash[:ensure] != :absent
   end
 
-  def buildPoolXML(resource)
+  def buildpoolxml(resource)
     root = REXML::Document.new
     pool = root.add_element 'pool', 'type' => resource[:type]
     name = pool.add_element 'name'
     name.add_text resource[:name]
 
-    srcHost = resource[:sourcehost]
-    srcPath = resource[:sourcepath]
-    srcDev = resource[:sourcedev]
-    srcName = resource[:sourcename]
-    srcFormat = resource[:sourceformat]
+    srchost = resource[:sourcehost]
+    srcpath = resource[:sourcepath]
+    srcdev = resource[:sourcedev]
+    srcname = resource[:sourcename]
+    srcformat = resource[:sourceformat]
 
-    if srcHost || srcPath || srcDev || srcName || srcFormat
+    if srchost || srcpath || srcdev || srcname || srcformat
       source = pool.add_element 'source'
 
-      source.add_element('host', 'name' => srcHost)     if srcHost
-      source.add_element('dir', 'path' => srcPath)      if srcPath
-      source.add_element('format', 'type' => srcFormat) if srcFormat
+      source.add_element('host', 'name' => srchost)     if srchost
+      source.add_element('dir', 'path' => srcpath)      if srcpath
+      source.add_element('format', 'type' => srcformat) if srcformat
 
-      if srcDev
-        Array(srcDev).each do |dev|
+      if srcdev
+        Array(srcdev).each do |dev|
           source.add_element('device', 'path' => dev)
         end
       end
 
-      if srcName
-        srcNameEl = source.add_element 'name'
-        srcNameEl.add_text srcName
+      if srcname
+        srcnameel = source.add_element 'name'
+        srcnameel.add_text srcname
       end
     end
 
     target = resource[:target]
-    targetOwner = resource[:target_owner]
-    targetGroup = resource[:target_group]
-    targetMode = resource[:target_mode]
+    targetowner = resource[:target_owner]
+    targetgroup = resource[:target_group]
+    targetmode = resource[:target_mode]
     if target
-      targetEl = pool.add_element 'target'
-      targetPathEl = targetEl.add_element 'path'
-      targetPathEl.add_text target
+      targetel = pool.add_element 'target'
+      targetpathel = targetel.add_element 'path'
+      targetpathel.add_text target
 
-      if targetOwner || targetGroup || targetMode
-        targetPermissionsEl = targetEl.add_element 'permissions'
+      if targetowner || targetgroup || targetmode
+        targetpermissionsel = targetel.add_element 'permissions'
 
-        if targetOwner
-          targetPermissionsOwnerEl = targetPermissionsEl.add_element 'owner'
-          targetPermissionsOwnerEl.add_text targetOwner.to_s
+        if targetowner
+          targetpermissionsownerel = targetpermissionsel.add_element 'owner'
+          targetpermissionsownerel.add_text targetowner.to_s
         end
 
-        if targetGroup
-          targetPermissionsGroupEl = targetPermissionsEl.add_element 'group'
-          targetPermissionsGroupEl.add_text targetGroup.to_s
+        if targetgroup
+          targetpermissionsgroupel = targetpermissionsel.add_element 'group'
+          targetpermissionsgroupel.add_text targetgroup.to_s
         end
 
-        if targetMode
-          targetPermissionsModeEl = targetPermissionsEl.add_element 'mode'
-          targetPermissionsModeEl.add_text targetMode.to_s
+        if targetmode
+          targetpermissionsmodeel = targetpermissionsel.add_element 'mode'
+          targetpermissionsmodeel.add_text targetmode.to_s
         end
       end
     end
 
     root.to_s
-  end # buildPoolXML
+  end # buildpoolxml
 end
