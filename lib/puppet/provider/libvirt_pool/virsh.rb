@@ -42,24 +42,21 @@ Puppet::Type.type(:libvirt_pool).provide(:virsh) do
 
   def create
     defined = definepool
-    unless defined
-      # for some reason the pool has not been defined
-      # malformed xml
-      # or failed tmpfile creationa
-      # or ?
-      raise Puppet::Error, 'Unable to define the pool'
-    end
+
+    # for some reason the pool has not been defined
+    # malformed xml
+    # or failed tmpfile creationa
+    # or ?
+    raise Puppet::Error, 'Unable to define the pool' unless defined
+
     buildpool
 
     @property_hash[:ensure] = :present
     should_active = @resource.should(:active)
-    unless active == should_active
-      self.active = should_active
-    end
+    self.active = should_active unless active == should_active
+
     should_autostart = @resource.should(:autostart)
-    unless autostart == should_autostart
-      self.autostart = should_autostart
-    end
+    self.autostart = should_autostart unless autostart == should_autostart
   end
 
   def destroy
