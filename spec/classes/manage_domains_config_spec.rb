@@ -2,13 +2,6 @@
 require 'spec_helper'
 
 describe 'libvirt::manage_domains_config' do
-  let :facts do
-    {
-      osfamily: 'Debian',
-      lsbdistcodename: 'stretch',
-    }
-  end
-
   let :default_params do
     {}
   end
@@ -30,11 +23,17 @@ describe 'libvirt::manage_domains_config' do
     }
   end
 
-  context 'with defaults' do
-    let :params do
-      default_params
-    end
+  on_supported_os.each do |os, os_facts|
+    context "on #{os}" do
+      let(:facts) { os_facts }
 
-    it_behaves_like 'libvirt::manage_domains_config shared examples'
+      context 'with defaults' do
+        let :params do
+          default_params
+        end
+
+        it_behaves_like 'libvirt::manage_domains_config shared examples'
+      end
+    end
   end
 end

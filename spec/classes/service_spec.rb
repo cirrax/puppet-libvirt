@@ -2,13 +2,6 @@
 require 'spec_helper'
 
 describe 'libvirt::service' do
-  let :facts do
-    {
-      osfamily: 'Debian',
-      lsbdistcodename: 'stretch',
-    }
-  end
-
   let :default_params do
     { service_name: 'libvirtd',
       service_ensure: 'running',
@@ -26,23 +19,29 @@ describe 'libvirt::service' do
     }
   end
 
-  context 'with defaults' do
-    let :params do
-      default_params
+  on_supported_os.each do |os, os_facts|
+    context "on #{os}" do
+      let(:facts) { os_facts }
+
+      context 'with defaults' do
+        let :params do
+          default_params
+        end
+
+        it_behaves_like 'libvirt::service shared examples'
+      end
+
+      context 'with non defaults' do
+        let :params do
+          default_params.merge(
+            service_ensure: 'stopped',
+            service_enable: false,
+            service_name: 'dtrivbil',
+          )
+        end
+
+        it_behaves_like 'libvirt::service shared examples'
+      end
     end
-
-    it_behaves_like 'libvirt::service shared examples'
-  end
-
-  context 'with non defaults' do
-    let :params do
-      default_params.merge(
-        service_ensure: 'stopped',
-        service_enable: false,
-        service_name: 'dtrivbil',
-      )
-    end
-
-    it_behaves_like 'libvirt::service shared examples'
   end
 end
