@@ -6,7 +6,8 @@ describe 'libvirt::config' do
     { qemu_conf: {},
       uri_aliases: [],
       uri_default: '',
-      default_conf: {} }
+      default_conf: {},
+      libvirtd_conf: {} }
   end
 
   shared_examples 'libvirt::config shared examples' do

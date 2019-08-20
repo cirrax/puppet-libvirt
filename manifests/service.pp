@@ -28,6 +28,8 @@ class libvirt::service(
 ) inherits libvirt {
 
   if $manage_service {
+    Libvirtd_conf <| |> ~> Service['libvirtd']
+
     service {'libvirtd':
       ensure => $service_ensure,
       name   => $service_name,

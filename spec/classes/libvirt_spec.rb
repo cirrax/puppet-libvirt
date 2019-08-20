@@ -15,7 +15,8 @@ describe 'libvirt' do
       suspend_multiplier: '5',
       uri_aliases: [],
       uri_default: '',
-      default_conf: {} }
+      default_conf: {},
+      libvirtd_conf: {} }
   end
 
   shared_examples 'libvirt shared examples' do

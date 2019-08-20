@@ -91,6 +91,9 @@
 #   Hash to add config to /etc/default/libvirtd (Debian) or
 #   /etc/sysconfig/libvirtd (RedHat)
 #   Defaults to {}
+# [*libvirtd_conf*]
+#   Hash to add config to /etc/libvirt/libvirtd.conf 
+#   Defaults to {}
 # [*config_dir*]
 #   the directory for configurations.
 #   Defaults to '/etc/libvirt'
@@ -125,28 +128,29 @@
 # Copyright 2014 Cirrax GmbH
 #
 class libvirt (
-  Array   $libvirt_package_names = [],
-  String  $service_name          = 'libvirtd',
-  String  $service_ensure        = 'running',
-  Boolean $service_enable        = true,
-  Boolean $manage_service        = true,
-  Hash    $qemu_conf             = {},
-  String  $qemu_hook             = '',
-  Hash    $qemu_hook_packages    = {},
-  Hash    $create_networks       = {},
-  Hash    $create_domains        = {},
-  Hash    $create_nwfilters      = {},
-  String  $evacuation            = 'migrate',
-  String  $max_job_time          = '120',
-  String  $suspend_multiplier    = '5',
-  String  $migration_url_format  = 'ssh',
-  Array   $uri_aliases           = [],
-  String  $uri_default           = '',
-  Hash    $default_conf          = {},
-  String  $config_dir            = '/etc/libvirt',
-  String  $manage_domains_config = '/etc/manage-domains.ini',
-  Boolean $drop_default_net      = false,
-  String  $diff_dir              = '',
+  Array                                                $libvirt_package_names = [],
+  String                                               $service_name          = 'libvirtd',
+  String                                               $service_ensure        = 'running',
+  Boolean                                              $service_enable        = true,
+  Boolean                                              $manage_service        = true,
+  Hash                                                 $qemu_conf             = {},
+  String                                               $qemu_hook             = '',
+  Hash                                                 $qemu_hook_packages    = {},
+  Hash                                                 $create_networks       = {},
+  Hash                                                 $create_domains        = {},
+  Hash                                                 $create_nwfilters      = {},
+  String                                               $evacuation            = 'migrate',
+  String                                               $max_job_time          = '120',
+  String                                               $suspend_multiplier    = '5',
+  String                                               $migration_url_format  = 'ssh',
+  Array                                                $uri_aliases           = [],
+  String                                               $uri_default           = '',
+  Hash                                                 $default_conf          = {},
+  Hash[Optional[String],Variant[String,Integer,Array]] $libvirtd_conf         = {},
+  String                                               $config_dir            = '/etc/libvirt',
+  String                                               $manage_domains_config = '/etc/manage-domains.ini',
+  Boolean                                              $drop_default_net      = false,
+  String                                               $diff_dir              = '',
 ) {
 
   Anchor['libvirt::begin']

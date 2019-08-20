@@ -2,13 +2,14 @@
 #
 # Installs configuration files
 class libvirt::config (
-  String  $qemu_hook    = $libvirt::qemu_hook,
-  Hash    $qemu_conf    = $libvirt::qemu_conf,
-  Array   $uri_aliases  = $libvirt::uri_aliases,
-  String  $uri_default  = $libvirt::uri_default,
-  Hash    $default_conf = $libvirt::default_conf,
-  String  $config_dir   = $libvirt::config_dir,
-  Boolean $drop_default_net = $libvirt::drop_default_net,
+  String                                               $qemu_hook        = $libvirt::qemu_hook,
+  Hash                                                 $qemu_conf        = $libvirt::qemu_conf,
+  Array                                                $uri_aliases      = $libvirt::uri_aliases,
+  String                                               $uri_default      = $libvirt::uri_default,
+  Hash                                                 $default_conf     = $libvirt::default_conf,
+  Hash[Optional[String],Variant[String,Integer,Array]] $libvirtd_conf    = $libvirt::libvirtd_conf,
+  String                                               $config_dir       = $libvirt::config_dir,
+  Boolean                                              $drop_default_net = $libvirt::drop_default_net,
 ) inherits libvirt {
 
   if ($qemu_hook != '') {
@@ -41,6 +42,18 @@ class libvirt::config (
   $default_conf.each | String $key, String $value | {
     libvirtd_default {
       $key: value => $value;
+    }
+  }
+
+  $libvirtd_conf.each | String $key, Variant[String,Integer,Array] $value | {
+    if $value =~ Array {
+      libvirtd_conf { $key:
+        value => join(['["', $value.join('","'), '"]']);
+      }
+    } else {
+      libvirtd_conf { $key:
+        value => $value,
+      }
     }
   }
 
