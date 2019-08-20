@@ -1,10 +1,8 @@
-# == Class: libvirt::manage_domains_config
+# libvirt::manage_domains_config
 #
-# Installs configuration files for manage-domains script
+# @summary Installs configuration files for manage-domains script
 #
-# === Parameters
-#
-# [*manage_domains_config*]
+# @param manage_domains_config
 #   file where the manage_domains configuration is.
 #   Defaults to $libvirt::manage_domains_config
 #   Remark: if you change this, you also have to change in

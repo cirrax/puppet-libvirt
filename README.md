@@ -315,25 +315,25 @@ The source format.
 
 ###### `target`
 
-Valid values: /(\/)?(\w)/
+Valid values: `/(\/)?(\w)/`
 
 The target.
 
 ###### `target_owner`
 
-Valid values: /^\S+$/
+Valid values: `/^\S+$/`
 
 The owner of the target dir or filesystem
 
 ###### `target_group`
 
-Valid values: /^\S+$/
+Valid values: `/^\S+$/`
 
 The group of the target dir or filesystem
 
 ###### `target_mode`
 
-Valid values: /^[0-7]{4}$/
+Valid values: `/^[0-7]{4}$/`
 
 The mode of the target dir or filesystem
 

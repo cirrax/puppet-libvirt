@@ -1,23 +1,21 @@
-# == Class: libvirt::install
+# libvirt::install
 #
-# Installs the required packages and files
+# @summary Installs the required packages and files
 #
-# === Parameters
-#
-# [*qemu_hook*]
+# @param qemu_hook
 #   QEMU hook to install. The only currently available hook is a script
 #   to setup DRBD resources. Valid values are 'drbd' or '' (=no hook).
 #   Default inherited from ::libvirt class
 #
-# [*packages*]
+# @param packages
 #   Array of the libvirt package names to install.
 #   Default inherited from ::libvirt class
 #
-# [*qemu_hook_packages*]
+# @param qemu_hook_packages
 #   Hash of Arrays of hook specific packages to install
 #   Default inherited from ::libvirt class
 #
-# [*package_ensure*]
+# @param package_ensure
 #   What state the packages should be in.
 #   Defaults to 'installed'
 #

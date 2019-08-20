@@ -3,6 +3,9 @@ module Puppet::Parser::Functions
     Generates MAC addresses for all interfaces in the array which do not yet have an
     address specified. The MAC addresses are based on the domain name, network and
     portgroup.
+    @param
+       hash of interfaces
+    @return the interfacess with mac address
 
     ENDHEREDOC
 

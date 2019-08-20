@@ -1,6 +1,9 @@
 #
 # function to merge profiles.
 #
+# @summary
+#   merges profiles
+#
 # A profile is a hash of values. A profile can depend on another profile.
 # The base for a profile can be configured in the profiles data:
 # $data['profileconfig']['base'], which should reference another profile.
@@ -9,9 +12,16 @@
 # (remark: this is NOT the deep_merge of hiera, but of puppetlab-stdlib,
 # see https://github.com/puppetlabs/puppetlabs-stdlib/blob/master/REFERENCE.md#deep_merge)
 #
-# The profiles are computed using recursion.
-#
-# $data['profileconfig'] is removed from the resulting hash.
+# @note 
+#   The profiles are computed using recursion.
+#   $data['profileconfig'] is removed from the resulting hash.
+# @param profile_hash
+#   all the profiles 
+# @param profile
+#   Name of the computed profile to return
+# @return
+#   the computed profile
+# 
 function libvirt::get_merged_profile(
   Hash   $profile_hash,
   String $profile,

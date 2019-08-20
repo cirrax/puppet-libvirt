@@ -1,13 +1,10 @@
-# == Class: libvirt::profiles
+# libvirt::profiles
 #
-# this class loads all the available profiles for usage in domain.pp
+# @summary this class loads all the available profiles for usage in domain.pp
 #
-#
-# === Parameters
-#
-# [*devices*]
+# @param devices
 #   devices profiles to load
-# [*domconf*]
+# @param domconf
 #   domconf profiles to load
 #
 class libvirt::profiles (

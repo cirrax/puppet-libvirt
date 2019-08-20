@@ -5,6 +5,10 @@ require 'rexml/document'
 require 'tempfile'
 
 Puppet::Type.type(:libvirt_pool).provide(:virsh) do
+  desc '
+    @summary virsh provider
+  '
+
   commands virsh: 'virsh'
 
   def self.instances

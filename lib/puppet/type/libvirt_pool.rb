@@ -4,39 +4,38 @@
 Puppet::Type.newtype(:libvirt_pool) do
   @doc = "Manages libvirt pools
 
-            Example :
-              libvirt_pool { 'default' :
-                ensure => absent
-              }
+          @example 
+            libvirt_pool { 'default' :
+              ensure => absent
+            }
 
-              libvirt_pool { 'mydirpool' :
-                ensure    => present,
-                active    => true,
-                autostart => true,
-                type      => 'dir',
-                target    => '/tmp/mypool',
-              }
+          @example
+            libvirt_pool { 'mydirpool' :
+              ensure    => present,
+              active    => true,
+              autostart => true,
+              type      => 'dir',
+              target    => '/tmp/mypool',
+            }
+          @example
+            libvirt_pool { 'mydirpool2' :
+              ensure       => present,
+              active       => true,
+              autostart    => true,
+              type         => 'dir',
+              target       => '/tmp/mypool2',
+              target_owner => 107,
+              target_group => 107,
+              target_mode  => '0755',
+            }
 
-              libvirt_pool { 'mydirpool2' :
-                ensure       => present,
-                active       => true,
-                autostart    => true,
-                type         => 'dir',
-                target       => '/tmp/mypool2',
-                target_owner => 107,
-                target_group => 107,
-                target_mode  => '0755',
-              }
-
-              libvirt_pool { 'vm_storage':
-                ensure    => 'present',
-                active    => 'true',
-                type      => 'logical',
-                sourcedev => ['/dev/sdb', '/dev/sdc'],
-                target    => '/dev/vg0'
-              }
-
-
+            libvirt_pool { 'vm_storage':
+              ensure    => 'present',
+              active    => 'true',
+              type      => 'logical',
+              sourcedev => ['/dev/sdb', '/dev/sdc'],
+              target    => '/dev/vg0'
+            }
           "
 
   ensurable do

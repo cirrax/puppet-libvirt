@@ -2,6 +2,9 @@ Puppet::Type.type(:libvirtd_default).provide(
   :ini_setting,
   parent: Puppet::Type.type(:ini_setting).provider(:ruby),
 ) do
+  desc '
+    @summary add config to /etc/default/libvirtd
+  '
 
   def section
     ''

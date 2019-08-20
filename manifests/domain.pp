@@ -1,31 +1,30 @@
-# == Define: libvirt::domain
 #
-# Define a new libvirt domain. The name of the domain is
-# the resource name. The domain_title attribute allows to
-# to set a free text title.
+# libvirt::domain
 #
-# === Parameters:
+# @summary Define a new libvirt domain. The name of the domain is
+#   the resource name. The domain_title attribute allows to
+#   to set a free text title.
 #
-# Most parameters are modeled after their equivalents in the libvirt
-# domain XML definition. See http://libvirt.org/formatdomain.html
-# for more information.
+# @note Most parameters are modeled after their equivalents in the libvirt
+#   domain XML definition. See http://libvirt.org/formatdomain.html
+#   for more information.
 #
-# [*type*]
+# @param type
 #   Specify the hypervisor used for running the domain.
 #   The allowed values are driver specific, but include "xen", "kvm", "qemu" and "lxc"
 #   Defaults to 'kvm'
-# [*domain_title*]
+# @param domain_title
 #   Free text title of the domain. Defaults to ''.
-# [*description*]
+# @param description
 #   Free text description of the domain. Defaults to ''.
-# [*uuid*]
+# @param uuid
 #   UUID for the domain. The default is the uuid, generated
 #   with puppet.
-# [*boot*]
+# @param boot
 #   Default boot device. Valid values are any accepted by libvirt or the string
 #   'per-device' to set individual boot orders on disks or interfaces.
 #   Defaults to 'hd'.
-# [*disks*]
+# @param disks
 #   Array of hashes defining the disks of this domain. Defaults to no disks
 #   at all. The hashes support the following keys:
 #     * type:       Disk type, supported types are 'file', 'block', 'network' and
@@ -45,9 +44,9 @@
 #                   and native io. Use {'name' => 'qemu', 'type' => 'qcow2'} for QCOW2
 #                   images.
 #                   See the libvirt domain XML documentation for all possible values.
-#     * boot_order: Integer starting at 1 for the highest priority (shared with
+#    * boot_order:  Integer starting at 1 for the highest priority (shared with
 #                   interfaces).
-# [*interfaces*]
+# @param interfaces
 #   Array of hashes defining the network interfaces of this domain. Defaults to
 #   no network interfaces.
 #   The hashes support the following keys:
@@ -59,67 +58,74 @@
 #     * type:       Type of network card. Defaults to 'virtio'.
 #     * boot_order: Integer starting at 1 for the highest priority (shared with
 #                   disks).
-# [*autostart*]
+# @param autostart
 #   Wheter the libvirt autostart flag should be set. Defaults to true. Autostart
 #   domains are started if the host is booted.
-# [*dom_profile*]
+# @param dom_profile
 #   profile to use for $domconf.
 #   Defaults to 'default' which is defined in data/profiles/xxx.yaml
 #   A profile is a predefined set of parameters for a vm.
 #   see class libvirt::profiles for additional information.
-# [*domconf*]
+# @param domconf
 #   the generic domain configuration to activate for vm.
 #   this parameter is merged with the choosen profile,
 #   ($libvirt::profiles::domconf)
 #   to generate the final configuration.
 #   Defaults to {} which does not change the profile.
 #   see also libvirt::profiles for how to use profiles
-# [*devices_profile*]
+# @param devices_profile
 #   profile to use for $devices.
 #   Defaults to 'default' which is defined in data/profiles/xxx.yaml
 #   A profile is a predefined set of parameters for a vm.
 #   see class libvirt::profiles for additional information.
-# [*devices*]
+# @param devices
 #   devices to attach to the vm
 #   this parameter is merged with the choosen profile,
 #   ($libvirt::profiles::devices)
 #   to generate the final configuration.
 #   Defaults to {} which does not change the profile.
 #   see also libvirt::profiles for how to use profiles
-# [*additionaldevices*]
+# @param additionaldevices
 #   additional devices to attach to the vm
 #   Same format as $devices, but without merging.
 #   Defaults to {}
 #
-# The following values are only useful together with the drbd qemu_hook in
-# setups of two redundant virtualization hosts synchronized over DRBD. They
-# have no effect if qemu_hook is not set to drbd.
-#
-# [*default_host*]
+# @param default_host
 #   FQDN for the default host of this domain. The manage-domains script uses
 #   this value to move a domain to it's default host if it's running elsewhere.
-#   The default value is undef.
-# [*evacuation*]
+#   <p>Only useful together with the drbd qemu_hook in setups of two
+#   redundant virtualization hosts synchronized over DRBD. They
+#   have no effect if qemu_hook is not set to drbd.
+# @param evacuation
 #   Evacuation policy for this domain. Valid values are 'migrate', 'save' and
 #   'shutdown'. The default is to not set a value and to use the global default.
-# [*max_job_time*]
+#   <p>Only useful together with the drbd qemu_hook in setups of two
+#    redundant virtualization hosts synchronized over DRBD. They
+#    have no effect if qemu_hook is not set to drbd.
+# @param max_job_time
 #   Maximum job time in seconds when migrating, saving or shuting down this
 #   domain with the manage-domains script. The default is to not set a value
 #   and to use the global default.
-# [*suspend_multiplier*]
+#   <p>Only useful together with the drbd qemu_hook in setups of two
+#    redundant virtualization hosts synchronized over DRBD. They
+#    have no effect if qemu_hook is not set to drbd.
+# @param suspend_multiplier
 #   suspend_multiplier for migrating domains with the manage-domains
 #   script. The default is to not set a value and to use the global default.
+#   <p>Only useful together with the drbd qemu_hook in setups of two
+#   redundant virtualization hosts synchronized over DRBD. They
+#   have no effect if qemu_hook is not set to drbd.
 #
-# == Deprecated parameters:
-# [*max_memory*]
-#   Maximum amount of memory that can be allocated to the domain.
+# @param max_memory
+#   Deprecated: Maximum amount of memory that can be allocated to the domain.
 #   Example (yaml):
 #     domconf:
 #       memory:
 #         attrs:
 #           unit: 'MiB'
 #         values: 2000
-# [*initial_memory*]
+#   **This parameter is deprecated, if set, the manifest will fail**
+# @param initial_memory
 #   Initial memory allocation for the domain. Defaults to max_memory.
 #   Deprecation notice: use $domconf (or profile) to set.
 #   Example (yaml):
@@ -128,14 +134,16 @@
 #         attrs:
 #           unit: 'MiB'
 #         values: 1000
-# [*cpus*]
+#   **This parameter is deprecated, if set, the manifest will fail**
+# @param cpus
 #   Number of virtual CPUs for the domain. Defaults to '1'.
 #   Deprecation notice: use $domconf (or profile) to set.
 #   Example (yaml):
 #     domconf:
 #       vcpu:
 #         values: 1
-# [*bootmenu*]
+#   **This parameter is deprecated, if set, the manifest will fail**
+# @param bootmenu
 #   Wheter the boot menu option should be available or not. Defaults to true.
 #   Deprecation notice: use $domconf if you want to disable the bootmenu
 #   Example (yaml):
@@ -144,12 +152,14 @@
 #         bootmenu:
 #           attrs: 
 #             enable: 'no'
-# [*machine_type*]
+#   **This parameter is deprecated, if set, the manifest will fail**
+# @param machine_type
 #   Machine type to use, i.e.
 #     * "pc" - Standard PC (i440FX + PIIX, 1996)
 #     * "q35" - Standard PC (Q35 + ICH9, 2009)
 #   Deprecation notice: use $domconf if you want to set the machine type
-# [*cpu_model*]
+#   **This parameter is deprecated, if set, the manifest will fail**
+# @param cpu_model
 #   CPU model to emulate. Valid values are any cpu model accepted by libvirt or
 #   the special values 'host-model' and 'host-passthrough'. See
 #   http://libvirt.org/formatdomain.html#elementsCPU for details. Defaults to
@@ -163,7 +173,8 @@
 #           mode: 'custom'
 #         values:
 #           model: 'SandyBridge'
-
+#   **This parameter is deprecated, if set, the manifest will fail**
+#
 define libvirt::domain (
   String            $type               = 'kvm',
   String            $domain_title       = '',

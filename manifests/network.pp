@@ -1,23 +1,22 @@
-# == Define: libvirt::network
+# libvirt::network
 #
-# Define a new libvirt network. The name of the network is
-# the resource name.
+# @summary Define a new libvirt network. The name of the network is
+#   the resource name.
 #
-# === Parameters:
+# @note Most parameters are modeled after their equivalents in the libvirt
+#   network XML definition. See http://libvirt.org/formatnetwork.html
+#   for more information.
 #
-# Most parameters are modeled after their equivalents in the libvirt
-# network XML definition. See http://libvirt.org/formatnetwork.html
-# for more information.
-#
-# [*bridge*]
+# @param ensure
+# @param bridge
 #   Name of the bridge device to use for this network.
-# [*forward_mode*]
+# @param forward_mode
 #   Network forward mode. Valid modes are 'nat', 'route', 'bridge', 'private',
 #   'vepa', 'passthrough' and 'hostdev'. The default is 'bridge'.
-# [*virtualport_type*]
+# @param virtualport_type
 #   Set this to 'openvswitch' for an Open vSwitch bridge. Leave undefined
 #   otherwise.
-# [*portgroups*]
+# @param portgroups
 #   Array of hashes defining portgroups. This only works for Open vSwitch
 #   networks. The hash supports the following keys:
 #   * name:     Name of the portgroup.
@@ -25,19 +24,20 @@
 #               vlan_tag element must contain an array of allowed VLAN
 #               tags.
 #   * vlan_tag: VLAN tag for this portgroup.
-# [*autostart*]
+# @param autostart
 #   Wheter to start this network on boot or not. Defaults to true.
-# [*forward_dev*]
+# @param forward_dev
 #    The interface to forward, useful in bridge and route mode
-# [*forward_interfaces*]
+# @param forward_interfaces
 #    An array of interfaces to forwad
-# [*ip_address*]
+# @param ip_address
 #    The ip address for the device
-# [*ip_netmask*]
+# @param ip_netmask
 #    The netmask for the ip address
-# [*dhcp_start*]
-# [*dhcp_end*]
-#    Optional dhcp range
+# @param dhcp_start
+#    Optional dhcp range start
+# @param dhcp_end
+#    Optional dhcp range end
 #
 define libvirt::network (
   String           $ensure             = 'present',
