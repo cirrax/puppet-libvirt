@@ -1,0 +1,7 @@
+
+.travis.yml:
+  simplecov: true
+
+spec/spec_helper.rb:
+  coverage_report: true
+
