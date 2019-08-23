@@ -21,6 +21,12 @@ describe 'libvirt' do
 
   shared_examples 'libvirt shared examples' do
     it { is_expected.to compile.with_all_deps }
+    it { is_expected.to contain_anchor('libvirt::begin') }
+    it { is_expected.to contain_anchor('libvirt::installed') }
+    it { is_expected.to contain_anchor('libvirt::end') }
+    it { is_expected.to contain_class('libvirt::install') }
+    it { is_expected.to contain_class('libvirt::config') }
+    it { is_expected.to contain_class('libvirt::service') }
   end
 
   on_supported_os.each do |os, os_facts|
@@ -59,6 +65,9 @@ describe 'libvirt' do
         it {
           is_expected.to contain_libvirt__network('mynetwork')
             .with_bridge('test')
+          is_expected.to contain_exec('libvirt-network-autostart-mynetwork')
+          is_expected.to contain_exec('libvirt-network-mynetwork')
+          is_expected.to contain_exec('libvirt-network-start-mynetwork')
         }
       end
 
@@ -74,6 +83,9 @@ describe 'libvirt' do
         it {
           is_expected.to contain_libvirt__domain('mydom')
             .with_devices_profile('myprofile')
+          is_expected.to contain_exec('libvirt-domain-mydom')
+          is_expected.to contain_exec('libvirt-domain-start-mydom')
+          is_expected.to contain_exec('libvirt-domain-autostart-mydom')
         }
       end
 

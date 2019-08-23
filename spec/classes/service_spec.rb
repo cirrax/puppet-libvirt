@@ -42,6 +42,18 @@ describe 'libvirt::service' do
 
         it_behaves_like 'libvirt::service shared examples'
       end
+
+      context 'without managing service' do
+        let :params do
+          default_params.merge(
+            manage_service: false,
+          )
+        end
+
+        it {
+          is_expected.not_to contain_service('libvirtd')
+        }
+      end
     end
   end
 end
