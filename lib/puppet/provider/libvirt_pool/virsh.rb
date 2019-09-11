@@ -34,7 +34,7 @@ Puppet::Type.type(:libvirt_pool).provide(:virsh) do
   def self.prefetch(resources)
     pools = instances
     resources.keys.each do |name|
-      if provider = pools.find { |pool| pool.name == name }
+      if (provider = pools.find { |pool| pool.name == name })
         resources[name].provider = provider
       end
     end
