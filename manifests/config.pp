@@ -9,7 +9,6 @@ class libvirt::config (
   Hash                                                 $default_conf     = $libvirt::default_conf,
   Hash[Optional[String],Variant[String,Integer,Array]] $libvirtd_conf    = $libvirt::libvirtd_conf,
   String                                               $config_dir       = $libvirt::config_dir,
-  Boolean                                              $drop_default_net = $libvirt::drop_default_net,
 ) inherits libvirt {
 
   if ($qemu_hook != '') {
@@ -54,12 +53,6 @@ class libvirt::config (
       libvirtd_conf { $key:
         value => $value,
       }
-    }
-  }
-
-  if ( $drop_default_net ) {
-    libvirt::network { 'default':
-      ensure => 'absent',
     }
   }
 }
