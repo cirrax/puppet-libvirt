@@ -89,6 +89,23 @@ describe 'libvirt' do
         }
       end
 
+      context 'with drop_default_net true' do
+        let :params do
+          default_params.merge(
+            drop_default_net: true,
+          )
+        end
+
+        it_behaves_like 'libvirt shared examples'
+        it {
+          is_expected.to contain_libvirt__network('default')
+            .with_ensure('absent')
+        }
+        it { is_expected.to contain_exec('libvirt-delete-network-default') }
+        it { is_expected.to contain_exec('libvirt-network-disable-autostart-default') }
+        it { is_expected.to contain_exec('libvirt-undefine-network-default') }
+      end
+
       context 'with manage_service false' do
         let :params do
           default_params.merge(
