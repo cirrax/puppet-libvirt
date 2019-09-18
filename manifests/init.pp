@@ -185,4 +185,10 @@ class libvirt (
   create_resources('::libvirt::network', $create_networks)
   create_resources('::libvirt::domain', $create_domains)
   create_resources('::libvirt::nwfilter', $create_nwfilters)
+
+  if ( $drop_default_net ) {
+    libvirt::network { 'default':
+      ensure => 'absent',
+    }
+  }
 }
