@@ -25,8 +25,8 @@ function libvirt::get_merged_profile(
   } else {
     # recurse, to get the base profile to merge
     case pick($profile_hash.dig('profileconfig','merge'), 'merge') {
-      'merge': { $result = $profile_hash[$profile] + libvirt::get_merged_profile($profile_hash, $base_profile) }
-      'deep':  { $result = deep_merge($profile_hash[$profile], libvirt::get_merged_profile($profile_hash, $base_profile)) }
+      'merge': { $result = libvirt::get_merged_profile($profile_hash, $base_profile) + $profile_hash[$profile] }
+      'deep':  { $result = deep_merge(libvirt::get_merged_profile($profile_hash, $base_profile), $profile_hash[$profile]) }
       default: { fail('unknown profile merge function') }
     }
   }

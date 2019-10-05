@@ -212,12 +212,12 @@ define libvirt::domain (
   include ::libvirt
   include ::libvirt::profiles
 
-  $devices_real  = $devices + libvirt::get_merged_profile($libvirt::profiles::devices, $devices_profile)
+  $devices_real  = libvirt::get_merged_profile($libvirt::profiles::devices, $devices_profile) + $devices
 
   if $boot == 'per-device' {
-    $domconf_real  = $domconf + libvirt::get_merged_profile($libvirt::profiles::domconf, $dom_profile)
+    $domconf_real  = libvirt::get_merged_profile($libvirt::profiles::domconf, $dom_profile) + $domconf
   } else {
-    $_domconf = $domconf + libvirt::get_merged_profile($libvirt::profiles::domconf, $dom_profile)
+    $_domconf = libvirt::get_merged_profile($libvirt::profiles::domconf, $dom_profile) + $domconf
     $domconf_real = deep_merge($_domconf,{'os' => {'boot' => { 'attrs' => { 'dev' => $boot }}}})
   }
 
