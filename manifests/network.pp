@@ -38,6 +38,8 @@
 #    Optional dhcp range start
 # @param dhcp_end
 #    Optional dhcp range end
+# @param dns_enable
+#    Set this to 'no' to disable the DNS service. Leave undefined otherwise.
 #
 define libvirt::network (
   String           $ensure             = 'present',
@@ -52,6 +54,7 @@ define libvirt::network (
   Optional[String] $ip_netmask         = undef,
   Optional[String] $dhcp_start         = undef,
   Optional[String] $dhcp_end           = undef,
+  Optional[String] $dns_enable         = undef,
 ) {
 
   include ::libvirt

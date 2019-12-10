@@ -21,6 +21,9 @@
     <%- end -%>
   </ip>
   <%- end -%>
+  <%- if @dns_enable -%>
+  <dns enable='<%= @dns_enable %>'/>
+  <%- end -%>
   <%- if @virtualport_type -%>
   <virtualport type='<%= @virtualport_type %>'/>
   <%- end -%>
