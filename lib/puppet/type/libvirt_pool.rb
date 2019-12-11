@@ -4,7 +4,7 @@
 Puppet::Type.newtype(:libvirt_pool) do
   @doc = "Manages libvirt pools
 
-          @example 
+          @example
             libvirt_pool { 'default' :
               ensure => absent
             }

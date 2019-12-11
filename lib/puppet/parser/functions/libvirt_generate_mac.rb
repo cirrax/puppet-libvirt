@@ -1,14 +1,12 @@
 #
 module Puppet::Parser::Functions
   newfunction(:libvirt_generate_mac, type: :rvalue, doc: <<-'ENDHEREDOC') do |args|
-   
     compute sha1 hash of all keys concatenated, only the first 6
     hex digits will be used
-  
+
     @return a mac address
 
     ENDHEREDOC
-
 
     sha1 = Digest::SHA1.hexdigest(args.join(''))
 
