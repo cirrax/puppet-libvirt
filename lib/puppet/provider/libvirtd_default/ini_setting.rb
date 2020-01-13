@@ -19,7 +19,11 @@ Puppet::Type.type(:libvirtd_default).provide(
   end
 
   def self.file_path
-    '/etc/default/libvirtd'
+    if Facter.value(:osfamily) == 'RedHat'
+      '/etc/sysconfig/libvirtd'
+    else
+      '/etc/default/libvirtd'
+    end
   end
 
   # this needs to be removed. This has been replaced with the class method
