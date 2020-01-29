@@ -1,5 +1,5 @@
 Puppet::Type.type(:libvirtd_default).provide(
-  :ini_setting,
+  :redhat,
   parent: Puppet::Type.type(:libvirtd_default).provider(:ini_setting),
 ) do
   desc '
