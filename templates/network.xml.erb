@@ -12,6 +12,9 @@
   <%- if @bridge != '' -%>
   <bridge name='<%= @bridge %>'/>
   <%- end -%>
+  <%- if @mtu -%>
+  <mtu size='<%= @mtu %>'/>
+  <%- end -%>
   <%- if @ip_address and @ip_netmask -%>
   <ip address='<%= @ip_address %>' netmask='<%= @ip_netmask %>'>
     <%- if @dhcp_start and @dhcp_end -%>
