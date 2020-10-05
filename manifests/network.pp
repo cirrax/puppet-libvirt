@@ -40,6 +40,8 @@
 #    Optional dhcp range end
 # @param dns_enable
 #    Set this to 'no' to disable the DNS service. Leave undefined otherwise.
+# @param mtu
+#    Set a custom mtu value. Default is 1500.
 #
 define libvirt::network (
   String           $ensure             = 'present',
@@ -55,6 +57,7 @@ define libvirt::network (
   Optional[String] $dhcp_start         = undef,
   Optional[String] $dhcp_end           = undef,
   Optional[String] $dns_enable         = undef,
+  Optional[Integer] $mtu               = undef,
 ) {
 
   include ::libvirt
