@@ -2,10 +2,6 @@
 # Defaults for Ubuntu
 
 libvirt::libvirt_package_names:
-  - 'libvirt-bin'
+  - 'libvirt-daemon-system'
+  - 'libvirt-clients'
   - 'qemu-kvm'
-
-libvirt::qemu_hook_packages:
-  drbd:
-    - 'xmlstarlet'
-    - 'python-libvirt'
