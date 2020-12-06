@@ -1,0 +1,6 @@
+---
+# Defaults for Ubuntu 16.04 LTS (Xenial Xerus)
+
+libvirt::libvirt_package_names:
+  - 'libvirt-bin'
+  - 'qemu-kvm'
