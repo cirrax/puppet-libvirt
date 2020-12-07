@@ -4,7 +4,7 @@
       String    $boot,
     | -%>
     <disk type='<%= $disk['type'] %>' device='<%= $disk['device'] %>'>
-      <source <% $disk_src_attrs[$disk['type']].each | $attr | { -%><%= $attr %>='<%= $disk['source'][$attr] %>'<% } -%>/>
+      <source <% $disk_src_attrs[$disk['type']].each | $attr | { -%><%= $attr %>='<%= $disk['source'][$attr] %>' <% } -%>/>
       <target dev='vd<%= $ind %>' bus='<% if $disk.has_key('bus') { %><%= $disk['bus'] %><% } else { %><%= virtio %> <% } %>'/>
     <%- if $disk.has_key('driver') { -%>
       <driver <% $disk['driver'].each |$attr| { -%><%= $attr[0] %>='<%= $attr[1] %>' <% } -%>/>
