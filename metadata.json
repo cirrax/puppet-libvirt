@@ -1,6 +1,6 @@
 {
   "name": "cirrax-libvirt",
-  "version": "4.3.1",
+  "version": "4.3.2",
   "author": "Cirrax GmbH",
   "summary": "Puppet module to install libvirt and create virtual domain configuration",
   "license": "GPL-3.0",
@@ -45,14 +45,14 @@
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
         "7",
-	"8"
+        "8"
       ]
     },
     {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
         "7",
-	"8"
+        "8"
       ]
     }
   ],
