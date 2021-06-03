@@ -37,7 +37,7 @@ the resource name.
 
 ## Classes
 
-### `libvirt`
+### <a name="libvirt"></a>`libvirt`
 
 Libvirt (http://libvirt.org/) Puppet module
 
@@ -56,9 +56,34 @@ class { 'libvirt':
 
 #### Parameters
 
-The following parameters are available in the `libvirt` class.
+The following parameters are available in the `libvirt` class:
 
-##### `service_name`
+* [`service_name`](#service_name)
+* [`service_ensure`](#service_ensure)
+* [`service_enable`](#service_enable)
+* [`manage_service`](#manage_service)
+* [`libvirt_package_names`](#libvirt_package_names)
+* [`qemu_hook_packages`](#qemu_hook_packages)
+* [`qemu_conf`](#qemu_conf)
+* [`qemu_hook`](#qemu_hook)
+* [`qemu_hook_packages`](#qemu_hook_packages)
+* [`create_networks`](#create_networks)
+* [`create_domains`](#create_domains)
+* [`create_nwfilters`](#create_nwfilters)
+* [`evacuation`](#evacuation)
+* [`max_job_time`](#max_job_time)
+* [`suspend_multiplier`](#suspend_multiplier)
+* [`migration_url_format`](#migration_url_format)
+* [`uri_aliases`](#uri_aliases)
+* [`uri_default`](#uri_default)
+* [`default_conf`](#default_conf)
+* [`libvirtd_conf`](#libvirtd_conf)
+* [`config_dir`](#config_dir)
+* [`manage_domains_config`](#manage_domains_config)
+* [`drop_default_net`](#drop_default_net)
+* [`diff_dir`](#diff_dir)
+
+##### <a name="service_name"></a>`service_name`
 
 Data type: `String`
 
@@ -68,7 +93,7 @@ your distribution.
 
 Default value: `'libvirtd'`
 
-##### `service_ensure`
+##### <a name="service_ensure"></a>`service_ensure`
 
 Data type: `String`
 
@@ -77,7 +102,7 @@ Defaults to 'running'
 
 Default value: `'running'`
 
-##### `service_enable`
+##### <a name="service_enable"></a>`service_enable`
 
 Data type: `Boolean`
 
@@ -86,7 +111,7 @@ Defaults to true
 
 Default value: ``true``
 
-##### `manage_service`
+##### <a name="manage_service"></a>`manage_service`
 
 Data type: `Boolean`
 
@@ -95,7 +120,7 @@ Defaults to true
 
 Default value: ``true``
 
-##### `libvirt_package_names`
+##### <a name="libvirt_package_names"></a>`libvirt_package_names`
 
 Data type: `Array`
 
@@ -104,7 +129,7 @@ Required, see hiera data directory for defaults
 
 Default value: `[]`
 
-##### `qemu_hook_packages`
+##### <a name="qemu_hook_packages"></a>`qemu_hook_packages`
 
 Data type: `Hash`
 
@@ -113,7 +138,7 @@ Defaults to {}
 
 Default value: `{}`
 
-##### `qemu_conf`
+##### <a name="qemu_conf"></a>`qemu_conf`
 
 Data type: `Hash`
 
@@ -121,7 +146,7 @@ Hash of key/value pairs you want to put in qemu.conf file.
 
 Default value: `{}`
 
-##### `qemu_hook`
+##### <a name="qemu_hook"></a>`qemu_hook`
 
 Data type: `String`
 
@@ -131,14 +156,14 @@ Defaults to ''.
 
 Default value: `''`
 
-##### `qemu_hook_packages`
+##### <a name="qemu_hook_packages"></a>`qemu_hook_packages`
 
 Hash of Arrays of hook specific packages to install
 see hiera data directory for defaults
 
 Default value: `{}`
 
-##### `create_networks`
+##### <a name="create_networks"></a>`create_networks`
 
 Data type: `Hash`
 
@@ -147,7 +172,7 @@ Defaults to {}
 
 Default value: `{}`
 
-##### `create_domains`
+##### <a name="create_domains"></a>`create_domains`
 
 Data type: `Hash`
 
@@ -156,7 +181,7 @@ Defaults to {}
 
 Default value: `{}`
 
-##### `create_nwfilters`
+##### <a name="create_nwfilters"></a>`create_nwfilters`
 
 Data type: `Hash`
 
@@ -165,7 +190,7 @@ Defaults to {}
 
 Default value: `{}`
 
-##### `evacuation`
+##### <a name="evacuation"></a>`evacuation`
 
 Data type: `String`
 
@@ -178,7 +203,7 @@ have no effect if qemu_hook is not set to drbd.
 
 Default value: `'migrate'`
 
-##### `max_job_time`
+##### <a name="max_job_time"></a>`max_job_time`
 
 Data type: `String`
 
@@ -191,7 +216,7 @@ have no effect if qemu_hook is not set to drbd.
 
 Default value: `'120'`
 
-##### `suspend_multiplier`
+##### <a name="suspend_multiplier"></a>`suspend_multiplier`
 
 Data type: `String`
 
@@ -203,7 +228,7 @@ have no effect if qemu_hook is not set to drbd.
 
 Default value: `'5'`
 
-##### `migration_url_format`
+##### <a name="migration_url_format"></a>`migration_url_format`
 
 Data type: `String`
 
@@ -215,7 +240,7 @@ alias: sepcify the url as an alias in /etc/libvirt.conf
 
 Default value: `'ssh'`
 
-##### `uri_aliases`
+##### <a name="uri_aliases"></a>`uri_aliases`
 
 Data type: `Array`
 
@@ -224,7 +249,7 @@ defaults to []
 
 Default value: `[]`
 
-##### `uri_default`
+##### <a name="uri_default"></a>`uri_default`
 
 Data type: `String`
 
@@ -233,7 +258,7 @@ defaults to '' (which means the system default is used)
 
 Default value: `''`
 
-##### `default_conf`
+##### <a name="default_conf"></a>`default_conf`
 
 Data type: `Hash`
 
@@ -243,7 +268,7 @@ Defaults to {}
 
 Default value: `{}`
 
-##### `libvirtd_conf`
+##### <a name="libvirtd_conf"></a>`libvirtd_conf`
 
 Data type: `Hash[Optional[String],Variant[String,Integer,Array]]`
 
@@ -252,7 +277,7 @@ Defaults to {}
 
 Default value: `{}`
 
-##### `config_dir`
+##### <a name="config_dir"></a>`config_dir`
 
 Data type: `String`
 
@@ -261,7 +286,7 @@ Defaults to '/etc/libvirt'
 
 Default value: `'/etc/libvirt'`
 
-##### `manage_domains_config`
+##### <a name="manage_domains_config"></a>`manage_domains_config`
 
 Data type: `String`
 
@@ -270,7 +295,7 @@ Defaults to '/etc/manage-domains.ini'
 
 Default value: `'/etc/manage-domains.ini'`
 
-##### `drop_default_net`
+##### <a name="drop_default_net"></a>`drop_default_net`
 
 Data type: `Boolean`
 
@@ -279,7 +304,7 @@ Defaults to false
 
 Default value: ``false``
 
-##### `diff_dir`
+##### <a name="diff_dir"></a>`diff_dir`
 
 Data type: `String`
 
@@ -291,7 +316,7 @@ defaults to '' (== disabled)
 
 Default value: `''`
 
-### `libvirt::config`
+### <a name="libvirtconfig"></a>`libvirt::config`
 
 libvirt::config
 
@@ -299,9 +324,17 @@ libvirt::config
 
 #### Parameters
 
-The following parameters are available in the `libvirt::config` class.
+The following parameters are available in the `libvirt::config` class:
 
-##### `qemu_hook`
+* [`qemu_hook`](#qemu_hook)
+* [`qemu_conf`](#qemu_conf)
+* [`uri_aliases`](#uri_aliases)
+* [`uri_default`](#uri_default)
+* [`default_conf`](#default_conf)
+* [`libvirtd_conf`](#libvirtd_conf)
+* [`config_dir`](#config_dir)
+
+##### <a name="qemu_hook"></a>`qemu_hook`
 
 Data type: `String`
 
@@ -309,7 +342,7 @@ source name for qemu hook
 
 Default value: `$libvirt::qemu_hook`
 
-##### `qemu_conf`
+##### <a name="qemu_conf"></a>`qemu_conf`
 
 Data type: `Hash`
 
@@ -317,7 +350,7 @@ configuration that goes into qemu.conf
 
 Default value: `$libvirt::qemu_conf`
 
-##### `uri_aliases`
+##### <a name="uri_aliases"></a>`uri_aliases`
 
 Data type: `Array`
 
@@ -325,7 +358,7 @@ uri alias from libvirt.conf
 
 Default value: `$libvirt::uri_aliases`
 
-##### `uri_default`
+##### <a name="uri_default"></a>`uri_default`
 
 Data type: `String`
 
@@ -333,7 +366,7 @@ uri default from libvirt.conf
 
 Default value: `$libvirt::uri_default`
 
-##### `default_conf`
+##### <a name="default_conf"></a>`default_conf`
 
 Data type: `Hash`
 
@@ -341,7 +374,7 @@ defaults for libvirtd.conf
 
 Default value: `$libvirt::default_conf`
 
-##### `libvirtd_conf`
+##### <a name="libvirtd_conf"></a>`libvirtd_conf`
 
 Data type: `Hash[Optional[String],Variant[String,Integer,Array]]`
 
@@ -349,7 +382,7 @@ libvirtd.conf configs
 
 Default value: `$libvirt::libvirtd_conf`
 
-##### `config_dir`
+##### <a name="config_dir"></a>`config_dir`
 
 Data type: `String`
 
@@ -357,15 +390,20 @@ directory for configs
 
 Default value: `$libvirt::config_dir`
 
-### `libvirt::install`
+### <a name="libvirtinstall"></a>`libvirt::install`
 
 libvirt::install
 
 #### Parameters
 
-The following parameters are available in the `libvirt::install` class.
+The following parameters are available in the `libvirt::install` class:
 
-##### `qemu_hook`
+* [`qemu_hook`](#qemu_hook)
+* [`packages`](#packages)
+* [`qemu_hook_packages`](#qemu_hook_packages)
+* [`package_ensure`](#package_ensure)
+
+##### <a name="qemu_hook"></a>`qemu_hook`
 
 Data type: `String`
 
@@ -375,7 +413,7 @@ Default inherited from ::libvirt class
 
 Default value: `$libvirt::qemu_hook`
 
-##### `packages`
+##### <a name="packages"></a>`packages`
 
 Data type: `Array`
 
@@ -384,7 +422,7 @@ Default inherited from ::libvirt class
 
 Default value: `$libvirt::libvirt_package_names`
 
-##### `qemu_hook_packages`
+##### <a name="qemu_hook_packages"></a>`qemu_hook_packages`
 
 Data type: `Hash`
 
@@ -393,7 +431,7 @@ Default inherited from ::libvirt class
 
 Default value: `$libvirt::qemu_hook_packages`
 
-##### `package_ensure`
+##### <a name="package_ensure"></a>`package_ensure`
 
 Data type: `String`
 
@@ -402,15 +440,17 @@ Defaults to 'installed'
 
 Default value: `'installed'`
 
-### `libvirt::manage_domains_config`
+### <a name="libvirtmanage_domains_config"></a>`libvirt::manage_domains_config`
 
 libvirt::manage_domains_config
 
 #### Parameters
 
-The following parameters are available in the `libvirt::manage_domains_config` class.
+The following parameters are available in the `libvirt::manage_domains_config` class:
 
-##### `manage_domains_config`
+* [`manage_domains_config`](#manage_domains_config)
+
+##### <a name="manage_domains_config"></a>`manage_domains_config`
 
 Data type: `String`
 
@@ -421,35 +461,43 @@ libvirt::domain define
 
 Default value: `$libvirt::manage_domains_config`
 
-### `libvirt::profiles`
+### <a name="libvirtprofiles"></a>`libvirt::profiles`
 
 libvirt::profiles
 
 #### Parameters
 
-The following parameters are available in the `libvirt::profiles` class.
+The following parameters are available in the `libvirt::profiles` class:
 
-##### `devices`
+* [`devices`](#devices)
+* [`domconf`](#domconf)
+
+##### <a name="devices"></a>`devices`
 
 Data type: `Hash`
 
 devices profiles to load
 
-##### `domconf`
+##### <a name="domconf"></a>`domconf`
 
 Data type: `Hash`
 
 domconf profiles to load
 
-### `libvirt::service`
+### <a name="libvirtservice"></a>`libvirt::service`
 
 libvirt::service
 
 #### Parameters
 
-The following parameters are available in the `libvirt::service` class.
+The following parameters are available in the `libvirt::service` class:
 
-##### `service_name`
+* [`service_name`](#service_name)
+* [`service_ensure`](#service_ensure)
+* [`service_enable`](#service_enable)
+* [`manage_service`](#manage_service)
+
+##### <a name="service_name"></a>`service_name`
 
 Data type: `String`
 
@@ -458,7 +506,7 @@ and inherited from ::libvirt class.
 
 Default value: `$libvirt::service_name`
 
-##### `service_ensure`
+##### <a name="service_ensure"></a>`service_ensure`
 
 Data type: `String`
 
@@ -467,7 +515,7 @@ Defaults to 'running'
 
 Default value: `$libvirt::service_ensure`
 
-##### `service_enable`
+##### <a name="service_enable"></a>`service_enable`
 
 Data type: `Boolean`
 
@@ -476,7 +524,7 @@ Defaults to true
 
 Default value: `$libvirt::service_enable`
 
-##### `manage_service`
+##### <a name="manage_service"></a>`manage_service`
 
 Data type: `Boolean`
 
@@ -487,7 +535,7 @@ Default value: `$libvirt::manage_service`
 
 ## Defined types
 
-### `libvirt::domain`
+### <a name="libvirtdomain"></a>`libvirt::domain`
 
 libvirt::domain
 
@@ -497,9 +545,33 @@ for more information.
 
 #### Parameters
 
-The following parameters are available in the `libvirt::domain` defined type.
+The following parameters are available in the `libvirt::domain` defined type:
 
-##### `type`
+* [`type`](#type)
+* [`domain_title`](#domain_title)
+* [`description`](#description)
+* [`uuid`](#uuid)
+* [`boot`](#boot)
+* [`disks`](#disks)
+* [`interfaces`](#interfaces)
+* [`autostart`](#autostart)
+* [`dom_profile`](#dom_profile)
+* [`domconf`](#domconf)
+* [`devices_profile`](#devices_profile)
+* [`devices`](#devices)
+* [`additionaldevices`](#additionaldevices)
+* [`default_host`](#default_host)
+* [`evacuation`](#evacuation)
+* [`max_job_time`](#max_job_time)
+* [`suspend_multiplier`](#suspend_multiplier)
+* [`max_memory`](#max_memory)
+* [`initial_memory`](#initial_memory)
+* [`cpus`](#cpus)
+* [`bootmenu`](#bootmenu)
+* [`machine_type`](#machine_type)
+* [`cpu_model`](#cpu_model)
+
+##### <a name="type"></a>`type`
 
 Data type: `String`
 
@@ -509,7 +581,7 @@ Defaults to 'kvm'
 
 Default value: `'kvm'`
 
-##### `domain_title`
+##### <a name="domain_title"></a>`domain_title`
 
 Data type: `String`
 
@@ -517,7 +589,7 @@ Free text title of the domain. Defaults to ''.
 
 Default value: `''`
 
-##### `description`
+##### <a name="description"></a>`description`
 
 Data type: `String`
 
@@ -525,7 +597,7 @@ Free text description of the domain. Defaults to ''.
 
 Default value: `''`
 
-##### `uuid`
+##### <a name="uuid"></a>`uuid`
 
 Data type: `String`
 
@@ -534,7 +606,7 @@ with puppet.
 
 Default value: `libvirt_generate_uuid($name)`
 
-##### `boot`
+##### <a name="boot"></a>`boot`
 
 Data type: `String`
 
@@ -544,7 +616,7 @@ Defaults to 'hd'.
 
 Default value: `'hd'`
 
-##### `disks`
+##### <a name="disks"></a>`disks`
 
 Data type: `Array`
 
@@ -572,7 +644,7 @@ at all. The hashes support the following keys:
 
 Default value: `[]`
 
-##### `interfaces`
+##### <a name="interfaces"></a>`interfaces`
 
 Data type: `Array`
 
@@ -590,7 +662,7 @@ The hashes support the following keys:
 
 Default value: `[]`
 
-##### `autostart`
+##### <a name="autostart"></a>`autostart`
 
 Data type: `Boolean`
 
@@ -599,7 +671,7 @@ domains are started if the host is booted.
 
 Default value: ``true``
 
-##### `dom_profile`
+##### <a name="dom_profile"></a>`dom_profile`
 
 Data type: `String`
 
@@ -610,7 +682,7 @@ see class libvirt::profiles for additional information.
 
 Default value: `'default'`
 
-##### `domconf`
+##### <a name="domconf"></a>`domconf`
 
 Data type: `Hash`
 
@@ -623,7 +695,7 @@ see also libvirt::profiles for how to use profiles
 
 Default value: `{}`
 
-##### `devices_profile`
+##### <a name="devices_profile"></a>`devices_profile`
 
 Data type: `String`
 
@@ -634,7 +706,7 @@ see class libvirt::profiles for additional information.
 
 Default value: `'default'`
 
-##### `devices`
+##### <a name="devices"></a>`devices`
 
 Data type: `Hash`
 
@@ -647,7 +719,7 @@ see also libvirt::profiles for how to use profiles
 
 Default value: `{}`
 
-##### `additionaldevices`
+##### <a name="additionaldevices"></a>`additionaldevices`
 
 Data type: `Hash`
 
@@ -657,7 +729,7 @@ Defaults to {}
 
 Default value: `{}`
 
-##### `default_host`
+##### <a name="default_host"></a>`default_host`
 
 Data type: `Optional[String]`
 
@@ -669,7 +741,7 @@ have no effect if qemu_hook is not set to drbd.
 
 Default value: ``undef``
 
-##### `evacuation`
+##### <a name="evacuation"></a>`evacuation`
 
 Data type: `Optional[String]`
 
@@ -681,7 +753,7 @@ Evacuation policy for this domain. Valid values are 'migrate', 'save' and
 
 Default value: ``undef``
 
-##### `max_job_time`
+##### <a name="max_job_time"></a>`max_job_time`
 
 Data type: `Optional[String]`
 
@@ -694,7 +766,7 @@ and to use the global default.
 
 Default value: ``undef``
 
-##### `suspend_multiplier`
+##### <a name="suspend_multiplier"></a>`suspend_multiplier`
 
 Data type: `Optional[String]`
 
@@ -706,7 +778,7 @@ have no effect if qemu_hook is not set to drbd.
 
 Default value: ``undef``
 
-##### `max_memory`
+##### <a name="max_memory"></a>`max_memory`
 
 Data type: `Optional[Any]`
 
@@ -721,7 +793,7 @@ Example (yaml):
 
 Default value: ``undef``
 
-##### `initial_memory`
+##### <a name="initial_memory"></a>`initial_memory`
 
 Data type: `Optional[Any]`
 
@@ -737,7 +809,7 @@ Example (yaml):
 
 Default value: ``undef``
 
-##### `cpus`
+##### <a name="cpus"></a>`cpus`
 
 Data type: `Optional[Any]`
 
@@ -751,7 +823,7 @@ Example (yaml):
 
 Default value: ``undef``
 
-##### `bootmenu`
+##### <a name="bootmenu"></a>`bootmenu`
 
 Data type: `Optional[Any]`
 
@@ -767,7 +839,7 @@ Example (yaml):
 
 Default value: ``undef``
 
-##### `machine_type`
+##### <a name="machine_type"></a>`machine_type`
 
 Data type: `Optional[Any]`
 
@@ -779,7 +851,7 @@ Deprecation notice: use $domconf if you want to set the machine type
 
 Default value: ``undef``
 
-##### `cpu_model`
+##### <a name="cpu_model"></a>`cpu_model`
 
 Data type: `Optional[Any]`
 
@@ -800,7 +872,7 @@ Example (yaml):
 
 Default value: ``undef``
 
-### `libvirt::network`
+### <a name="libvirtnetwork"></a>`libvirt::network`
 
 libvirt::network
 
@@ -810,9 +882,24 @@ for more information.
 
 #### Parameters
 
-The following parameters are available in the `libvirt::network` defined type.
+The following parameters are available in the `libvirt::network` defined type:
 
-##### `ensure`
+* [`ensure`](#ensure)
+* [`bridge`](#bridge)
+* [`forward_mode`](#forward_mode)
+* [`virtualport_type`](#virtualport_type)
+* [`portgroups`](#portgroups)
+* [`autostart`](#autostart)
+* [`forward_dev`](#forward_dev)
+* [`forward_interfaces`](#forward_interfaces)
+* [`ip_address`](#ip_address)
+* [`ip_netmask`](#ip_netmask)
+* [`dhcp_start`](#dhcp_start)
+* [`dhcp_end`](#dhcp_end)
+* [`dns_enable`](#dns_enable)
+* [`mtu`](#mtu)
+
+##### <a name="ensure"></a>`ensure`
 
 Data type: `String`
 
@@ -820,7 +907,7 @@ Data type: `String`
 
 Default value: `'present'`
 
-##### `bridge`
+##### <a name="bridge"></a>`bridge`
 
 Data type: `String`
 
@@ -828,7 +915,7 @@ Name of the bridge device to use for this network.
 
 Default value: `''`
 
-##### `forward_mode`
+##### <a name="forward_mode"></a>`forward_mode`
 
 Data type: `String`
 
@@ -837,7 +924,7 @@ Network forward mode. Valid modes are 'nat', 'route', 'bridge', 'private',
 
 Default value: `'bridge'`
 
-##### `virtualport_type`
+##### <a name="virtualport_type"></a>`virtualport_type`
 
 Data type: `Optional[String]`
 
@@ -846,7 +933,7 @@ otherwise.
 
 Default value: ``undef``
 
-##### `portgroups`
+##### <a name="portgroups"></a>`portgroups`
 
 Data type: `Array`
 
@@ -860,7 +947,7 @@ networks. The hash supports the following keys:
 
 Default value: `[]`
 
-##### `autostart`
+##### <a name="autostart"></a>`autostart`
 
 Data type: `Boolean`
 
@@ -868,7 +955,7 @@ Wheter to start this network on boot or not. Defaults to true.
 
 Default value: ``true``
 
-##### `forward_dev`
+##### <a name="forward_dev"></a>`forward_dev`
 
 Data type: `Optional[String]`
 
@@ -876,7 +963,7 @@ The interface to forward, useful in bridge and route mode
 
 Default value: ``undef``
 
-##### `forward_interfaces`
+##### <a name="forward_interfaces"></a>`forward_interfaces`
 
 Data type: `Array`
 
@@ -884,7 +971,7 @@ An array of interfaces to forwad
 
 Default value: `[]`
 
-##### `ip_address`
+##### <a name="ip_address"></a>`ip_address`
 
 Data type: `Optional[String]`
 
@@ -892,7 +979,7 @@ The ip address for the device
 
 Default value: ``undef``
 
-##### `ip_netmask`
+##### <a name="ip_netmask"></a>`ip_netmask`
 
 Data type: `Optional[String]`
 
@@ -900,7 +987,7 @@ The netmask for the ip address
 
 Default value: ``undef``
 
-##### `dhcp_start`
+##### <a name="dhcp_start"></a>`dhcp_start`
 
 Data type: `Optional[String]`
 
@@ -908,7 +995,7 @@ Optional dhcp range start
 
 Default value: ``undef``
 
-##### `dhcp_end`
+##### <a name="dhcp_end"></a>`dhcp_end`
 
 Data type: `Optional[String]`
 
@@ -916,7 +1003,7 @@ Optional dhcp range end
 
 Default value: ``undef``
 
-##### `dns_enable`
+##### <a name="dns_enable"></a>`dns_enable`
 
 Data type: `Optional[String]`
 
@@ -924,7 +1011,7 @@ Set this to 'no' to disable the DNS service. Leave undefined otherwise.
 
 Default value: ``undef``
 
-##### `mtu`
+##### <a name="mtu"></a>`mtu`
 
 Data type: `Optional[Integer]`
 
@@ -932,7 +1019,7 @@ Set a custom mtu value. Default is 1500.
 
 Default value: ``undef``
 
-### `libvirt::nwfilter`
+### <a name="libvirtnwfilter"></a>`libvirt::nwfilter`
 
 libvirt::nwfilter
 
@@ -943,9 +1030,16 @@ numbers.
 
 #### Parameters
 
-The following parameters are available in the `libvirt::nwfilter` defined type.
+The following parameters are available in the `libvirt::nwfilter` defined type:
 
-##### `uuid`
+* [`uuid`](#uuid)
+* [`ip`](#ip)
+* [`publictcpservices`](#publictcpservices)
+* [`publicudpservices`](#publicudpservices)
+* [`customtcprules`](#customtcprules)
+* [`customudprules`](#customudprules)
+
+##### <a name="uuid"></a>`uuid`
 
 Data type: `String`
 
@@ -953,7 +1047,7 @@ The libvirt UUID, optional.
 
 Default value: `libvirt_generate_uuid($name)`
 
-##### `ip`
+##### <a name="ip"></a>`ip`
 
 Data type: `Optional[String]`
 
@@ -961,7 +1055,7 @@ The VM's IP address, mandatory.
 
 Default value: ``undef``
 
-##### `publictcpservices`
+##### <a name="publictcpservices"></a>`publictcpservices`
 
 Data type: `Array`
 
@@ -970,7 +1064,7 @@ TCP from anywhere
 
 Default value: `[]`
 
-##### `publicudpservices`
+##### <a name="publicudpservices"></a>`publicudpservices`
 
 Data type: `Array`
 
@@ -979,7 +1073,7 @@ UDP from anywhere
 
 Default value: `[]`
 
-##### `customtcprules`
+##### <a name="customtcprules"></a>`customtcprules`
 
 Data type: `Array`
 
@@ -989,7 +1083,7 @@ port from a specific address. Syntax:
 
 Default value: `[]`
 
-##### `customudprules`
+##### <a name="customudprules"></a>`customudprules`
 
 Data type: `Array`
 
@@ -1001,7 +1095,7 @@ Default value: `[]`
 
 ## Resource types
 
-### `libvirt_pool`
+### <a name="libvirt_pool"></a>`libvirt_pool`
 
 Manages libvirt pools
 
@@ -1084,7 +1178,20 @@ Default value: `present`
 
 The following parameters are available in the `libvirt_pool` type.
 
-##### `name`
+* [`name`](#name)
+* [`provider`](#provider)
+* [`sourcedev`](#sourcedev)
+* [`sourceformat`](#sourceformat)
+* [`sourcehost`](#sourcehost)
+* [`sourcename`](#sourcename)
+* [`sourcepath`](#sourcepath)
+* [`target`](#target)
+* [`target_group`](#target_group)
+* [`target_mode`](#target_mode)
+* [`target_owner`](#target_owner)
+* [`type`](#type)
+
+##### <a name="name"></a>`name`
 
 Valid values: `%r{^\S+$}`
 
@@ -1092,72 +1199,72 @@ namevar
 
 The pool name.
 
-##### `provider`
+##### <a name="provider"></a>`provider`
 
 The specific backend to use for this `libvirt_pool` resource. You will seldom need to specify this --- Puppet will
 usually discover the appropriate provider for your platform.
 
-##### `sourcedev`
+##### <a name="sourcedev"></a>`sourcedev`
 
 Valid values: `%r{(\/)?(\w)}`
 
 The source device.
 
-##### `sourceformat`
+##### <a name="sourceformat"></a>`sourceformat`
 
 Valid values: `auto`, `nfs`, `glusterfs`, `cifs`
 
 The source format.
 
-##### `sourcehost`
+##### <a name="sourcehost"></a>`sourcehost`
 
 Valid values: `%r{^\S+$}`
 
 The source host.
 
-##### `sourcename`
+##### <a name="sourcename"></a>`sourcename`
 
 Valid values: `%r{^\S+$}`
 
 The source name.
 
-##### `sourcepath`
+##### <a name="sourcepath"></a>`sourcepath`
 
 Valid values: `%r{(\/)?(\w)}`
 
 The source path.
 
-##### `target`
+##### <a name="target"></a>`target`
 
 Valid values: `%r{(\/)?(\w)}`
 
 The target.
 
-##### `target_group`
+##### <a name="target_group"></a>`target_group`
 
 Valid values: `%r{^\S+$}`
 
 The group of the target dir or filesystem
 
-##### `target_mode`
+##### <a name="target_mode"></a>`target_mode`
 
 Valid values: `%r{^[0-7]{4}$}`
 
 The mode of the target dir or filesystem
 
-##### `target_owner`
+##### <a name="target_owner"></a>`target_owner`
 
 Valid values: `%r{^\S+$}`
 
 The owner of the target dir or filesystem
 
-##### `type`
+##### <a name="type"></a>`type`
 
 Valid values: `dir`, `netfs`, `fs`, `logical`, `disk`, `iscsi`, `mpath`, `rbd`, `sheepdog`
 
 The pool type.
 
-### `libvirtd_conf`
+### <a name="libvirtd_conf"></a>`libvirtd_conf`
 
 setting name to manage value in libvirtd.conf
 
@@ -1181,7 +1288,11 @@ The value of the setting to be defined.
 
 The following parameters are available in the `libvirtd_conf` type.
 
-##### `name`
+* [`name`](#name)
+* [`provider`](#provider)
+* [`secret`](#secret)
+
+##### <a name="name"></a>`name`
 
 Valid values: `%r{\S+}`
 
@@ -1189,12 +1300,12 @@ namevar
 
 setting name to manage value in libvirtd.conf
 
-##### `provider`
+##### <a name="provider"></a>`provider`
 
 The specific backend to use for this `libvirtd_conf` resource. You will seldom need to specify this --- Puppet will
 usually discover the appropriate provider for your platform.
 
-##### `secret`
+##### <a name="secret"></a>`secret`
 
 Valid values: ``true``, ``false``
 
@@ -1202,7 +1313,7 @@ Whether to hide the value from Puppet logs. Defaults to `false`.
 
 Default value: ``false``
 
-### `libvirtd_default`
+### <a name="libvirtd_default"></a>`libvirtd_default`
 
 setting name to manage default for libvirtd
 
@@ -1226,7 +1337,11 @@ The value of the setting to be defined.
 
 The following parameters are available in the `libvirtd_default` type.
 
-##### `name`
+* [`name`](#name)
+* [`provider`](#provider)
+* [`secret`](#secret)
+
+##### <a name="name"></a>`name`
 
 Valid values: `%r{\S+}`
 
@@ -1234,12 +1349,12 @@ namevar
 
 setting name to manage default for libvirtd
 
-##### `provider`
+##### <a name="provider"></a>`provider`
 
 The specific backend to use for this `libvirtd_default` resource. You will seldom need to specify this --- Puppet will
 usually discover the appropriate provider for your platform.
 
-##### `secret`
+##### <a name="secret"></a>`secret`
 
 Valid values: ``true``, ``false``
 
@@ -1249,7 +1364,7 @@ Default value: ``false``
 
 ## Functions
 
-### `libvirt::get_merged_profile`
+### <a name="libvirtget_merged_profile"></a>`libvirt::get_merged_profile`
 
 Type: Puppet Language
 
@@ -1292,7 +1407,7 @@ Data type: `String`
 
 Name of the computed profile to return
 
-### `libvirt_generate_mac`
+### <a name="libvirt_generate_mac"></a>`libvirt_generate_mac`
 
 Type: Ruby 3.x API
 
@@ -1306,7 +1421,7 @@ hex digits will be used
 
 Returns: `Any` a mac address
 
-### `libvirt_generate_mac_addresses`
+### <a name="libvirt_generate_mac_addresses"></a>`libvirt_generate_mac_addresses`
 
 Type: Ruby 3.x API
 
@@ -1328,7 +1443,7 @@ Data type: `Any`
 
 of interfaces
 
-### `libvirt_generate_uuid`
+### <a name="libvirt_generate_uuid"></a>`libvirt_generate_uuid`
 
 Type: Ruby 3.x API
 
