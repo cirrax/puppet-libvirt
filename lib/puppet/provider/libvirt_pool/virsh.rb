@@ -28,7 +28,7 @@ Puppet::Type.type(:libvirt_pool).provide(:virsh) do
     list = virsh('-q', 'pool-list', '--all')
     list.split(%r{\n})[0..-1].find do |line|
       fields = line.strip.split(%r{ +})
-      if fields[0] =~ %r{^#{resource[:name]}$}
+      if %r{^#{resource[:name]}$}.match?(fields[0])
         return :present
       end
     end
@@ -37,7 +37,7 @@ Puppet::Type.type(:libvirt_pool).provide(:virsh) do
 
   def self.prefetch(resources)
     pools = instances
-    resources.keys.each do |name|
+    resources.each_key do |name|
       if (provider = pools.find { |pool| pool.name == name })
         resources[name].provider = provider
       end

@@ -11,7 +11,7 @@ Puppet::Type.newtype(:libvirtd_conf) do
     desc 'The value of the setting to be defined.'
 
     munge do |value|
-      value = if value =~ %r{^\[.*\]$}
+      value = if %r{^\[.*\]$}.match?(value)
                 value.to_s.strip
               elsif value.is_a?(String)
                 '"' + value + '"'
