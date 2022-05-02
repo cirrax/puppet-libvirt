@@ -467,6 +467,8 @@ Default value: `$libvirt::manage_domains_config`
 
 libvirt::profiles
 
+find some default profiles in the data/profiles directory
+
 #### Parameters
 
 The following parameters are available in the `libvirt::profiles` class:
@@ -479,12 +481,14 @@ The following parameters are available in the `libvirt::profiles` class:
 Data type: `Hash`
 
 devices profiles to load
+remark: parameter is hiera hash merged
 
 ##### <a name="domconf"></a>`domconf`
 
 Data type: `Hash`
 
 domconf profiles to load
+remark: parameter is hiera hash merged
 
 ### <a name="libvirtservice"></a>`libvirt::service`
 
@@ -566,12 +570,6 @@ The following parameters are available in the `libvirt::domain` defined type:
 * [`evacuation`](#evacuation)
 * [`max_job_time`](#max_job_time)
 * [`suspend_multiplier`](#suspend_multiplier)
-* [`max_memory`](#max_memory)
-* [`initial_memory`](#initial_memory)
-* [`cpus`](#cpus)
-* [`bootmenu`](#bootmenu)
-* [`machine_type`](#machine_type)
-* [`cpu_model`](#cpu_model)
 
 ##### <a name="type"></a>`type`
 
@@ -777,100 +775,6 @@ script. The default is to not set a value and to use the global default.
 <p>Only useful together with the drbd qemu_hook in setups of two
 redundant virtualization hosts synchronized over DRBD. They
 have no effect if qemu_hook is not set to drbd.
-
-Default value: ``undef``
-
-##### <a name="max_memory"></a>`max_memory`
-
-Data type: `Optional[Any]`
-
-Deprecated: Maximum amount of memory that can be allocated to the domain.
-Example (yaml):
-  domconf:
-    memory:
-      attrs:
-        unit: 'MiB'
-      values: 2000
-**This parameter is deprecated, if set, the manifest will fail**
-
-Default value: ``undef``
-
-##### <a name="initial_memory"></a>`initial_memory`
-
-Data type: `Optional[Any]`
-
-Initial memory allocation for the domain. Defaults to max_memory.
-Deprecation notice: use $domconf (or profile) to set.
-Example (yaml):
-  domconf:
-    currentMemory:
-      attrs:
-        unit: 'MiB'
-      values: 1000
-**This parameter is deprecated, if set, the manifest will fail**
-
-Default value: ``undef``
-
-##### <a name="cpus"></a>`cpus`
-
-Data type: `Optional[Any]`
-
-Number of virtual CPUs for the domain. Defaults to '1'.
-Deprecation notice: use $domconf (or profile) to set.
-Example (yaml):
-  domconf:
-    vcpu:
-      values: 1
-**This parameter is deprecated, if set, the manifest will fail**
-
-Default value: ``undef``
-
-##### <a name="bootmenu"></a>`bootmenu`
-
-Data type: `Optional[Any]`
-
-Wheter the boot menu option should be available or not. Defaults to true.
-Deprecation notice: use $domconf if you want to disable the bootmenu
-Example (yaml):
-  domconf:
-    os:
-      bootmenu:
-        attrs:
-          enable: 'no'
-**This parameter is deprecated, if set, the manifest will fail**
-
-Default value: ``undef``
-
-##### <a name="machine_type"></a>`machine_type`
-
-Data type: `Optional[Any]`
-
-Machine type to use, i.e.
-  * "pc" - Standard PC (i440FX + PIIX, 1996)
-  * "q35" - Standard PC (Q35 + ICH9, 2009)
-Deprecation notice: use $domconf if you want to set the machine type
-**This parameter is deprecated, if set, the manifest will fail**
-
-Default value: ``undef``
-
-##### <a name="cpu_model"></a>`cpu_model`
-
-Data type: `Optional[Any]`
-
-CPU model to emulate. Valid values are any cpu model accepted by libvirt or
-the special values 'host-model' and 'host-passthrough'. See
-http://libvirt.org/formatdomain.html#elementsCPU for details. Defaults to
-not set a CPU at all and let libvirt choose. The values 'host-model' and
-'host-passthrough' prevent migrations from working.
-Deprecation notice: use $domconf (or profile) if you want to set the machine type
-Example (yaml):
-  domconf:
-    cpu:
-      attrs:
-        mode: 'custom'
-      values:
-        model: 'SandyBridge'
-**This parameter is deprecated, if set, the manifest will fail**
 
 Default value: ``undef``
 

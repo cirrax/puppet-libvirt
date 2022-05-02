@@ -116,65 +116,6 @@
 #   redundant virtualization hosts synchronized over DRBD. They
 #   have no effect if qemu_hook is not set to drbd.
 #
-# @param max_memory
-#   Deprecated: Maximum amount of memory that can be allocated to the domain.
-#   Example (yaml):
-#     domconf:
-#       memory:
-#         attrs:
-#           unit: 'MiB'
-#         values: 2000
-#   **This parameter is deprecated, if set, the manifest will fail**
-# @param initial_memory
-#   Initial memory allocation for the domain. Defaults to max_memory.
-#   Deprecation notice: use $domconf (or profile) to set.
-#   Example (yaml):
-#     domconf:
-#       currentMemory:
-#         attrs:
-#           unit: 'MiB'
-#         values: 1000
-#   **This parameter is deprecated, if set, the manifest will fail**
-# @param cpus
-#   Number of virtual CPUs for the domain. Defaults to '1'.
-#   Deprecation notice: use $domconf (or profile) to set.
-#   Example (yaml):
-#     domconf:
-#       vcpu:
-#         values: 1
-#   **This parameter is deprecated, if set, the manifest will fail**
-# @param bootmenu
-#   Wheter the boot menu option should be available or not. Defaults to true.
-#   Deprecation notice: use $domconf if you want to disable the bootmenu
-#   Example (yaml):
-#     domconf:
-#       os:
-#         bootmenu:
-#           attrs: 
-#             enable: 'no'
-#   **This parameter is deprecated, if set, the manifest will fail**
-# @param machine_type
-#   Machine type to use, i.e.
-#     * "pc" - Standard PC (i440FX + PIIX, 1996)
-#     * "q35" - Standard PC (Q35 + ICH9, 2009)
-#   Deprecation notice: use $domconf if you want to set the machine type
-#   **This parameter is deprecated, if set, the manifest will fail**
-# @param cpu_model
-#   CPU model to emulate. Valid values are any cpu model accepted by libvirt or
-#   the special values 'host-model' and 'host-passthrough'. See
-#   http://libvirt.org/formatdomain.html#elementsCPU for details. Defaults to
-#   not set a CPU at all and let libvirt choose. The values 'host-model' and
-#   'host-passthrough' prevent migrations from working.
-#   Deprecation notice: use $domconf (or profile) if you want to set the machine type
-#   Example (yaml):
-#     domconf:
-#       cpu:
-#         attrs:
-#           mode: 'custom'
-#         values:
-#           model: 'SandyBridge'
-#   **This parameter is deprecated, if set, the manifest will fail**
-#
 define libvirt::domain (
   String            $type               = 'kvm',
   Optional[String]  $domain_title       = undef,
@@ -193,32 +134,7 @@ define libvirt::domain (
   Optional[String]  $evacuation         = undef,
   Optional[String]  $max_job_time       = undef,
   Optional[String]  $suspend_multiplier = undef,
-  # deprecated parameters:
-  Optional[Any]     $max_memory         = undef,
-  Optional[Any]     $initial_memory     = undef,
-  Optional[Any]     $cpus               = undef,
-  Optional[Any]     $cpu_model          = undef,
-  Optional[Any]     $bootmenu           = undef,
-  Optional[Any]     $machine_type       = undef,
 ) {
-  if $max_memory != undef {
-    fail("deprecation: libvirt::domain, ${title}: max_memory parameter is deprecated, use domconf Hash or profile instead")
-  }
-  if $initial_memory != undef {
-    fail("deprecation: libvirt::domain, ${title}: initial_memory parameter is deprecated, use domconf Hash or profile instead")
-  }
-  if $cpus != undef {
-    fail("deprecation: libvirt::domain, ${title}: cpus parameter is deprecated, use domconf Hash or profile instead")
-  }
-  if $cpu_model != undef {
-    fail("deprecation: libvirt::domain, ${title}: cpu_model parameter is deprecated, use domconf Hash or profile instead")
-  }
-  if $bootmenu != undef {
-    fail("deprecation: libvirt::domain, ${title}: bootmenu is deprecated, use domconf Hash or profile instead")
-  }
-  if $machine_type != undef {
-    warning("deprecation: libvirt::domain, ${title}: machine_type parameter is deprecated, use domconf Hash or profile Hash instead")
-  }
 
   include libvirt
   include libvirt::profiles
