@@ -18,6 +18,14 @@
 # @param filterref
 #   references to other filters to include
 #   only used if template is set to generic
+#   Example (yaml):
+#   filterref:
+#     - filter: 'other filter'
+#     - filter: 'filter with parameter'
+#       parameters:
+#         - IP: '127.0.0.1',
+#         - PORT: '22',
+#         - PORT: '80',
 # @param ip
 #   The VM's IP address, mandatory.
 #   only used if template is set to simple
@@ -46,17 +54,17 @@
 #   configurations.
 #
 define libvirt::nwfilter (
-  String                   $uuid              = libvirt_generate_uuid($name),
-  Optional[String]         $chain             = undef,
-  Optional[String]         $priority          = undef,
-  Array                    $rules             = [],
-  Libvirt::Filterref       $filterref         = [],
-  Optional[String]         $ip                = undef,
-  Array                    $publictcpservices = [],
-  Array                    $publicudpservices = [],
-  Array                    $customtcprules    = [],
-  Array                    $customudprules    = [],
-  Enum['simple','generic'] $template  = 'simple',
+  Optional[String]                      $uuid              = undef,
+  Libvirt::Nwfilter::Chain              $chain             = 'root',
+  Optional[Libvirt::Nwfilter::Priority] $priority          = undef,
+  Libvirt::Nwrules                      $rules             = [],
+  Libvirt::Filterref                    $filterref         = [],
+  Optional[String]                      $ip                = undef,
+  Array                                 $publictcpservices = [],
+  Array                                 $publicudpservices = [],
+  Array                                 $customtcprules    = [],
+  Array                                 $customudprules    = [],
+  Enum['simple','generic']              $template          = 'simple',
 ) {
   include libvirt
 
