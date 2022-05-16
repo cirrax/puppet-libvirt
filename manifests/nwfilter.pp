@@ -77,16 +77,13 @@ define libvirt::nwfilter (
     })
   }
 
-  exec { "libvirt-nwfilter-${name}":
-    command  => join(['f=$(mktemp) && echo "',
-        $content,
-    '" > $f && virsh nwfilter-define $f && rm $f']),
-    provider => 'shell',
-    require  => $require_service,
+  libvirt_nwfilter { $title:
+    content => $content,
+    uuid    => $uuid,
   }
 
   if $libvirt::diff_dir {
-    file { "${libvirt::diff_dir}/nwfilters/${name}.xml":
+    file { "${libvirt::diff_dir}/nwfilters/${title}.xml":
       content => $content,
     }
   }

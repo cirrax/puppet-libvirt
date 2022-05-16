@@ -19,8 +19,7 @@ describe 'libvirt::nwfilter' do
     it { is_expected.to compile.with_all_deps }
 
     it {
-      is_expected.to contain_exec('libvirt-nwfilter-' + title)
-        .with_provider('shell')
+      is_expected.to contain_libvirt_nwfilter(title)
     }
   end
 
