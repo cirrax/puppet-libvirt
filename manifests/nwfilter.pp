@@ -66,7 +66,7 @@ define libvirt::nwfilter (
   }
 
   if $template == 'simple' {
-    $content = template('libvirt/nwfilter/simple.xml.erb')
+    $content = libvirt::normalxml(template('libvirt/nwfilter/simple.xml.erb'))
   } else {
     $content = epp('libvirt/nwfilter/generic.xml.epp', {
         filtername => $title,
