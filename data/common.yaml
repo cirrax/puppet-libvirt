@@ -21,3 +21,52 @@ libvirt::filter_default_prio:
   ipv6: -600
   arp: -500
   rarp: -400
+
+# this tree is a hash of all elements in the xml, ordered in a tree
+# every value that is not in there is handled as a attribute in the 
+# generic template.
+libvirt::tree_network:
+  metadata: {}
+  bridge:   {}
+  domain:   {}
+  forward:
+    nat:
+      address: {}
+      port: {}
+    interface: {}
+    pf: {}
+    driver: {}
+    address: {}
+  bandwith:
+   inbound: {}
+   outbound: {}
+  vlan:
+    tag: {}
+  port: {}
+  virtualport:
+    parameters: {}
+  portgroup:
+    vlan:
+      tag: {}
+    bandwith:
+      inbound: {}
+      outbound: {}
+    virtualport:
+      parameters: {}
+  dns:
+    forwarder: {}
+    txt: {}
+    srv: {}
+    host:
+      hostname: {}
+  ip:
+    tftp: {}
+    dhcp:
+      range:
+        lease: {}
+      host:
+        lease: {}
+      bootp: {}
+  route: {}
+  dnsmasq:options:
+    dnsmasq:option: {}

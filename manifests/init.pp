@@ -123,6 +123,18 @@
 #    none: we do not care
 #    purge: remove the filters
 #    noop: warn (do a purge with noop parameter)
+# @param purge_network
+#   what to do with persistent networks not managed with puppet:
+#    none: we do not care
+#    purge: remove the network
+#    noop: warn (do a purge with noop parameter)
+#   Remark: non persistent networks are not affected.
+#   only persisten network are handled within this module.   
+# @param tree_network
+#   this is the tree of all elements available for network
+#   xml definition, which stears the xml generation
+#   everything not defined as element is treated as attribute.
+#   There is no need to change this !! Better file a bug !
 #
 # @example using a drbd hook
 #   class { 'libvirt':
@@ -161,6 +173,8 @@ class libvirt (
   Hash[String[1], Hash]                                $default_nwfilters     = {},
   Array[String[1]]                                     $load_nwfilter_set     = [],
   Enum['none','purge','noop']                          $purge_nwfilter        = 'none',
+  Enum['none','purge','noop']                          $purge_network         = 'none',
+  Hash                                                 $tree_network          = {},
 ) {
   Class['Libvirt::Install']
   -> Class['Libvirt::Config']
@@ -185,12 +199,25 @@ class libvirt (
     }
   }
 
+  # do nwfilter purge (if configured)
   if $purge_nwfilter == 'purge' {
     resources { 'libvirt_nwfilter':
       purge => true,
     }
   } elsif $purge_nwfilter == 'noop' {
     resources { 'libvirt_nwfilter':
+      purge => true,
+      noop  => true,
+    }
+  }
+
+  # do network purge (if configured !)
+  if $purge_network == 'purge' {
+    resources { 'libvirt_network':
+      purge => true,
+    }
+  } elsif $purge_network == 'noop' {
+    resources { 'libvirt_network':
       purge => true,
       noop  => true,
     }

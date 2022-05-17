@@ -76,9 +76,6 @@ describe 'libvirt' do
         it {
           is_expected.to contain_libvirt__network('mynetwork')
             .with_bridge('test')
-          is_expected.to contain_exec('libvirt-network-autostart-mynetwork')
-          is_expected.to contain_exec('libvirt-network-mynetwork')
-          is_expected.to contain_exec('libvirt-network-start-mynetwork')
         }
       end
 
@@ -126,9 +123,6 @@ describe 'libvirt' do
           is_expected.to contain_libvirt__network('default')
             .with_ensure('absent')
         }
-        it { is_expected.to contain_exec('libvirt-delete-network-default') }
-        it { is_expected.to contain_exec('libvirt-network-disable-autostart-default') }
-        it { is_expected.to contain_exec('libvirt-undefine-network-default') }
       end
 
       context 'with manage_service false' do

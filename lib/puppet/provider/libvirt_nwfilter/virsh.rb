@@ -75,9 +75,11 @@ Puppet::Type.type(:libvirt_nwfilter).provide(:virsh) do
     end
     # remove the uuid
     xml.root.elements.delete('//uuid')
-    out = ''.dup
-    xml.write(output: out, indent: 2)
-    out
+    formatter = REXML::Formatters::Pretty.new(2)
+    formatter.compact = true
+    output = ''.dup
+    formatter.write(xml, output)
+    output
   end
 
   def exists?

@@ -1,22 +1,20 @@
 # frozen_string_literal: true
 
-#
-
-Puppet::Type.newtype(:libvirt_nwfilter) do
-  @doc = 'ensures a nwfilter
+Puppet::Type.newtype(:libvirt_network) do
+  @doc = 'ensures a persistent network (transient networks are ignored)
          '
   ensurable
 
   newparam(:name, namevar: true) do
-    desc 'name of the filter, name as namevar'
+    desc 'name of the network, name as namevar'
 
     validate do |value|
-      raise ArgumentError, 'The name of the libvirt filter name needs to be a string' unless value.is_a?(String)
+      raise ArgumentError, 'The name of the libvirt network name needs to be a string' unless value.is_a?(String)
     end
   end
 
   newparam(:uuid) do
-    desc 'uuid to use for creation of a new nwfilter, if undef (default) automatic creation'
+    desc 'uuid to use for creation of a new network, if undef (default) automatic creation'
   end
 
   newparam(:show_diff, boolean: true, parent: Puppet::Parameter::Boolean) do
@@ -25,8 +23,22 @@ Puppet::Type.newtype(:libvirt_nwfilter) do
     defaultto :false
   end
 
+  newproperty(:active) do
+    desc 'Whether the network should be started. (active)'
+    defaultto(:true)
+    newvalues(:true)
+    newvalues(:false)
+  end
+
+  newproperty(:autostart) do
+    desc 'Whether the network should be autostarted.'
+    defaultto(:true)
+    newvalues(:true)
+    newvalues(:false)
+  end
+
   newproperty(:content) do
-    desc 'content of the nwfilter formated as XML'
+    desc 'content of the network formated as XML'
 
     validate do |value|
       raise ArgumentError, 'content needs to be a XML string' unless value.is_a?(String)
