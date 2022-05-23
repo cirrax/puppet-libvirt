@@ -118,6 +118,12 @@
 #   in $load_nwfilter_set.each |$i| {$default_nwfilters[$i]}
 #   see data/profiles/nwfilter_* for supported sets of filter
 #   will set the default template to 'generic'
+# @param purge_nwfilter
+#   what to do with nwfilters not managed with puppet:
+#    none: we do not care
+#    purge: remove the filters
+#    noop: warn (do a purge with noop parameter)
+#
 # @example using a drbd hook
 #   class { 'libvirt':
 #     qemu_hook => 'drbd',
@@ -154,6 +160,7 @@ class libvirt (
   Hash                                                 $filter_default_prio   = {},
   Hash[String[1], Hash]                                $default_nwfilters     = {},
   Array[String[1]]                                     $load_nwfilter_set     = [],
+  Enum['none','purge','noop']                          $purge_nwfilter        = 'none',
 ) {
   Class['Libvirt::Install']
   -> Class['Libvirt::Config']
@@ -175,6 +182,17 @@ class libvirt (
       ensure  => directory,
       purge   => true,
       recurse => true,
+    }
+  }
+
+  if $purge_nwfilter == 'purge' {
+    resources { 'libvirt_nwfilter':
+      purge => true,
+    }
+  } elsif $purge_nwfilter == 'noop' {
+    resources { 'libvirt_nwfilter':
+      purge => true,
+      noop  => true,
     }
   }
 
