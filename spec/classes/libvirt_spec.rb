@@ -82,6 +82,20 @@ describe 'libvirt' do
         }
       end
 
+      context 'with create_default nwfilter' do
+        let :params do
+          default_params.merge(
+            load_nwfilter_set: ['test'],
+            default_nwfilters: { 'test' => { 'filter' => {} } },
+          )
+        end
+
+        it_behaves_like 'libvirt shared examples'
+
+        it { is_expected.to contain_libvirt__nwfilter('filter').with_template('generic') }
+        it { is_expected.to contain_libvirt_nwfilter('filter') }
+      end
+
       context 'with create_domain' do
         let :params do
           default_params.merge(

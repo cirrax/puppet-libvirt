@@ -109,6 +109,15 @@
 # @param filter_default_prio
 #   default filter priorities per filter chain.
 #   defaults are taken from hiera.
+# @param default_nwfilters
+#   hash of default filters to load
+#   this parameter is hash merged.
+# @param load_nwfilter_set
+#   set of nwfilters to load
+#   this loads (create_resources) of all filters defined
+#   in $load_nwfilter_set.each |$i| {$default_nwfilters[$i]}
+#   see data/profiles/nwfilter_* for supported sets of filter
+#   will set the default template to 'generic'
 # @example using a drbd hook
 #   class { 'libvirt':
 #     qemu_hook => 'drbd',
@@ -143,6 +152,8 @@ class libvirt (
   Boolean                                              $drop_default_net      = false,
   Optional[String]                                     $diff_dir              = undef,
   Hash                                                 $filter_default_prio   = {},
+  Hash[String[1], Hash]                                $default_nwfilters     = {},
+  Array[String[1]]                                     $load_nwfilter_set     = [],
 ) {
   Class['Libvirt::Install']
   -> Class['Libvirt::Config']
@@ -171,6 +182,12 @@ class libvirt (
   create_resources('::libvirt::domain', $create_domains)
   create_resources('::libvirt::nwfilter', $create_nwfilters)
   create_resources('libvirt_pool', $create_pools)
+
+  $load_nwfilter_set.each | String[1] $i| {
+    create_resources('libvirt::nwfilter', $default_nwfilters[$i],{
+        'template' => 'generic',
+    })
+  }
 
   if ( $drop_default_net ) {
     libvirt::network { 'default':
