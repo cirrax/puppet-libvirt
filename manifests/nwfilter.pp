@@ -9,7 +9,6 @@
 #   The libvirt UUID, optional.
 # @param chain
 #   filter chain to use
-#   only used if template is set to generic
 # @param priority
 #   filter priority
 #   only used if template is set to generic
