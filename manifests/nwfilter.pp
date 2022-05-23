@@ -5,6 +5,8 @@
 # firewalling that restricts inbound traffic to the given port
 # numbers.
 #
+# @param ensure
+#   if the resource should be present or absent.
 # @param uuid
 #   The libvirt UUID, optional.
 # @param chain
@@ -54,6 +56,7 @@
 #   configurations.
 #
 define libvirt::nwfilter (
+  Enum['present', 'absent']             $ensure            = 'present',
   Optional[String]                      $uuid              = undef,
   Libvirt::Nwfilter::Chain              $chain             = 'root',
   Optional[Libvirt::Nwfilter::Priority] $priority          = undef,
@@ -73,26 +76,34 @@ define libvirt::nwfilter (
     default => Service[$libvirt::service_name],
   }
 
-  if $template == 'simple' {
-    $content = libvirt::normalxml(template('libvirt/nwfilter/simple.xml.erb'))
+  if $ensure == 'absent' {
+    libvirt_nwfilter { $title:
+      ensure  => 'absent',
+    }
   } else {
-    $content = epp('libvirt/nwfilter/generic.xml.epp', {
-        filtername => $title,
-        chain      => $chain,
-        priority   => pick($priority, $libvirt::filter_default_prio[$chain], 500),
-        rules      => $rules,
-        filterref  => $filterref,
-    })
-  }
+    include libvirt
 
-  libvirt_nwfilter { $title:
-    content => $content,
-    uuid    => $uuid,
-  }
+    if $template == 'simple' {
+      $content = libvirt::normalxml(template('libvirt/nwfilter/simple.xml.erb'))
+    } else {
+      $content = libvirt::normalxml(epp('libvirt/nwfilter/generic.xml.epp', {
+            filtername => $title,
+            chain      => $chain,
+            priority   => pick($priority, $libvirt::filter_default_prio[$chain], 500),
+            rules      => $rules,
+            filterref  => $filterref,
+      }))
+    }
 
-  if $libvirt::diff_dir {
-    file { "${libvirt::diff_dir}/nwfilters/${title}.xml":
+    libvirt_nwfilter { $title:
       content => $content,
+      uuid    => $uuid,
+    }
+
+    if $libvirt::diff_dir {
+      file { "${libvirt::diff_dir}/nwfilters/${title}.xml":
+        content => $content,
+      }
     }
   }
 }

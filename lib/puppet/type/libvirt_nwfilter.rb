@@ -5,6 +5,7 @@
 Puppet::Type.newtype(:libvirt_nwfilter) do
   @doc = 'ensures a nwfilter
          '
+  ensurable
 
   newparam(:name, namevar: true) do
     desc 'name of the filter, name as namevar'
