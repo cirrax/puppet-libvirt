@@ -70,6 +70,7 @@ The following parameters are available in the `libvirt` class:
 * [`create_networks`](#create_networks)
 * [`create_domains`](#create_domains)
 * [`create_nwfilters`](#create_nwfilters)
+* [`create_pools`](#create_pools)
 * [`evacuation`](#evacuation)
 * [`max_job_time`](#max_job_time)
 * [`suspend_multiplier`](#suspend_multiplier)
@@ -186,6 +187,15 @@ Default value: `{}`
 Data type: `Hash`
 
 Hash of nwfilters to create with libvirt::nwfilter
+Defaults to {}
+
+Default value: `{}`
+
+##### <a name="create_pools"></a>`create_pools`
+
+Data type: `Hash`
+
+Hash of pools to create with libvirt_pool
 Defaults to {}
 
 Default value: `{}`
