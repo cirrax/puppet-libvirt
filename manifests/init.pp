@@ -48,6 +48,10 @@
 #   Hash of nwfilters to create with libvirt::nwfilter
 #   Defaults to {}
 #
+# @param create_pools
+#   Hash of pools to create with libvirt_pool
+#   Defaults to {}
+#
 # @param evacuation
 #   Default evacuation policy to shutdown or migrate all domains on a host.
 #   Valid values are 'migrate', 'save' and 'shutdown'. This can be overriden
@@ -123,6 +127,7 @@ class libvirt (
   Hash                                                 $create_networks       = {},
   Hash                                                 $create_domains        = {},
   Hash                                                 $create_nwfilters      = {},
+  Hash                                                 $create_pools          = {},
   String                                               $evacuation            = 'migrate',
   String                                               $max_job_time          = '120',
   String                                               $suspend_multiplier    = '5',
@@ -162,6 +167,7 @@ class libvirt (
   create_resources('::libvirt::network', $create_networks)
   create_resources('::libvirt::domain', $create_domains)
   create_resources('::libvirt::nwfilter', $create_nwfilters)
+  create_resources('libvirt_pool', $create_pools)
 
   if ( $drop_default_net ) {
     libvirt::network { 'default':
