@@ -21,9 +21,6 @@ describe 'libvirt' do
 
   shared_examples 'libvirt shared examples' do
     it { is_expected.to compile.with_all_deps }
-    it { is_expected.to contain_anchor('libvirt::begin') }
-    it { is_expected.to contain_anchor('libvirt::installed') }
-    it { is_expected.to contain_anchor('libvirt::end') }
     it { is_expected.to contain_class('libvirt::install') }
     it { is_expected.to contain_class('libvirt::config') }
     it { is_expected.to contain_class('libvirt::service') }

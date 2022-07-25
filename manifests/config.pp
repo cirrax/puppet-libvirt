@@ -20,17 +20,16 @@
 # 
 # @note parameter are inherited from ::libvirt and documented there.
 class libvirt::config (
-  String                                               $qemu_hook        = $libvirt::qemu_hook,
+  Optional[String]                                     $qemu_hook        = $libvirt::qemu_hook,
   Hash                                                 $qemu_conf        = $libvirt::qemu_conf,
   Array                                                $uri_aliases      = $libvirt::uri_aliases,
-  String                                               $uri_default      = $libvirt::uri_default,
+  Optional[String]                                     $uri_default      = $libvirt::uri_default,
   Hash                                                 $default_conf     = $libvirt::default_conf,
   Hash[Optional[String],Variant[String,Integer,Array]] $libvirtd_conf    = $libvirt::libvirtd_conf,
   String                                               $config_dir       = $libvirt::config_dir,
 ) inherits libvirt {
-
-  if ($qemu_hook != '') {
-    file {"${config_dir}/hooks/qemu":
+  if $qemu_hook {
+    file { "${config_dir}/hooks/qemu":
       owner  => 'root',
       group  => 'root',
       mode   => '0755',
@@ -39,7 +38,7 @@ class libvirt::config (
   }
 
   if ($qemu_conf != {}) {
-    file {"${config_dir}/qemu.conf":
+    file { "${config_dir}/qemu.conf":
       owner   => 'root',
       group   => 'root',
       mode    => '0600',
@@ -47,12 +46,12 @@ class libvirt::config (
     }
   }
 
-  if ( $uri_default != '' ) or ( $uri_aliases != [] ) {
-    file {"${config_dir}/libvirt.conf":
+  if ( $uri_default != '' ) or ( $uri_aliases != []) {
+    file { "${config_dir}/libvirt.conf":
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
-      content => template('libvirt/libvirt.conf.erb'),
+      content => epp('libvirt/libvirt.conf.epp'),
     }
   }
 

@@ -24,17 +24,13 @@
 #   Array of the libvirt packages to install.
 #   Required, see hiera data directory for defaults
 #
-# @param qemu_hook_packages
-#   Hash of Arrays of hook specific packages to install
-#   Defaults to {}
-#
 # @param qemu_conf
 #   Hash of key/value pairs you want to put in qemu.conf file.
 #
 # @param qemu_hook
 #   QEMU hook to install. The only currently available hook is a script
-#   to setup DRBD resources. Valid values are 'drbd' or '' (=no hook).
-#   Defaults to ''.
+#   to setup DRBD resources. Valid values are 'drbd' or `undef` (=no hook).
+#   Defaults to `undef`.
 #
 # @param qemu_hook_packages
 #   Hash of Arrays of hook specific packages to install
@@ -83,7 +79,7 @@
 #   defaults to []
 # @param uri_default
 #   the default url to use.
-#   defaults to '' (which means the system default is used)
+#   defaults to `undef` (which means the system default is used)
 # @param default_conf
 #   Hash to add config to /etc/default/libvirtd (Debian) or
 #   /etc/sysconfig/libvirtd (RedHat)
@@ -105,7 +101,7 @@
 #   the xmls generated for the domains are kept and diffs
 #   are shown on changes by puppet.
 #   usefull for development (or on upgrade)
-#   defaults to '' (== disabled)
+#   defaults to `undef` (== disabled)
 #
 # @example using a drbd hook
 #   class { 'libvirt':
@@ -122,7 +118,7 @@ class libvirt (
   Boolean                                              $service_enable        = true,
   Boolean                                              $manage_service        = true,
   Hash                                                 $qemu_conf             = {},
-  String                                               $qemu_hook             = '',
+  Optional[String]                                     $qemu_hook             = undef,
   Hash                                                 $qemu_hook_packages    = {},
   Hash                                                 $create_networks       = {},
   Hash                                                 $create_domains        = {},
@@ -132,38 +128,31 @@ class libvirt (
   String                                               $suspend_multiplier    = '5',
   String                                               $migration_url_format  = 'ssh',
   Array                                                $uri_aliases           = [],
-  String                                               $uri_default           = '',
+  Optional[String]                                     $uri_default           = undef,
   Hash                                                 $default_conf          = {},
   Hash[Optional[String],Variant[String,Integer,Array]] $libvirtd_conf         = {},
   String                                               $config_dir            = '/etc/libvirt',
   String                                               $manage_domains_config = '/etc/manage-domains.ini',
   Boolean                                              $drop_default_net      = false,
-  String                                               $diff_dir              = '',
+  Optional[String]                                     $diff_dir              = undef,
 ) {
-
-  Anchor['libvirt::begin']
-  -> Class['Libvirt::Install']
+  Class['Libvirt::Install']
   -> Class['Libvirt::Config']
   -> Class['Libvirt::Service']
-  -> Anchor['libvirt::installed']
-  -> Anchor['libvirt::end']
 
-  anchor { 'libvirt::begin': }
-  include ::libvirt::install
-  include ::libvirt::config
-  include ::libvirt::service
-  anchor { 'libvirt::installed': }
-  anchor { 'libvirt::end': }
+  include libvirt::install
+  include libvirt::config
+  include libvirt::service
 
   # include manage-domains script config outside of the anchor to
   # avoid dependency cycles when declaring libvirt before and
   # libvirt::domains
   if ($qemu_hook == 'drbd') {
-    include ::libvirt::manage_domains_config
+    include libvirt::manage_domains_config
   }
 
-  if $diff_dir != '' {
-    file{ [ $diff_dir, "${diff_dir}/domains", "${diff_dir}/networks", "${diff_dir}/nwfilters" ]:
+  if $diff_dir {
+    file { [$diff_dir, "${diff_dir}/domains", "${diff_dir}/networks", "${diff_dir}/nwfilters"]:
       ensure  => directory,
       purge   => true,
       recurse => true,

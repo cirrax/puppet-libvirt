@@ -26,7 +26,6 @@ function libvirt::get_merged_profile(
   Hash   $profile_hash,
   String $profile,
 ) {
-
   $base_profile=pick($profile_hash[$profile].dig('profileconfig','base'), $profile)
 
   if $base_profile == $profile {

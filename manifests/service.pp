@@ -18,17 +18,16 @@
 #   Whether the service should be managed at all.
 #   Defaults to true
 #
-class libvirt::service(
+class libvirt::service (
   String  $service_name   = $libvirt::service_name,
   String  $service_ensure = $libvirt::service_ensure,
   Boolean $service_enable = $libvirt::service_enable,
   Boolean $manage_service = $libvirt::manage_service,
 ) inherits libvirt {
-
   if $manage_service {
     Libvirtd_conf <| |> ~> Service['libvirtd']
 
-    service {'libvirtd':
+    service { 'libvirtd':
       ensure => $service_ensure,
       name   => $service_name,
       enable => $service_enable,
