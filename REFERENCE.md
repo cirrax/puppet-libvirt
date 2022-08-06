@@ -82,6 +82,7 @@ The following parameters are available in the `libvirt` class:
 * [`manage_domains_config`](#manage_domains_config)
 * [`drop_default_net`](#drop_default_net)
 * [`diff_dir`](#diff_dir)
+* [`modular_services`](#modular_services)
 
 ##### <a name="service_name"></a>`service_name`
 
@@ -318,6 +319,15 @@ defaults to `undef` (== disabled)
 
 Default value: ``undef``
 
+##### <a name="modular_services"></a>`modular_services`
+
+Data type: `Hash[String, Hash]`
+
+Hash of `service` resources for [modular drivers and sockets](https://libvirt.org/daemons.html#modular-driver-daemons).
+When this is set, `service_name`, `service_ensure`, and `service_enable` are ignored.
+
+Default value: `{}`
+
 ### <a name="libvirtconfig"></a>`libvirt::config`
 
 libvirt::config
@@ -502,6 +512,7 @@ The following parameters are available in the `libvirt::service` class:
 * [`service_ensure`](#service_ensure)
 * [`service_enable`](#service_enable)
 * [`manage_service`](#manage_service)
+* [`modular_services`](#modular_services)
 
 ##### <a name="service_name"></a>`service_name`
 
@@ -538,6 +549,15 @@ Whether the service should be managed at all.
 Defaults to true
 
 Default value: `$libvirt::manage_service`
+
+##### <a name="modular_services"></a>`modular_services`
+
+Data type: `Hash[String, Hash]`
+
+Hash of `service` resources for [modular drivers and sockets](https://libvirt.org/daemons.html#modular-driver-daemons).
+When this is set, `service_name`, `service_ensure`, and `service_enable` are ignored.
+
+Default value: `{}`
 
 ## Defined types
 

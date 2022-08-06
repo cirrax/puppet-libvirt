@@ -106,6 +106,9 @@
 #   are shown on changes by puppet.
 #   usefull for development (or on upgrade)
 #   defaults to `undef` (== disabled)
+# @param modular_services
+#   Hash of `service` resources for [modular drivers and sockets](https://libvirt.org/daemons.html#modular-driver-daemons).
+#   When this is set, `service_name`, `service_ensure`, and `service_enable` are ignored.
 #
 # @example using a drbd hook
 #   class { 'libvirt':
