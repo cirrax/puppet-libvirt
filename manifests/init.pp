@@ -140,6 +140,7 @@ class libvirt (
   String                                               $manage_domains_config = '/etc/manage-domains.ini',
   Boolean                                              $drop_default_net      = false,
   Optional[String]                                     $diff_dir              = undef,
+  Hash[String, Hash]                                   $modular_services      = {},
 ) {
   Class['Libvirt::Install']
   -> Class['Libvirt::Config']

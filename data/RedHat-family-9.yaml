@@ -1,0 +1,98 @@
+---
+# See https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html/configuring_and_managing_virtualization/optimizing-virtual-machine-performance-in-rhel_configuring-and-managing-virtualization#proc_enabling-modular-libvirt-daemons_assembly_optimizing-libvirt-daemons
+# for more information.
+libvirt::modular_services:
+  libvirtd:
+    ensure: stopped
+    enable: false
+  libvirtd.socket:
+    ensure: stopped
+    enable: false
+  libvirtd-ro.socket:
+    ensure: stopped
+    enable: false
+  libvirtd-admin.socket:
+    ensure: stopped
+    enable: false
+  libvirtd-tcp.socket:
+    ensure: stopped
+    enable: false
+  libvirtd-tls.socket:
+    ensure: stopped
+    enable: false
+  virtqemud:
+    enable: true
+  virtinterfaced:
+    enable: true
+  virtinterfaced.socket:
+    enable: true
+  virtinterfaced-ro.socket:
+    enable: true
+  virtinterfaced-admin.socket:
+    enable: true
+  virtnetworkd:
+    enable: true
+  virtnodedevd:
+    enable: true
+  virtnwfilterd:
+    enable: true
+  virtsecretd:
+    enable: true
+  virtstoraged:
+    enable: true
+  virtqemud.socket:
+    ensure: running
+    enable: true
+  virtqemud-ro.socket:
+    ensure: running
+    enable: true
+  virtqemud-admin.socket:
+    ensure: running
+    enable: true
+  virtnetworkd.socket:
+    ensure: running
+    enable: true
+  virtnetworkd-ro.socket:
+    ensure: running
+    enable: true
+  virtnetworkd-admin.socket:
+    ensure: running
+    enable: true
+  virtnodedevd.socket:
+    ensure: running
+    enable: true
+  virtnodedevd-ro.socket:
+    ensure: running
+    enable: true
+  virtnodedevd-admin.socket:
+    ensure: running
+    enable: true
+  virtnwfilterd.socket:
+    ensure: running
+    enable: true
+  virtnwfilterd-ro.socket:
+    ensure: running
+    enable: true
+  virtnwfilterd-admin.socket:
+    ensure: running
+    enable: true
+  virtsecretd.socket:
+    ensure: running
+    enable: true
+  virtsecretd-ro.socket:
+    ensure: running
+    enable: true
+  virtsecretd-admin.socket:
+    ensure: running
+    enable: true
+  virtstoraged.socket:
+    ensure: running
+    enable: true
+  virtstoraged-ro.socket:
+    ensure: running
+    enable: true
+  virtstoraged-admin.socket:
+    ensure: running
+    enable: true
+  # for drv in qemu network nodedev nwfilter secret storage;
+  # do systemctl start virt${drv}d{,-ro,-admin}.socket; done
