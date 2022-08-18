@@ -1,0 +1,12 @@
+---
+# Defaults for Ubuntu 20.04 LTS (Focal Fossa)
+
+libvirt::libvirt_package_names:
+  - 'libvirt-daemon-system'
+  - 'libvirt-clients'
+  - 'qemu-kvm'
+
+libvirt::qemu_hook_packages:
+  drbd:
+    - 'xmlstarlet'
+    - 'python-libvirt'
