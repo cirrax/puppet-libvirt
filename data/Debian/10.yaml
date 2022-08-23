@@ -1,10 +1,9 @@
 ---
-# Debian/default.yaml
 # defaults for Debian Operating system
 
 libvirt::libvirt_package_names:
   - 'libvirt-daemon-system'
-  - 'qemu-system-x86'
+  - 'qemu-kvm'
 
 libvirt::qemu_hook_packages:
    drbd:
