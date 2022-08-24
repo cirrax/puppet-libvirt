@@ -135,7 +135,6 @@ define libvirt::domain (
   Optional[String]  $max_job_time       = undef,
   Optional[String]  $suspend_multiplier = undef,
 ) {
-
   include libvirt
   include libvirt::profiles
 
