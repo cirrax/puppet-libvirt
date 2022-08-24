@@ -1,5 +1,6 @@
 ---
-# Defaults for Ubuntu 16.04 LTS (Xenial Xerus)
+# Ubuntu/14.04.yaml
+# Defaults for Ubuntu 14.04 LTS (Trusty Tahr)
 
 libvirt::libvirt_package_names:
   - 'libvirt-bin'
