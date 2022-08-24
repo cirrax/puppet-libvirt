@@ -10,9 +10,7 @@
 #
 class libvirt::manage_domains_config (
   String $manage_domains_config = $libvirt::manage_domains_config,
-) inherits ::libvirt {
-
-
+) inherits libvirt {
   concat { $manage_domains_config:
     owner => 'root',
     group => 'root',

@@ -14,9 +14,9 @@
 #   The allowed values are driver specific, but include "xen", "kvm", "qemu" and "lxc"
 #   Defaults to 'kvm'
 # @param domain_title
-#   Free text title of the domain. Defaults to ''.
+#   Free text title of the domain. Defaults to `undef`.
 # @param description
-#   Free text description of the domain. Defaults to ''.
+#   Free text description of the domain. Defaults to `undef`.
 # @param uuid
 #   UUID for the domain. The default is the uuid, generated
 #   with puppet.
@@ -177,8 +177,8 @@
 #
 define libvirt::domain (
   String            $type               = 'kvm',
-  String            $domain_title       = '',
-  String            $description        = '',
+  Optional[String]  $domain_title       = undef,
+  Optional[String]  $description        = undef,
   String            $uuid               = libvirt_generate_uuid($name),
   String            $boot               = 'hd',
   Array             $disks              = [],
@@ -220,8 +220,8 @@ define libvirt::domain (
     warning("deprecation: libvirt::domain, ${title}: machine_type parameter is deprecated, use domconf Hash or profile Hash instead")
   }
 
-  include ::libvirt
-  include ::libvirt::profiles
+  include libvirt
+  include libvirt::profiles
 
   $devices_real  = libvirt::get_merged_profile($libvirt::profiles::devices, $devices_profile) + $devices
 
@@ -229,33 +229,38 @@ define libvirt::domain (
     $domconf_real  = libvirt::get_merged_profile($libvirt::profiles::domconf, $dom_profile) + $domconf
   } else {
     $_domconf = libvirt::get_merged_profile($libvirt::profiles::domconf, $dom_profile) + $domconf
-    $domconf_real = deep_merge($_domconf,{'os' => {'boot' => { 'attrs' => { 'dev' => $boot }}}})
+    $domconf_real = deep_merge($_domconf,{ 'os' => { 'boot' => { 'attrs' => { 'dev' => $boot } } } })
   }
 
-  exec {"libvirt-domain-${name}":
+  $require_service = $libvirt::service_name ? {
+    Undef   => undef,
+    default => Service[$libvirt::service_name],
+  }
+
+  exec { "libvirt-domain-${name}":
     command  => join(['f=$(mktemp) && echo "',
-                      template('libvirt/domain.xml.erb'),
-                      '" > $f && virsh define $f && rm $f']),
+        template('libvirt/domain.xml.erb'),
+    '" > $f && virsh define $f && rm $f']),
     provider => 'shell',
     creates  => "${libvirt::config_dir}/qemu/${name}.xml",
-    require  => Anchor['libvirt::end'],
+    require  => $require_service,
   }
 
-  if $libvirt::diff_dir != '' {
-    file {"${libvirt::diff_dir}/domains/${name}.xml":
+  if $libvirt::diff_dir {
+    file { "${libvirt::diff_dir}/domains/${name}.xml":
       content => template('libvirt/domain.xml.erb'),
     }
   }
 
   if ($autostart) {
-    exec {"libvirt-domain-autostart-${name}":
+    exec { "libvirt-domain-autostart-${name}":
       command  => "virsh autostart ${name}",
       provider => 'shell',
       creates  => "${libvirt::config_dir}/qemu/autostart/${name}.xml",
       require  => Exec["libvirt-domain-${name}"],
     }
 
-    exec {"libvirt-domain-start-${name}":
+    exec { "libvirt-domain-start-${name}":
       command  => "virsh start ${name}",
       provider => 'shell',
       unless   => "virsh list --name | grep -q ^${name}$",

@@ -64,7 +64,7 @@ describe 'libvirt::install' do
         it_behaves_like 'libvirt::install shared examples'
         it {
           is_expected.to contain_file('/usr/local/sbin/manage-domains')
-            .with_ensure('present')
+            .with_ensure('file')
             .with_owner('root')
             .with_group('root')
             .with_mode('0755')

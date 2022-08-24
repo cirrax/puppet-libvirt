@@ -13,9 +13,9 @@
 #  "sleet=qemu+ssh://root@sleet.cloud.example.com/system",
 #]
 uri_aliases = [
-<% @uri_aliases.each do | val | -%>
-   "<%= val %>",
-<% end -%>
+<% $libvirt::uri_aliases.each | $val | { -%>
+   "<%= $val %>",
+<% } -%>
 ]
 
 #
@@ -23,7 +23,7 @@ uri_aliases = [
 # driver when no URI is supplied by the application.
 
 #uri_default = "qemu:///system"
-<% if @uri_default != '' -%>
-uri_default = "<%= @uri_default %>"
-<% end -%>
+<% if $libvirt::uri_default { -%>
+uri_default = "<%= $libvirt::uri_default %>"
+<% } -%>
 

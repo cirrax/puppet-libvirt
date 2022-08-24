@@ -63,7 +63,6 @@ The following parameters are available in the `libvirt` class:
 * [`service_enable`](#service_enable)
 * [`manage_service`](#manage_service)
 * [`libvirt_package_names`](#libvirt_package_names)
-* [`qemu_hook_packages`](#qemu_hook_packages)
 * [`qemu_conf`](#qemu_conf)
 * [`qemu_hook`](#qemu_hook)
 * [`qemu_hook_packages`](#qemu_hook_packages)
@@ -129,15 +128,6 @@ Required, see hiera data directory for defaults
 
 Default value: `[]`
 
-##### <a name="qemu_hook_packages"></a>`qemu_hook_packages`
-
-Data type: `Hash`
-
-Hash of Arrays of hook specific packages to install
-Defaults to {}
-
-Default value: `{}`
-
 ##### <a name="qemu_conf"></a>`qemu_conf`
 
 Data type: `Hash`
@@ -148,15 +138,17 @@ Default value: `{}`
 
 ##### <a name="qemu_hook"></a>`qemu_hook`
 
-Data type: `String`
+Data type: `Optional[String]`
 
 QEMU hook to install. The only currently available hook is a script
-to setup DRBD resources. Valid values are 'drbd' or '' (=no hook).
-Defaults to ''.
+to setup DRBD resources. Valid values are 'drbd' or `undef` (=no hook).
+Defaults to `undef`.
 
-Default value: `''`
+Default value: ``undef``
 
 ##### <a name="qemu_hook_packages"></a>`qemu_hook_packages`
+
+Data type: `Hash`
 
 Hash of Arrays of hook specific packages to install
 see hiera data directory for defaults
@@ -251,12 +243,12 @@ Default value: `[]`
 
 ##### <a name="uri_default"></a>`uri_default`
 
-Data type: `String`
+Data type: `Optional[String]`
 
 the default url to use.
-defaults to '' (which means the system default is used)
+defaults to `undef` (which means the system default is used)
 
-Default value: `''`
+Default value: ``undef``
 
 ##### <a name="default_conf"></a>`default_conf`
 
@@ -306,15 +298,15 @@ Default value: ``false``
 
 ##### <a name="diff_dir"></a>`diff_dir`
 
-Data type: `String`
+Data type: `Optional[String]`
 
 if this is set to a path, the directory is created and
 the xmls generated for the domains are kept and diffs
 are shown on changes by puppet.
 usefull for development (or on upgrade)
-defaults to '' (== disabled)
+defaults to `undef` (== disabled)
 
-Default value: `''`
+Default value: ``undef``
 
 ### <a name="libvirtconfig"></a>`libvirt::config`
 
@@ -336,7 +328,7 @@ The following parameters are available in the `libvirt::config` class:
 
 ##### <a name="qemu_hook"></a>`qemu_hook`
 
-Data type: `String`
+Data type: `Optional[String]`
 
 source name for qemu hook
 
@@ -360,7 +352,7 @@ Default value: `$libvirt::uri_aliases`
 
 ##### <a name="uri_default"></a>`uri_default`
 
-Data type: `String`
+Data type: `Optional[String]`
 
 uri default from libvirt.conf
 
@@ -405,7 +397,7 @@ The following parameters are available in the `libvirt::install` class:
 
 ##### <a name="qemu_hook"></a>`qemu_hook`
 
-Data type: `String`
+Data type: `Optional[String]`
 
 QEMU hook to install. The only currently available hook is a script
 to setup DRBD resources. Valid values are 'drbd' or '' (=no hook).
@@ -583,19 +575,19 @@ Default value: `'kvm'`
 
 ##### <a name="domain_title"></a>`domain_title`
 
-Data type: `String`
+Data type: `Optional[String]`
 
-Free text title of the domain. Defaults to ''.
+Free text title of the domain. Defaults to `undef`.
 
-Default value: `''`
+Default value: ``undef``
 
 ##### <a name="description"></a>`description`
 
-Data type: `String`
+Data type: `Optional[String]`
 
-Free text description of the domain. Defaults to ''.
+Free text description of the domain. Defaults to `undef`.
 
-Default value: `''`
+Default value: ``undef``
 
 ##### <a name="uuid"></a>`uuid`
 
@@ -909,11 +901,11 @@ Default value: `'present'`
 
 ##### <a name="bridge"></a>`bridge`
 
-Data type: `String`
+Data type: `Optional[String]`
 
 Name of the bridge device to use for this network.
 
-Default value: `''`
+Default value: ``undef``
 
 ##### <a name="forward_mode"></a>`forward_mode`
 

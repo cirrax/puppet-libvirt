@@ -32,19 +32,23 @@ define libvirt::nwfilter (
   Array            $customtcprules    = [],
   Array            $customudprules    = [],
 ) {
+  include libvirt
 
-  include ::libvirt
-
-  exec {"libvirt-nwfilter-${name}":
-    command  => join(['f=$(mktemp) && echo "',
-                      template('libvirt/nwfilter.xml.erb'),
-                      '" > $f && virsh nwfilter-define $f && rm $f']),
-    provider => 'shell',
-    require  => Anchor['libvirt::end'],
+  $require_service = $libvirt::service_name ? {
+    Undef   => undef,
+    default => Service[$libvirt::service_name],
   }
 
-  if $libvirt::diff_dir != '' {
-    file {"${libvirt::diff_dir}/nwfilters/${name}.xml":
+  exec { "libvirt-nwfilter-${name}":
+    command  => join(['f=$(mktemp) && echo "',
+        template('libvirt/nwfilter.xml.erb'),
+    '" > $f && virsh nwfilter-define $f && rm $f']),
+    provider => 'shell',
+    require  => $require_service,
+  }
+
+  if $libvirt::diff_dir {
+    file { "${libvirt::diff_dir}/nwfilters/${name}.xml":
       content => template('libvirt/nwfilter.xml.erb'),
     }
   }

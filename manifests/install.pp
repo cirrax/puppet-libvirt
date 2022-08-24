@@ -20,27 +20,26 @@
 #   Defaults to 'installed'
 #
 class libvirt::install (
-  String $qemu_hook          = $libvirt::qemu_hook,
-  Array  $packages           = $libvirt::libvirt_package_names,
-  Hash   $qemu_hook_packages = $libvirt::qemu_hook_packages,
-  String $package_ensure     = 'installed',
+  Optional[String] $qemu_hook          = $libvirt::qemu_hook,
+  Array            $packages           = $libvirt::libvirt_package_names,
+  Hash             $qemu_hook_packages = $libvirt::qemu_hook_packages,
+  String           $package_ensure     = 'installed',
 ) inherits libvirt {
-
   package { $packages:
     ensure => $package_ensure,
   }
 
   # install hook specific packages
   if ($qemu_hook_packages[$qemu_hook]) {
-    package {$qemu_hook_packages[$qemu_hook]:
+    package { $qemu_hook_packages[$qemu_hook]:
       ensure => $package_ensure,
     }
   }
 
   # install managment script for drbd hook
   if ($qemu_hook == 'drbd') {
-    file {'/usr/local/sbin/manage-domains':
-      ensure => 'present',
+    file { '/usr/local/sbin/manage-domains':
+      ensure => 'file',
       owner  => 'root',
       group  => 'root',
       mode   => '0755',
