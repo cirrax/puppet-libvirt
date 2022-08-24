@@ -32,7 +32,9 @@ Certain profiles can be defined and used for a set of VM's
 The module contains helper scripts to manage VMs on a 2 node cluster
 with disk replication over DRBD. But this is completely optional.
 
-Remark: For puppet 3 support use versions 2.x.x !
+Remark: Debian >= 12 (bullseye) and Ubuntu >= 21.10 uses architecture
+        specific packages. Currently amd64 is configured. Merge requests
+        for other architectures are welcome! 
 
 ## Description
 
