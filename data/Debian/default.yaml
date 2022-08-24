@@ -1,4 +1,5 @@
 ---
+# Debian/default.yaml
 # defaults for Debian Operating system
 
 libvirt::libvirt_package_names:
@@ -6,6 +7,6 @@ libvirt::libvirt_package_names:
   - 'qemu-kvm'
 
 libvirt::qemu_hook_packages:
-   drbd:
-     - 'xmlstarlet'
-     - 'python-libvirt'
+  drbd:
+    - 'xmlstarlet'
+    - 'python-libvirt'
