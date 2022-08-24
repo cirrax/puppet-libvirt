@@ -3,9 +3,9 @@
 
 libvirt::libvirt_package_names:
   - 'libvirt-daemon-system'
-  - 'qemu-kvm'
+  - 'qemu-system-x86'
 
 libvirt::qemu_hook_packages:
    drbd:
      - 'xmlstarlet'
-     - 'python-libvirt'
+     - 'python3-libvirt'
