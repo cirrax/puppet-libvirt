@@ -41,7 +41,7 @@ define libvirt::nwfilter (
 
   exec { "libvirt-nwfilter-${name}":
     command  => join(['f=$(mktemp) && echo "',
-        template('libvirt/nwfilter.xml.erb'),
+        template('libvirt/nwfilter/simple.xml.erb'),
     '" > $f && virsh nwfilter-define $f && rm $f']),
     provider => 'shell',
     require  => $require_service,
@@ -49,7 +49,7 @@ define libvirt::nwfilter (
 
   if $libvirt::diff_dir {
     file { "${libvirt::diff_dir}/nwfilters/${name}.xml":
-      content => template('libvirt/nwfilter.xml.erb'),
+      content => template('libvirt/nwfilter/simple.xml.erb'),
     }
   }
 }
