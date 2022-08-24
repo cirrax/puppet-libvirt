@@ -1,11 +1,8 @@
 ---
-# defaults for Debian Operating system
+# Debian/12_amd64.yaml
+#
+# defaults for Debian bullseye amd64 architecture
 
 libvirt::libvirt_package_names:
   - 'libvirt-daemon-system'
   - 'qemu-system-x86'
-
-libvirt::qemu_hook_packages:
-   drbd:
-     - 'xmlstarlet'
-     - 'python3-libvirt'

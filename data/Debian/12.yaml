@@ -1,0 +1,9 @@
+---
+# Debian/12.yaml
+#
+# Debian bullseye defaults
+
+libvirt::qemu_hook_packages:
+  drbd:
+    - 'xmlstarlet'
+    - 'python3-libvirt'
