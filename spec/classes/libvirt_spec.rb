@@ -50,6 +50,20 @@ describe 'libvirt' do
         it { is_expected.to contain_class('libvirt::manage_domains_config') }
       end
 
+      context 'with create_pools' do
+        let :params do
+          default_params.merge(
+            create_pools: { 'mypool' => {} },
+          )
+        end
+
+        it_behaves_like 'libvirt shared examples'
+
+        it {
+          is_expected.to contain_libvirt_pool('mypool')
+        }
+      end
+
       context 'with create_networks' do
         let :params do
           default_params.merge(
