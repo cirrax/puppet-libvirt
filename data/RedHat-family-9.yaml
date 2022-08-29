@@ -40,6 +40,8 @@ libvirt::modular_services:
     enable: true
   virtstoraged:
     enable: true
+  virtproxyd:
+    enable: true
   virtqemud.socket:
     ensure: running
     enable: true
@@ -94,5 +96,15 @@ libvirt::modular_services:
   virtstoraged-admin.socket:
     ensure: running
     enable: true
-  # for drv in qemu network nodedev nwfilter secret storage;
-  # do systemctl start virt${drv}d{,-ro,-admin}.socket; done
+  virtproxyd.socket:
+    ensure: running
+    enable: true
+  virtproxyd-ro.socket:
+    ensure: running
+    enable: true
+  virtproxyd-admin.socket:
+    ensure: running
+    enable: true
+  virtproxyd-tls.socket:
+    ensure: running
+    enable: true
