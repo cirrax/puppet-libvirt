@@ -1,7 +1,7 @@
 ---
-# Debian/12.yaml
+# Debian/11.yaml
 #
-# Debian bookworm defaults
+# Debian bullseye defaults
 
 libvirt::qemu_hook_packages:
   drbd:
