@@ -9,4 +9,4 @@ libvirt::libvirt_package_names:
 libvirt::qemu_hook_packages:
   drbd:
     - 'xmlstarlet'
-    - 'python-libvirt'
+    - 'python3-libvirt'
