@@ -54,6 +54,9 @@
 #   for new implementations you shoud use generic which is much 
 #   more powerfull and should support all possible libvirt
 #   configurations.
+# @param show_diff
+#   if set to true, we show the whole xml changes.
+#   defaults to false, to not fill logs !
 #
 define libvirt::nwfilter (
   Enum['present', 'absent']             $ensure            = 'present',
@@ -68,6 +71,7 @@ define libvirt::nwfilter (
   Array                                 $customtcprules    = [],
   Array                                 $customudprules    = [],
   Enum['simple','generic']              $template          = 'simple',
+  Boolean                               $show_diff         = false,
 ) {
   include libvirt
 
@@ -96,8 +100,9 @@ define libvirt::nwfilter (
     }
 
     libvirt_nwfilter { $title:
-      content => $content,
-      uuid    => $uuid,
+      content   => $content,
+      uuid      => $uuid,
+      show_diff => $show_diff,
     }
 
     if $libvirt::diff_dir {
