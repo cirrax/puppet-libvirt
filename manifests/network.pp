@@ -126,30 +126,25 @@ define libvirt::network (
   Optional[Integer]                        $mtu                = undef,
   Enum['simple','generic']                 $template           = 'simple',
 ) {
-  $require_service = $libvirt::service_name ? {
-    Undef   => undef,
-    default => Service[$libvirt::service_name],
-  }
-
   if ($ensure != 'absent') {
     include libvirt
 
     if $template == 'generic' {
       $content = libvirt::normalxml(epp('libvirt/network/generic.xml.epp', {
-            'networkname'     => $title,
-            'tree'            => $libvirt::tree_network,
-            'metadata'        => $metadata,
-            'mtu'             => $mtu,
-            'bridge'          => $bridge,
-            'domain'          => $domain,
-            'forward'         => $forward,
-            'bandwith'        => $bandwith,
-            'vlan'            => $vlan,
-            'port'            => $port,
-            'portgroups'      => $portgroups,
-            'ips'             => $ips,
-            'routes'          => $routes,
-            'dns'             => $dns,
+            'networkname' => $title,
+            'tree'        => $libvirt::tree_network,
+            'metadata'    => $metadata,
+            'mtu'         => $mtu,
+            'bridge'      => $bridge,
+            'domain'      => $domain,
+            'forward'     => $forward,
+            'bandwith'    => $bandwith,
+            'vlan'        => $vlan,
+            'port'        => $port,
+            'portgroups'  => $portgroups,
+            'ips'         => $ips,
+            'routes'      => $routes,
+            'dns'         => $dns,
             'dnsmasq_options' => $dnsmasq_options,
             'virtualport'     => $virtualport,
       }))

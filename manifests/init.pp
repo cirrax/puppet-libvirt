@@ -176,9 +176,13 @@ class libvirt (
   Enum['none','purge','noop']                          $purge_network         = 'none',
   Hash                                                 $tree_network          = {},
 ) {
+  # dependencies
   Class['Libvirt::Install']
   -> Class['Libvirt::Config']
-  -> Class['Libvirt::Service']
+  -> Service<| tag == 'libvirt' |>  # libvirt automatic tag !
+  -> Libvirt_network<| |>
+  -> Libvirt_nwfilter<| |>
+  -> Libvirt_domain<| |>
 
   include libvirt::install
   include libvirt::config

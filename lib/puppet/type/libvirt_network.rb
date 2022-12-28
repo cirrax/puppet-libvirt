@@ -60,9 +60,4 @@ Puppet::Type.newtype(:libvirt_network) do
       end
     end
   end
-
-  # autorequire Anchor['libvirt::installed']
-  autorequire(:anchor) do
-    ['libvirt::installed']
-  end
 end

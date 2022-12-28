@@ -48,9 +48,4 @@ Puppet::Type.newtype(:libvirt_nwfilter) do
       end
     end
   end
-
-  # autorequire Anchor['libvirt::installed']
-  autorequire(:anchor) do
-    ['libvirt::installed']
-  end
 end

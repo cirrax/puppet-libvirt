@@ -75,11 +75,6 @@ define libvirt::nwfilter (
 ) {
   include libvirt
 
-  $require_service = $libvirt::service_name ? {
-    Undef   => undef,
-    default => Service[$libvirt::service_name],
-  }
-
   if $ensure == 'absent' {
     libvirt_nwfilter { $title:
       ensure  => 'absent',
