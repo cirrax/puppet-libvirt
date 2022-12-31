@@ -97,6 +97,8 @@
 #   device being used, usually 1500.
 # @param template
 #    template to use to create the network xml
+# @param show_diff
+#   set to false, if you do not want to see the changes
 #
 define libvirt::network (
   Enum['present','absent']                 $ensure             = 'present',
@@ -125,10 +127,11 @@ define libvirt::network (
   Optional[String]                         $dns_enable         = undef,
   Optional[Integer]                        $mtu                = undef,
   Enum['simple','generic']                 $template           = 'simple',
+  Boolean                                  $show_diff          = true,
 ) {
-  if ($ensure != 'absent') {
-    include libvirt
+  include libvirt
 
+  if ($ensure != 'absent') {
     if $template == 'generic' {
       $content = libvirt::normalxml(epp('libvirt/network/generic.xml.epp', {
             'networkname' => $title,
@@ -154,21 +157,21 @@ define libvirt::network (
       }
       $content = libvirt::normalxml(template('libvirt/network/simple.xml.erb'))
     }
-
-    libvirt_network { $title:
-      content   => $content,
-      autostart => $autostart,
-      show_diff => true,
-    }
-
-    if $libvirt::diff_dir {
-      file { "${libvirt::diff_dir}/networks/${name}.xml":
-        content => $content,
-      }
-    }
   } else {
-    libvirt_network { $title:
-      ensure => 'absent',
+    $content = ''
+  }
+
+  libvirt_network { $title:
+    ensure    => $ensure,
+    content   => $content,
+    autostart => $autostart,
+    show_diff => $show_diff,
+  }
+
+  if $libvirt::diff_dir {
+    file { "${libvirt::diff_dir}/networks/${name}.xml":
+      ensure  => $ensure,
+      content => $content,
     }
   }
 }

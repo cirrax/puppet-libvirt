@@ -4,15 +4,24 @@ require 'spec_helper'
 describe 'libvirt::network' do
   let :default_params do
     {
+      ensure: 'present',
       forward_mode: 'bridge',
       forward_interfaces: [],
       portgroups: [],
       autostart: true,
+      show_diff: true,
     }
   end
 
   shared_examples 'libvirt::network shared examples' do
     it { is_expected.to compile.with_all_deps }
+    it {
+      is_expected.to contain_libvirt_network(title)
+        .with_ensure(params[:ensure])
+        .with_uuid(params[:uuid])
+        .with_show_diff(params[:show_diff])
+    }
+    it { is_expected.to contain_class('libvirt') }
   end
 
   on_supported_os.each do |os, os_facts|
@@ -43,7 +52,7 @@ describe 'libvirt::network' do
         it_behaves_like 'libvirt::network shared examples'
       end
 
-      context 'whith absent' do
+      context 'with absent' do
         let(:title) { 'mytitle' }
 
         let :params do
