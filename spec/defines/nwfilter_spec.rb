@@ -4,6 +4,7 @@ require 'spec_helper'
 describe 'libvirt::nwfilter' do
   let :default_params do
     {
+      ensure: 'present',
       chain: 'root',
       rules: [],
       filterref: [],
@@ -12,6 +13,7 @@ describe 'libvirt::nwfilter' do
       customtcprules: [],
       customudprules: [],
       template: 'simple',
+      show_diff: true,
     }
   end
 
@@ -20,7 +22,12 @@ describe 'libvirt::nwfilter' do
 
     it {
       is_expected.to contain_libvirt_nwfilter(title)
+        .with_ensure(params[:ensure])
+        .with_uuid(params[:uuid])
+        .with_show_diff(params[:show_diff])
     }
+
+    it { is_expected.to contain_class('libvirt') }
   end
 
   on_supported_os.each do |os, os_facts|
