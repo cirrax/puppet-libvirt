@@ -11,6 +11,7 @@ describe 'libvirt::install' do
 
   shared_examples 'libvirt::install shared examples' do
     it { is_expected.to compile.with_all_deps }
+    it { params[:packages].each { |package| is_expected.to contain_package(package) } }
   end
 
   on_supported_os.each do |os, os_facts|

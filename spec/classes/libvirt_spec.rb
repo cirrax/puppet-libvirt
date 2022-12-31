@@ -76,6 +76,7 @@ describe 'libvirt' do
         it {
           is_expected.to contain_libvirt__network('mynetwork')
             .with_bridge('test')
+          is_expected.to contain_libvirt_network('mynetwork')
         }
       end
 
@@ -105,9 +106,7 @@ describe 'libvirt' do
         it {
           is_expected.to contain_libvirt__domain('mydom')
             .with_devices_profile('myprofile')
-          is_expected.to contain_exec('libvirt-domain-mydom')
-          is_expected.to contain_exec('libvirt-domain-start-mydom')
-          is_expected.to contain_exec('libvirt-domain-autostart-mydom')
+          is_expected.to contain_libvirt_domain('mydom')
         }
       end
 
@@ -122,6 +121,7 @@ describe 'libvirt' do
         it {
           is_expected.to contain_libvirt__network('default')
             .with_ensure('absent')
+          is_expected.to contain_libvirt_network('default')
         }
       end
 

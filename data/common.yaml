@@ -9,6 +9,8 @@ lookup_options:
     merge: 'hash'
   libvirt::default_nwfilters:
     merge: 'hash'
+  libvirt::profiles::domain_ignore:
+    merge: 'hash'
 
 # default filtering chain priorities
 # as descibed in 

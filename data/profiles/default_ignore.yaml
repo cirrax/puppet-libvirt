@@ -1,0 +1,8 @@
+---
+# profiles/default_ignore.yaml for puppet-libvirt
+#
+# these are the default Xpaths to ignore when comparing
+# the libvirt XML autput with the puppet XML generated.
+#
+libvirt::profiles::ignore:
+  default: []
