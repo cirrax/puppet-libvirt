@@ -5,6 +5,7 @@
 #
 require 'tempfile'
 require_relative '../../../puppet_x/libvirt/rexml_sorted_attributes.rb'
+require_relative '../../../puppet_x/libvirt/sort_elements.rb'
 
 Puppet::Type.type(:libvirt_nwfilter).provide(:virsh) do
   desc "@summary provider for the resource type `libvirt_nwfilter`,
@@ -78,7 +79,7 @@ Puppet::Type.type(:libvirt_nwfilter).provide(:virsh) do
     formatter = REXML::Formatters::Pretty.new(2)
     formatter.compact = true
     output = ''.dup
-    formatter.write(xml, output)
+    formatter.write(recursive_sort(xml.root), output)
     output
   end
 

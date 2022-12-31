@@ -11,6 +11,7 @@ File.expand_path('../../..', File.dirname(__FILE__)).tap { |dir| $LOAD_PATH.unsh
 
 # require_relative '../../../puppet_x/libvirt/rexml_sorted_attributes.rb'
 require 'puppet_x/libvirt/rexml_sorted_attributes.rb'
+require 'puppet_x/libvirt/sort_elements.rb'
 
 Puppet::Functions.create_function(:"libvirt::normalxml") do
   # @param value
@@ -38,7 +39,7 @@ Puppet::Functions.create_function(:"libvirt::normalxml") do
     formatter = REXML::Formatters::Pretty.new(2)
     formatter.compact = true
     output = ''.dup
-    formatter.write(xml, output)
+    formatter.write(recursive_sort(xml.root), output)
     output
   end
 end
