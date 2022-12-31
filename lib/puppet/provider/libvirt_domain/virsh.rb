@@ -92,7 +92,9 @@ Puppet::Type.type(:libvirt_domain).provide(:virsh) do
       raise Puppet::ParseError, "libvirt_domain: cannot parse xml: #{msg}"
     end
     # remove the elements to ignore
-    @resource[:ignore].each { |r| xml.root.elements.delete_all r }
+    @resource[:ignore].each do |rem|
+      REXML::XPath.match(xml, rem).each(&:remove)
+    end
     formatter = REXML::Formatters::Pretty.new(2)
     formatter.compact = true
     output = ''.dup
