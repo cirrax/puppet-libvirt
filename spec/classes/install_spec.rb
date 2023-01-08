@@ -4,14 +4,20 @@ require 'spec_helper'
 describe 'libvirt::install' do
   let :default_params do
     {
-      packages: ['qemu', 'libvirt-daemon-system'],
+      packages: ['qemu', 'libvirt-daemon-system', 'libvirt-bin'],
       qemu_hook_packages: { drbd: ['xmlstarlet', 'python-libvirt'] },
+      package_ensure: 'installed',
     }
   end
 
   shared_examples 'libvirt::install shared examples' do
     it { is_expected.to compile.with_all_deps }
-    it { params[:packages].each { |package| is_expected.to contain_package(package) } }
+    it {
+      params[:packages].each do |package|
+        is_expected.to contain_package(package)
+          .with_ensure(params[:package_ensure])
+      end
+    }
   end
 
   on_supported_os.each do |os, os_facts|
@@ -25,37 +31,25 @@ describe 'libvirt::install' do
 
         it_behaves_like 'libvirt::install shared examples'
         it {
-          is_expected.to contain_package('libvirt-daemon-system')
-            .with_ensure('installed')
+          params[:qemu_hook_packages][:drbd].each do |package|
+            is_expected.not_to contain_package(package)
+          end
         }
-        it {
-          is_expected.to contain_package('qemu')
-            .with_ensure('installed')
-        }
-        it { is_expected.not_to contain_package('xmlstarlet') }
-        it { is_expected.not_to contain_package('python-libvirt') }
       end
 
       context 'with package ensure non default' do
         let :params do
           default_params.merge(
             package_ensure: 'actual',
+            packages: [ 'libvirt-clients', 'libvirt', 'qemu-kvm', 'qemu-system-x86'],
           )
         end
 
         it_behaves_like 'libvirt::install shared examples'
-
-        it {
-          is_expected.to contain_package('libvirt-daemon-system')
-            .with_ensure('actual')
-        }
-        it {
-          is_expected.to contain_package('qemu')
-            .with_ensure('actual')
-        }
       end
 
       context 'with drbd hook' do
+        # hook_packages=hiera.lookup('libvirt::install::qemu_hook_packages', nil, nil)
         let :params do
           default_params.merge(
             qemu_hook: 'drbd',
@@ -72,11 +66,13 @@ describe 'libvirt::install' do
             .with_mode('0755')
             .with_source('puppet:///modules/libvirt/dummy')
         }
-        it { is_expected.to contain_package('xmlstarlet') }
-        it { is_expected.to contain_package('python-libvirt') }
-        #        let(:hiera_config) { 'spec/fixtures/modules/libvirt/hiera.yaml' }
-        #        hiera = Hiera.new({ :config => 'spec/fixtures/modules/libvirt/hiera.yaml' })
-        #        #packages = hiera.lookup('libvirt::libvirt_package_names',nil,nil)
+
+        it {
+          params[:qemu_hook_packages][:drbd].each do |package|
+            is_expected.to contain_package(package)
+              .with_ensure(params[:package_ensure])
+          end
+        }
       end
     end
   end

@@ -10,7 +10,9 @@ describe 'libvirt::domain' do
       disks: [],
       interfaces: [],
       autostart: true,
-      show_diff: true, }
+      show_diff: true,
+      replace: false,
+      ignore: [], }
   end
 
   shared_examples 'libvirt::domain shared examples' do
@@ -22,8 +24,9 @@ describe 'libvirt::domain' do
       is_expected.to contain_libvirt_domain(title)
         .with_ensure(params[:ensure])
         .with_autostart(params[:autostart])
-        .with_active(params[:autostart])
+        .with_active(params[:active])
         .with_show_diff(params[:show_diff])
+        .with_replace(params[:replace])
         .with_tag('libvirt')
     }
   end
@@ -50,6 +53,9 @@ describe 'libvirt::domain' do
           default_params.merge(
             show_diff: false,
             autostart: false,
+            active: true,
+            ignore: ['//domain/devices/controller'],
+            replace: true,
           )
         end
 

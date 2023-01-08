@@ -3,6 +3,6 @@
   simplecov: true
 
 spec/spec_helper.rb:
+  hiera_config: 'spec/fixtures/hiera.yaml'
   coverage_report: true
   mock_with: ':rspec'
-
