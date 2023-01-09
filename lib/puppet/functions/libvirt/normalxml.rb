@@ -1,5 +1,11 @@
 # frozen_string_literal: true
 
+File.expand_path('../../..', File.dirname(__FILE__)).tap { |dir| $LOAD_PATH.unshift(dir) unless $LOAD_PATH.include?(dir) }
+
+# require_relative '../../../puppet_x/libvirt/rexml_sorted_attributes.rb'
+require 'puppet_x/libvirt/rexml_sorted_attributes.rb'
+require 'puppet_x/libvirt/sort_elements.rb'
+
 # @summary
 #   normalize a xml string
 #
@@ -7,12 +13,6 @@
 # this function does the same for the input as it is done with the
 # output of the dumpxml in the provider. (see resource libvirt_nwfilter)
 #
-File.expand_path('../../..', File.dirname(__FILE__)).tap { |dir| $LOAD_PATH.unshift(dir) unless $LOAD_PATH.include?(dir) }
-
-# require_relative '../../../puppet_x/libvirt/rexml_sorted_attributes.rb'
-require 'puppet_x/libvirt/rexml_sorted_attributes.rb'
-require 'puppet_x/libvirt/sort_elements.rb'
-
 Puppet::Functions.create_function(:"libvirt::normalxml") do
   # @param value
   #   the xml string

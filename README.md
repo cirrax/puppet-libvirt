@@ -9,13 +9,22 @@
 #### Table of Contents
 
 1. [Overview](#overview)
-2. [Module Description - What the module does and why it is useful](#description)
-3. [Usage - Configuration options and additional functionality](#usage)
+2. [Description](#description)
+3. [Usage](#usage)
 3. [Reference](#reference)
-4. [Limitations - OS compatibility, etc.](#limitations)
-5. [Development - Guide for contributing to the module](#development)
+3. [Profiles](#profiles)
+4. [Limitations](#limitations)
+5. [Contributing](#contributing)
 
-## Upgrade warning:
+## Upgrade warnings:
+Upgrade to version 5.x.x introduced types/providers for network, nwfilter and domains 
+replacing the execs used before version 5.0.0. To compare the XML's generated with puppet and
+the actual running XML's generated with virsh they are sorted which leads to display lots of 
+changes if you use the diff_dir functionality.
+
+Version 5.0.0 also introduce a generic template for network and nwfilter which should be more flexible
+to define the configurations needed (the 'old' templates are still default).
+
 Upgrade to version 4.x.x will probably break any existing setup (puppet run fails),
 since several parameters of libvirt::domain are now deprecated in favor of using
 profiles. To make upgrade easier (and see what happens), upgrade to version 3.1.x and
@@ -141,11 +150,11 @@ Define a storage pool:
 Complete documentation is included in puppet doc format in the
 manifest files or in the REFERENCE.md file.
 
-## Reference and usage
+## Reference
 The detailed configuration of all parameters is found in the REFERENCE.md file generated from
 the strings in the manifests.
 
-### Profiles
+## Profiles
 Profiles are a set of values to add to the configuration, eg. some devices you like to add
 to all VM's (keyboard etc.)
 
