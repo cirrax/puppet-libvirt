@@ -2,7 +2,7 @@ module Puppet::Parser::Functions
   newfunction(:libvirt_generate_mac_addresses, type: :rvalue, doc: <<-'ENDHEREDOC') do |args|
     Generates MAC addresses for all interfaces in the array which do not yet have an
     address specified. The MAC addresses are based on the domain name, network and
-    portgroup.
+    portgroup. The function libvirt_generate_mac is used to generate a single mac address.
     @param
        hash of interfaces
     @return the interfacess with mac address

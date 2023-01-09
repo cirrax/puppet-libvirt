@@ -109,6 +109,7 @@ Define a domain (VM):
       devices_profile => 'default',
       dom_profile     => 'default',
       boot            => 'hd',
+      domconf         => { memory: { values => '2048', attrs => { unit => 'MiB' }}},
       disks           => [{'type' => 'block',
                            'device' => 'disk',
                            'source' => {'dev' => '/dev/vm-pool/my-domain.img'},
@@ -138,9 +139,12 @@ Define a storage pool:
     }
 
 Complete documentation is included in puppet doc format in the
-manifest files.
+manifest files or in the REFERENCE.md file.
 
-## Reference
+## Reference and usage
+The detailed configuration of all parameters is found in the REFERENCE.md file generated from
+the strings in the manifests.
+
 ### Profiles
 Profiles are a set of values to add to the configuration, eg. some devices you like to add
 to all VM's (keyboard etc.)
@@ -182,163 +186,6 @@ valid values are merge (default) or deep for a deep merge.
 
 Hint: To better see what is changing you can set libvirt::diff_dir to a directory.
 
-### Functions
-
-#### libvirt_generate_mac
-Returns a MAC address in the QEMU/KVM MAC OID (52:54:00:...)
-
-#### libvirt_generate_mac_addresses
-Generates MAC addresses for all interfaces in the array which do not yet have an
-address specified. The MAC addresses are based on the domain name, network and
-portgroup.
-
-#### libvirt_generate_uuid
-Return a uuid for a VM.
-
-#### libvirt::get_merged_profile
-Returns the merged profile accoring to definition. The profileconfig section is removed.
-
-### Types
-
-#### libvirt_pool
-
-Manages libvirt pools
-
-Example :
-  libvirt_pool { 'default' :
-    ensure => absent
-  }
-
-  libvirt_pool { 'mydirpool' :
-    ensure    => present,
-    active    => true,
-    autostart => true,
-    type      => 'dir',
-    target    => '/tmp/mypool',
-  }
-
-  libvirt_pool { 'mydirpool2' :
-    ensure       => present,
-    active       => true,
-    autostart    => true,
-    type         => 'dir',
-    target       => '/tmp/mypool2',
-    target_owner => 107,
-    target_group => 107,
-    target_mode  => '0755',
-  }
-
-  libvirt_pool { 'vm_storage':
-    ensure    => 'present',
-    active    => 'true',
-    type      => 'logical',
-    sourcedev => ['/dev/sdb', '/dev/sdc'],
-    target    => '/dev/vg0'
-  }
-
-
-##### Properties
-
-The following properties are available in the `libvirt_pool` type.
-
-###### `ensure`
-
-Valid values: present, absent
-
-Manages the creation or the removal of a pool
-`present` means that the pool will be defined and created
-`absent` means that the pool will be purged from the system
-
-Default value: present
-
-###### `active`
-
-Valid values: `true`, `false`
-
-Whether the pool should be started.
-
-Default value: true
-
-###### `autostart`
-
-Valid values: `true`, `false`
-
-Whether the pool should be autostarted.
-
-Default value: false
-
-##### Parameters
-
-The following parameters are available in the `libvirt_pool` type.
-
-###### `name`
-
-Valid values: /^\S+$/
-
-namevar
-
-The pool name.
-
-###### `type`
-
-Valid values: dir, netfs, fs, logical, disk, iscsi, mpath, rbd, sheepdog
-
-The pool type.
-
-###### `sourcehost`
-
-Valid values: /^\S+$/
-
-The source host.
-
-###### `sourcepath`
-
-Valid values: /(\/)?(\w)/
-
-The source path.
-
-###### `sourcedev`
-
-Valid values: /(\/)?(\w)/
-
-The source device.
-
-###### `sourcename`
-
-Valid values: /^\S+$/
-
-The source name.
-
-###### `sourceformat`
-
-Valid values: auto, nfs, glusterfs, cifs
-
-The source format.
-
-###### `target`
-
-Valid values: `/(\/)?(\w)/`
-
-The target.
-
-###### `target_owner`
-
-Valid values: `/^\S+$/`
-
-The owner of the target dir or filesystem
-
-###### `target_group`
-
-Valid values: `/^\S+$/`
-
-The group of the target dir or filesystem
-
-###### `target_mode`
-
-Valid values: `/^[0-7]{4}$/`
-
-The mode of the target dir or filesystem
-
 ## Limitations
 
 Things currently not supported:
@@ -356,3 +203,10 @@ Please report bugs and feature request using GitHub issue tracker.
 For pull requests, it is very much appreciated to check your Puppet manifest with puppet-lint
 and the available spec tests  in order to follow the recommended Puppet style guidelines
 from the Puppet Labs style guide.
+
+### Authors
+
+This module is mainly written by [Cirrax GmbH](https://cirrax.com).
+
+See the [list of contributors](https://github.com/cirrax/puppet-libvirt/graphs/contributors)
+for a list of all contributors.
