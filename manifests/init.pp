@@ -130,6 +130,13 @@
 #    noop: warn (do a purge with noop parameter)
 #   Remark: non persistent networks are not affected.
 #   only persisten network are handled within this module.   
+# @param purge_domain
+#   what to do with persistent domains not managed with puppet:
+#    none: we do not care
+#    purge: remove the domain
+#    noop: warn (do a purge with noop parameter)
+#   Remark: non persistent domains are not affected.
+#   only persisten domains are handled within this module.
 # @param tree_network
 #   this is the tree of all elements available for network
 #   xml definition, which stears the xml generation
@@ -174,6 +181,7 @@ class libvirt (
   Array[String[1]]                                     $load_nwfilter_set     = [],
   Enum['none','purge','noop']                          $purge_nwfilter        = 'none',
   Enum['none','purge','noop']                          $purge_network         = 'none',
+  Enum['none','purge','noop']                          $purge_domain          = 'none',
   Hash                                                 $tree_network          = {},
 ) {
   # dependencies
@@ -222,6 +230,18 @@ class libvirt (
     }
   } elsif $purge_network == 'noop' {
     resources { 'libvirt_network':
+      purge => true,
+      noop  => true,
+    }
+  }
+
+  # do domain purge (if configured !)
+  if $purge_domain == 'purge' {
+    resources { 'libvirt_domain':
+      purge => true,
+    }
+  } elsif $purge_domain == 'noop' {
+    resources { 'libvirt_domain':
       purge => true,
       noop  => true,
     }
