@@ -1,6 +1,7 @@
 # network forward
 type Libvirt::Net::Forward = Struct[{
     mode => Enum['nat','route','open','bridge','private','vepa','passthrough','hostdev'],
+    managed => Optional[Enum['yes','no']],
     dev  => Optional[String[1]],
     nat  => Optional[Struct[{
           addresses => Optional[Array[Struct[{
