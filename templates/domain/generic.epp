@@ -1,5 +1,5 @@
-<%- |  Hash $elements,
-       Integer $trim,
+<%- |  Hash[String[1], Any] $elements,
+       Integer                                  $trim,
     | -%>
 <%- $elements.each | $key, $element | { -%>
   <%- if $element =~ Array { -%>

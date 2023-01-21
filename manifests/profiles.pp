@@ -18,8 +18,8 @@
 # find some default profiles in the data/profiles directory 
 #
 class libvirt::profiles (
-  Hash $devices,
-  Hash $domconf,
-  Hash $ignore = {},
+  Libvirt::Profiles::Devices        $devices,
+  Hash                              $domconf,
+  Hash[String[1], Array[String[1]]] $ignore = {},
 ) {
 }

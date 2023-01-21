@@ -1,4 +1,4 @@
-<%- |  Hash   $iface,
+<%- |  Libvirt::Domain::Interface   $iface,
        String $boot,
     | -%>
     <interface type='network'>
