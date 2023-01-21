@@ -6,7 +6,21 @@
       <mac address='<%= $iface['mac'] %>'/>
 <%- } -%>
 <%- if $iface.has_key('filter') { -%>
+   <%- if $iface['filter'] =~ String { -%>
       <filterref filter='<%= $iface['filter'] %>'/>
+   <%- } else { -%>
+      <filterref filter='<%= $iface['filter']['filterref'] %>'>
+      <%- $iface['filter']['parameters'].each |String $k, Variant[String,Array] $val| { -%>
+        <%- if $val =~ String { -%>
+          <parameter name='<%= $k %>' value='<%= $val %>'/>
+        <%- } else { -%>
+          <%- $val.each | String $v| { -%>
+            <parameter name='<%= $k %>' value='<%= $v %>'/>
+          <%- } -%>
+        <%- } -%>
+      <%- } -%>
+      </filterref>
+   <%- } -%>
 <%- } -%>
       <source network='<%= $iface['network'] %>'<% if $iface.has_key('portgroup') { %> portgroup='<%= $iface['portgroup'] %>'<% } %>/>
       <model type='<% if $iface.has_key('type') { %><%= $iface['type'] %><% }else{ %>virtio<% } %>'/>
