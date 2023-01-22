@@ -18,10 +18,10 @@ disk_src_attrs = {
   <%- if @description -%>
   <description><%= @description %></description>
   <%- end -%>
-  <%- %><%= scope.call_function('epp', ["libvirt/domain/generic.epp", { 'elements'=>@domconf_real, 'trim'=>2 }]) -%>
+  <%- %><%= scope.call_function('epp', ["libvirt/domain/generic.epp", { 'elements'=>@domconf_real }]) -%>
   <devices>
-    <%- %><%= scope.call_function('epp', ["libvirt/domain/generic.epp", { 'elements'=>@devices_real, 'trim'=>4 }]) -%>
-    <%- %><%= scope.call_function('epp', ["libvirt/domain/generic.epp", { 'elements'=>@additionaldevices, 'trim'=>4 }]) -%>
+    <%- %><%= scope.call_function('epp', ["libvirt/domain/generic.epp", { 'elements'=>@devices_real }]) -%>
+    <%- %><%= scope.call_function('epp', ["libvirt/domain/generic.epp", { 'elements'=>@additionaldevices }]) -%>
     <%- @disks.each_with_index do | disk, i | -%>
       <%- %><%= scope.call_function('epp', ["libvirt/domain/device_disk.epp", { 'disk'=>disk, 'ind'=>(i+97).chr, 'disk_src_attrs'=>disk_src_attrs, 'boot'=>@boot }]) -%>
     <%- end -%>
