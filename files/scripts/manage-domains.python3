@@ -1,0 +1,196 @@
+#!/usr/bin/env python3
+
+from argparse import ArgumentParser
+from configparser import ConfigParser, NoSectionError, NoOptionError
+from datetime import timedelta
+from datetime import datetime
+from socket import getfqdn
+import sys
+from time import sleep
+from threading import Thread
+
+from libvirt import (VIR_MIGRATE_LIVE,
+                     VIR_DOMAIN_SHUTOFF,
+                     VIR_DOMAIN_SHUTOFF_MIGRATED,
+                     VIR_DOMAIN_RUNNING,
+                     VIR_DOMAIN_JOB_NONE,
+                     )
+from libvirt import open as libvirt_open, libvirtError
+
+
+class ManageDomains(object):
+
+    def __init__(self):
+        arg_parser = ArgumentParser(description='Manage wich libvirt domain runs on wich host of a redundant pair')
+        arg_parser.add_argument(
+            'command',
+            choices=['evacuate', 'distribute'],
+            nargs=1,
+            help="Action to perform. 'evacuate' performs the evacuation action for each domain, 'distribute' moves each domain to it's default host.",
+        )
+        arg_parser.add_argument(
+            'target',
+            nargs='?',
+            help="Target host for migrations done with the evacuate command",
+        )
+        arg_parser.add_argument(
+            '-c', '--config',
+            nargs=1,
+            default='/etc/manage-domains.ini',
+            help="Config file location",
+        )
+        self._args = arg_parser.parse_args()
+
+        self._config = ConfigParser({'max-job-time': '120', 'suspend-multiplier':'5', 'migration_url_format':'ssh'})
+        self._config.read(self._args.config)
+
+        self._con = {}
+
+        # check if there are any domains running
+        self._total =  len(self._connect('localhost').listDomainsID())
+        if self._total == 0:
+            print("No Domains are running. Nothing to be done.")
+            exit(0)
+
+    def _connect(self, host):
+        try:
+            return self._con[host]
+        except KeyError:
+            if host == 'localhost':
+                url = ''
+            elif self._config.get('DEFAULT','migration_url_format') == 'alias':
+                # use /etc/libvirt.conf to specify aliases
+                url = host
+            elif self._config.get('DEFAULT','migration_url_format') == 'tls':
+                # use tls
+                url = 'qemu+tls://%s/system' % host
+            else:
+                # default format is ssh
+                url = 'qemu+ssh://%s/system' % host
+            self._con[host] = libvirt_open(url)
+            return self._con[host]
+
+    def _progress_callback(self, domain, migration = False):
+        def cb():
+            start = datetime.now()
+            while datetime.now() - start < timedelta(self._config.getint(domain.name(),'max-job-time')):
+                # wait for the next update
+                sleep(1)
+
+                # get job state
+                state, reason = domain.state()
+                if state != VIR_DOMAIN_RUNNING:
+                    return
+                stats = domain.jobStats()
+                if stats['type'] == VIR_DOMAIN_JOB_NONE:
+                    # job no longer running
+                    return
+
+                # print a progress dot
+                sys.stdout.write('.')
+                sys.stdout.flush()
+
+                if migration:
+                    # increment time allowed to suspend the vm during
+                    # migration, use 5% of the time already spent on
+                    # migration
+                    try:
+                        max_downtime = (datetime.now() - start).total_seconds()*self._config.getint(domain.name(), 'suspend-multiplier')
+                        domain.migrateSetMaxDowntime(int(max_downtime))
+                    except libvirtError:
+                        pass
+
+            # abort this migration if it's not done yet
+            domain.abortJob()
+
+        thread = Thread(target=cb,
+                        name='progress thread for %s' % domain.name(),
+                    )
+        thread.daemon = True
+        thread.start()
+
+    def _evacuate_domain(self, domain, action='migrate', target=None):
+        self._progress_callback(domain, action=='migrate')
+        try:
+            if action == 'migrate':
+                domain.migrate(target, VIR_MIGRATE_LIVE)
+            elif action == 'shutdown':
+                domain.shutdown()
+            elif action == 'save':
+                domain.managedSave()
+        except libvirtError:
+            return False
+        else:
+            return True
+
+    def _print_progress_start(self, msg, i):
+        sys.stdout.write("(%i/%i) %s" % (i+1, self._total, msg))
+        sys.stdout.flush()
+
+    def evacuate(self):
+
+        if not self._args.target:
+            print("Need a target to evacuate to.")
+            sys.exit(1)
+
+        con = self._connect('localhost')
+        target = self._connect(self._args.target)
+
+        for i, id in enumerate(con.listDomainsID()):
+            domain = con.lookupByID(id)
+            try:
+                action = self._config.get(domain.name(), 'evacuation')
+            except NoOptionError:
+                self._print_progress_start("Unable to evacuate %s. No action defined.\n" % domain.name(), i)
+                continue
+            except NoSectionError:
+                self._print_progress_start("Unable to evacuate %s. No configuration found.\n" % domain.name(), i)
+                continue
+
+            self._print_progress_start("Evacuating %s (action = %s)" % (domain.name(), action), i)
+            if self._evacuate_domain(domain, action, target):
+                print("done.")
+            else:
+                print("failed.")
+
+        ids = con.listDomainsID()
+        if  len(ids) > 0:
+            print("The following %i domain(s) are still running on this host:" % len(ids))
+            for id in ids:
+                print("  %s" % con.lookupByID(id).name())
+
+
+    def distribute(self):
+        con = self._connect('localhost')
+        fqdn = getfqdn()
+
+        for i, id in enumerate(con.listDomainsID()):
+            domain = con.lookupByID(id)
+            try:
+                target = self._config.get(domain.name(), 'default-host')
+            except NoOptionError:
+                self._print_progress_start("Unable to distribute %s. No default host defined.\n" % domain.name(), i)
+                continue
+            except NoSectionError:
+                self._print_progress_start("Unable to distribute %s. No configuration found.\n" % domain.name(), i)
+                continue
+            if ( target == fqdn ) or ( target == fqdn.split('.')[0] ):
+                self._print_progress_start("Not moving %s. Already on default host.\n" % domain.name(), i)
+                continue
+
+            try:
+                target_con = self._connect(target)
+            except LibvirtError:
+                self._print_progress_start("Not moving %s. Can't connect to target host %s.\n" % (domain.name(), target), i)
+                continue
+
+            self._print_progress_start("Moving %s to %s" % (domain.name(), target), i)
+            if self._evacuate_domain(domain, 'migrate', target_con):
+                print("done.")
+            else:
+                print("failed.")
+
+    def main(self):
+        getattr(self, self._args.command[0])()
+
+ManageDomains().main()

@@ -19,11 +19,15 @@
 #   What state the packages should be in.
 #   Defaults to 'installed'
 #
+# @param manage_domain_file
+#   script to use for manage-domains
+#
 class libvirt::install (
   Optional[String] $qemu_hook          = $libvirt::qemu_hook,
   Array            $packages           = $libvirt::libvirt_package_names,
   Hash             $qemu_hook_packages = $libvirt::qemu_hook_packages,
   String           $package_ensure     = 'installed',
+  String[1]        $manage_domain_file = 'puppet:///modules/libvirt/scripts/manage-domains',
 ) inherits libvirt {
   package { $packages:
     ensure => $package_ensure,
@@ -43,7 +47,7 @@ class libvirt::install (
       owner  => 'root',
       group  => 'root',
       mode   => '0755',
-      source => 'puppet:///modules/libvirt/scripts/manage-domains',
+      source => $manage_domain_file,
     }
   }
 }

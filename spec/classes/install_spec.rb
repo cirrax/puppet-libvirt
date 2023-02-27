@@ -58,6 +58,7 @@ describe 'libvirt::install' do
         let :params do
           default_params.merge(
             qemu_hook: 'drbd',
+            manage_domain_file: 'puppet:///modules/libvirt/dummy',
           )
         end
 
@@ -68,7 +69,7 @@ describe 'libvirt::install' do
             .with_owner('root')
             .with_group('root')
             .with_mode('0755')
-            .with_source('puppet:///modules/libvirt/scripts/manage-domains')
+            .with_source('puppet:///modules/libvirt/dummy')
         }
         it { is_expected.to contain_package('xmlstarlet') }
         it { is_expected.to contain_package('python-libvirt') }
