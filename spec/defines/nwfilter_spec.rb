@@ -4,6 +4,14 @@ require 'spec_helper'
 describe 'libvirt::nwfilter' do
   let :default_params do
     {
+      chain: 'root',
+      rules: [],
+      filterref: [],
+      publictcpservices: [],
+      publicudpservices: [],
+      customtcprules: [],
+      customudprules: [],
+      template: 'simple',
     }
   end
 
@@ -20,11 +28,35 @@ describe 'libvirt::nwfilter' do
     context "on #{os}" do
       let(:facts) { os_facts }
 
-      context 'whith defaults' do
+      context 'whith defaults simple template' do
         let(:title) { 'mytitle' }
         let :params do
           default_params.merge(
             ip: '123.123.123.123',
+          )
+        end
+
+        it_behaves_like 'libvirt::nwfilter shared examples'
+      end
+
+      context 'whith generic template' do
+        let(:title) { 'mytitle' }
+        let :params do
+          default_params.merge(
+            filterref: [{ 'filter' => 'blah' }],
+            template: 'generic',
+          )
+        end
+
+        it_behaves_like 'libvirt::nwfilter shared examples'
+      end
+
+      context 'whith generic (filterref with parameters) template' do
+        let(:title) { 'mytitle' }
+        let :params do
+          default_params.merge(
+            filterref: [{ 'filter' => 'blah', 'parameters' => [ { 'PORT' => '22' }, { 'PORT' => '80' } ] }],
+            template: 'generic',
           )
         end
 

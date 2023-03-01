@@ -1,0 +1,22 @@
+# nwfilter rule protocol of icmpv6
+type Libvirt::Nwfilter::Protocol::Icmpv6 = Struct[{
+    id         => Enum['icmpv6'],
+    match      => Optional[Enum['no','yes']],
+    srcmacaddr => Optional[String[1]],
+    srcipaddr  => Optional[String[1]],
+    srcipmask  => Optional[String[1]],
+    dstipaddr  => Optional[String[1]],
+    dstipmask  => Optional[String[1]],
+    srcipfrom  => Optional[String[1]],
+    srcipto    => Optional[String[1]],
+    dstipfrom  => Optional[String[1]],
+    dstipto    => Optional[String[1]],
+    type       => Optional[Integer[0,65535]],
+    code       => Optional[Integer[0,65535]],
+    dscp       => Optional[Integer[0,256]],
+    comment    => Optional[String[1,256]],
+    state      => Optional[String[1]],
+    ipset      => Optional[String[1]],
+    ipsetflags => Optional[String[1]],
+    connlimit-above => Optional[Integer],
+}]

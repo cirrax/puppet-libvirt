@@ -8,3 +8,14 @@ lookup_options:
   libvirt::profiles::domconf:
     merge: 'hash'
 
+# default filtering chain priorities
+# as descibed in 
+# https://libvirt.org/formatnwfilter.html#filtering-chain-priorities
+libvirt::filter_default_prio:
+  stp: -810
+  mac: -800
+  vlan: -750
+  ipv4: -700
+  ipv6: -600
+  arp: -500
+  rarp: -400

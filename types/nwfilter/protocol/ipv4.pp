@@ -1,0 +1,25 @@
+# nwfilter rule protocol of ipv4
+type Libvirt::Nwfilter::Protocol::Ipv4 = Struct[{
+    id           => Enum['ip'],
+    match        => Optional[Enum['no','yes']],
+    srcmacaddr   => Optional[String[1]],
+    srcmacmask   => Optional[String[1]],
+    dstmacaddr   => Optional[String[1]],
+    dstmacmask   => Optional[String[1]],
+    srcipaddr    => Optional[String[1]],
+    srcipmask    => Optional[String[1]],
+    dstipaddr    => Optional[String[1]],
+    dstipmask    => Optional[String[1]],
+    protocol     => Optional[Variant[
+        Integer[0,256],
+        Enum['tcp', 'udp', 'udplite', 'esp', 'ah', 'icmp', 'igmp', 'sctp'],
+    ]],
+    srcportstart => Optional[Integer[0,65535]],
+    srcportend   => Optional[Integer[0,65535]],
+    dstportstart => Optional[Integer[0,65535]],
+    dstportend   => Optional[Integer[0,65535]],
+    dscp         => Optional[Integer[0,256]],
+    protocolid   => Optional[Integer[0,65535]],
+    comment      => Optional[String[1,256]],
+    connlimit-above => Optional[Integer],
+}]

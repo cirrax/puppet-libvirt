@@ -106,7 +106,9 @@
 #   are shown on changes by puppet.
 #   usefull for development (or on upgrade)
 #   defaults to `undef` (== disabled)
-#
+# @param filter_default_prio
+#   default filter priorities per filter chain.
+#   defaults are taken from hiera.
 # @example using a drbd hook
 #   class { 'libvirt':
 #     qemu_hook => 'drbd',
@@ -140,6 +142,7 @@ class libvirt (
   String                                               $manage_domains_config = '/etc/manage-domains.ini',
   Boolean                                              $drop_default_net      = false,
   Optional[String]                                     $diff_dir              = undef,
+  Hash                                                 $filter_default_prio   = {},
 ) {
   Class['Libvirt::Install']
   -> Class['Libvirt::Config']
