@@ -1,6 +1,6 @@
 # libvirt puppet module
 
-[![Build Status](https://travis-ci.org/cirrax/puppet-libvirt.svg?branch=master)](https://travis-ci.org/cirrax/puppet-libvirt)
+[![PDK](https://github.com/cirrax/puppet-libvirt/actions/workflows/pdk-basic.yml/badge.svg?branch=master)](https://github.com/cirrax/puppet-libvirt/actions/workflows/pdk.yml)
 [![Puppet Forge](https://img.shields.io/puppetforge/v/cirrax/libvirt.svg?style=flat-square)](https://forge.puppetlabs.com/cirrax/libvirt)
 [![Puppet Forge](https://img.shields.io/puppetforge/dt/cirrax/libvirt.svg?style=flat-square)](https://forge.puppet.com/cirrax/libvirt)
 [![Puppet Forge](https://img.shields.io/puppetforge/e/cirrax/libvirt.svg?style=flat-square)](https://forge.puppet.com/cirrax/libvirt)

@@ -144,7 +144,7 @@ define libvirt::domain (
     $domconf_real  = libvirt::get_merged_profile($libvirt::profiles::domconf, $dom_profile) + $domconf
   } else {
     $_domconf = libvirt::get_merged_profile($libvirt::profiles::domconf, $dom_profile) + $domconf
-    $domconf_real = deep_merge($_domconf,{ 'os' => { 'boot' => { 'attrs' => { 'dev' => $boot } } } })
+    $domconf_real = deep_merge($_domconf, { 'os' => { 'boot' => { 'attrs' => { 'dev' => $boot } } } })
   }
 
   $require_service = $libvirt::service_name ? {
