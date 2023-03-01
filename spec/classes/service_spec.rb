@@ -16,6 +16,7 @@ describe 'libvirt::service' do
         .with_name(params[:service_name])
         .with_ensure(params[:service_ensure])
         .with_enable(params[:service_enable])
+        .with_tag('libvirt-libvirtd-conf')
     }
   end
 
