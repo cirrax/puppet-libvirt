@@ -16,6 +16,7 @@ describe 'libvirt::service' do
         .with_name(params[:service_name])
         .with_ensure(params[:service_ensure])
         .with_enable(params[:service_enable])
+        .with_tag('libvirt-libvirtd-conf')
     }
   end
 
@@ -52,6 +53,23 @@ describe 'libvirt::service' do
 
         it {
           is_expected.not_to contain_service('libvirtd')
+        }
+      end
+
+      context 'with modular services' do
+        let :params do
+          default_params.merge(
+            modular_services: { 'virtqemud' => { 'ensure' => 'running', 'enable' => true } },
+          )
+        end
+
+        it {
+          is_expected.not_to contain_service('libvirtd')
+        }
+        it {
+          is_expected.to contain_service('virtqemud')
+            .with_ensure('running')
+            .with_enable('true')
         }
       end
     end
