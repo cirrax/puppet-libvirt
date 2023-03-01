@@ -98,8 +98,9 @@
 #   configuration file for managing domains.
 #   Defaults to '/etc/manage-domains.ini'
 # @param drop_default_net
-#   Boolean, don't create default network and bridge (virbr0)
-#   Defaults to false
+#   Boolean, if  true, purges the default network
+#   Deprecated, use $purge_network if you like to drop
+#   networks not managed with puppet.
 # @param diff_dir
 #   if this is set to a path, the directory is created and
 #   the xmls generated for the domains are kept and diffs
@@ -259,6 +260,7 @@ class libvirt (
   }
 
   if ( $drop_default_net ) {
+    warning('deprecation: libvirt::drop_default_net parameter will be deprecated in future version, use purge_network parameter instead')
     libvirt::network { 'default':
       ensure => 'absent',
     }
