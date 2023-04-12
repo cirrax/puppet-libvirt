@@ -1,0 +1,395 @@
+---
+# profiles/nwfilter_default_v7.yaml for puppet-libvirt
+#
+# These are the default filters as shipped with libvirt
+# version 7 (taken from Debian bullseye).
+#
+# we assume all filters using the 'generic' template
+# which is set as default for default_nwfilters
+# creation.
+#
+libvirt::default_nwfilters:
+  default_v7:
+    allow-arp:
+      chain: 'arp'
+      rules:
+        - action: 'accept'
+          direction: 'inout'
+    allow-dhcp-server:
+      chain: 'ipv4'
+      rules:
+        - action: 'accept'
+          direction: 'out'
+          priority: 100
+          protocols:
+            - id: 'ip'
+              srcipaddr: '0.0.0.0'
+              dstipaddr: '255.255.255.255'
+              protocol: 'udp'
+              srcportstart: 68
+              dstportstart: 67
+        - action: 'accept'
+          direction: 'in'
+          priority: 100
+          protocols:
+            - id: 'ip'
+              srcipaddr: '$DHCPSERVER'
+              protocol: 'udp'
+              srcportstart: 67
+              dstportstart: 68
+    allow-dhcpv6-server:
+      chain: 'ipv6'
+      rules:
+        - action: 'accept'
+          direction: 'out'
+          priority: 100
+          protocols:
+            - id: 'ipv6'
+              protocol: 'udp'
+              srcipaddr: 'fe80::'
+              srcipmask: '10'
+              dstipaddr: 'ff02::1:2'
+              srcportstart: 546
+              dstportstart: 547
+        - action: 'accept'
+          direction: 'in'
+          priority: 100
+          protocols:
+            - id: 'ipv6'
+              srcipaddr: '$DHCPSERVER'
+              protocol: 'udp'
+              srcportstart: 547
+              dstportstart: 546
+    allow-dhcp:
+      chain: 'ipv4'
+      rules:
+        - action: 'accept'
+          direction: 'out'
+          priority: 100
+          protocols:
+            - id: 'ip'
+              srcipaddr: '0.0.0.0'
+              dstipaddr: '255.255.255.255'
+              protocol: 'udp'
+              srcportstart: 68
+              dstportstart: 67
+        - action: 'accept'
+          direction: 'in'
+          priority: 100
+          protocols:
+            - id: 'ip'
+              protocol: 'udp'
+              srcportstart: 67
+              dstportstart: 68
+    allow-dhcpv6:
+      chain: 'ipv6'
+      rules:
+        - action: 'accept'
+          direction: 'out'
+          priority: 100
+          protocols:
+            - id: 'ipv6'
+              protocol: 'udp'
+              srcipaddr: 'fe80::'
+              srcipmask: '10'
+              dstipaddr: 'ff02::1:2'
+              srcportstart: 546
+              dstportstart: 547
+        - action: 'accept'
+          direction: 'in'
+          priority: 100
+          protocols:
+            - id: 'ipv6'
+              protocol: 'udp'
+              srcportstart: 547
+              dstportstart: 546
+    allow-incoming-ipv4:
+      chain: 'ipv4'
+      rules:
+        - action: 'accept'
+          direction: 'in'
+    allow-incoming-ipv6:
+      chain: 'ipv6'
+      rules:
+        - action: 'accept'
+          direction: 'in'
+    allow-ipv4:
+      chain: 'ipv4'
+      rules:
+        - action: 'accept'
+          direction: 'inout'
+    allow-ipv6:
+      chain: 'ipv6'
+      rules:
+        - action: 'accept'
+          direction: 'inout'
+    clean-traffic-gateway:
+      rules:
+        - action: 'accept'
+          direction: 'inout'
+          priority: -500
+          protocols:
+            - id: 'arp'
+        - action: 'accept'
+          direction: 'in'
+          protocols:
+            - id: 'mac'
+              match: 'yes'
+              srcmacaddr: '$GATEWAY_MAC'
+        - action: 'accept'
+          direction: 'out'
+          protocols:
+            - id: 'mac'
+              match: 'yes'
+              dstmacaddr: '$GATEWAY_MAC'
+      filterref:
+        - filter: 'no-mac-spoofing'
+        - filter: 'no-ip-spoofing'
+        - filter: 'no-arp-spoofing'
+        - filter: 'allow-incoming-ipv4'
+        - filter: 'no-other-l2-traffic'
+        - filter: 'qemu-announce-self'
+    clean-traffic:
+      rules:
+        - action: 'accept'
+          direction: 'out'
+          priority: -650
+          protocols:
+            - id: 'mac'
+              protocolid: 'ipv4'
+        - action: 'accept'
+          direction: 'inout'
+          priority: -500
+          protocols:
+            - id: 'mac'
+              protocolid: 'arp'
+      filterref:
+        - filter: 'no-mac-spoofing'
+        - filter: 'no-ip-spoofing'
+        - filter: 'allow-incoming-ipv4'
+        - filter: 'no-other-l2-traffic'
+        - filter: 'qemu-announce-self'
+    no-arp-ip-spoofing:
+      chain: 'arp-ip'
+      priority: -510
+      rules:
+        - action: 'return'
+          direction: 'out'
+          priority: 400
+          protocols:
+            - id: 'arp'
+              match: 'yes'
+              arpsrcipaddr: '$IP'
+        - action: 'drop'
+          direction: 'out'
+          priority: 1000
+    no-arp-mac-spoofing:
+      chain: 'arp-mac'
+      priority: -520
+      rules:
+        - action: 'return'
+          direction: 'out'
+          priority: 350
+          protocols:
+            - id: 'arp'
+              match: 'yes'
+              arpsrcmacaddr: '$MAC'
+        - action: 'drop'
+          direction: 'out'
+          priority: 1000
+    no-arp-spoofing:
+      chain: 'root'
+      filterref:
+        - filter: 'no-arp-mac-spoofing'
+        - filter: 'no-arp-ip-spoofing'
+    no-ip-multicast:
+      chain: 'ipv4'
+      rules:
+        - action: 'drop'
+          direction: 'out'
+          protocols:
+            - id: 'ip'
+              dstipaddr: '224.0.0.0'
+              dstipmask: '4'
+    no-ip-spoofing:
+      chain: 'ipv4-ip'
+      priority: -710
+      rules:
+        - action: 'return'
+          direction: 'out'
+          priority: 100
+          protocols:
+            - id: 'ip'
+              srcipaddr: '0.0.0.0'
+              protocol: 'udp'
+        - action: 'return'
+          direction: 'out'
+          priority: 500
+          protocols:
+            - id: 'ip'
+              srcipaddr: '$IP'
+        - action: 'drop'
+          direction: 'out'
+          priority: 1000
+    no-ipv6-multicast:
+      chain: 'ipv6'
+      rules:
+        - action: 'drop'
+          direction: 'out'
+          protocols:
+            - id: 'ipv6'
+              dstipaddr: 'ff00::'
+              dstipmask: '8'
+    no-ipv6-spoofing:
+      chain: 'ipv6-ip'
+      priority: -610
+      rules:
+        - action: 'return'
+          direction: 'out'
+          priority: 100
+          protocols:
+            - id: 'ipv6'
+              srcipaddr: 'fe80::'
+              srcipmask: '10'
+              protocol: 'udp'
+        - action: 'return'
+          direction: 'out'
+          priority: 500
+          protocols:
+            - id: 'ipv6'
+              srcipaddr: '$IPV6'
+        - action: 'drop'
+          direction: 'out'
+          priority: 1000
+    no-mac-broadcast:
+      chain: 'ipv4'
+      rules:
+        - action: 'drop'
+          direction: 'out'
+          protocols:
+            - id: 'mac'
+              dstmacaddr: 'ff:ff:ff:ff:ff:ff'
+    no-mac-spoofing:
+      chain: 'mac'
+      priority: -800
+      rules:
+        - action: 'return'
+          direction: 'out'
+          protocols:
+            - id: 'mac'
+              srcmacaddr: '$MAC'
+        - action: 'drop'
+          direction: 'out'
+          protocols:
+            - id: 'mac'
+    no-other-l2-traffic:
+      rules:
+        - action: 'drop'
+          direction: 'inout'
+          priority: 1000
+    no-other-rarp-traffic:
+      chain: 'rarp'
+      rules:
+        - action: 'drop'
+          direction: 'inout'
+          priority: 1000
+    qemu-announce-self-rarp:
+      chain: 'rarp'
+      rules:
+        - action: 'accept'
+          direction: 'out'
+          priority: 500
+          protocols:
+            - id: 'rarp'
+              opcode: 'Request_Reverse'
+              srcmacaddr: '$MAC'
+              dstmacaddr: 'ff:ff:ff:ff:ff:ff'
+              arpsrcmacaddr: '$MAC'
+              arpdstmacaddr: '$MAC'
+              arpsrcipaddr: '0.0.0.0'
+              arpdstipaddr: '0.0.0.0'
+        - action: 'accept'
+          direction: 'in'
+          priority: 500
+          protocols:
+            - id: 'rarp'
+              opcode: 'Request_Reverse'
+              dstmacaddr: 'ff:ff:ff:ff:ff:ff'
+              arpsrcmacaddr: '$MAC'
+              arpdstmacaddr: '$MAC'
+              arpsrcipaddr: '0.0.0.0'
+              arpdstipaddr: '0.0.0.0'
+    qemu-announce-self:
+      chain: 'root'
+      rules:
+        - action: 'accept'
+          direction: 'out'
+          protocols:
+            - id: 'mac'
+              protocolid: '0x835'
+      filterref:
+        - filter: 'qemu-announce-self-rarp'
+        - filter: 'no-other-rarp-traffic'
+  
+    fil_no-arp-mac-spoofing:
+      chain: 'arp-mac'
+      priority: -520
+      rules:
+        - action: 'return'
+          direction: 'out'
+          priority: 350
+          protocols:
+            - id: 'arp'
+              arpsrcmacaddr: '$MAC'
+        - action: 'drop'
+          direction: 'out'
+          priority: 1000
+    fil_no-mac-spoofing:
+      chain: 'mac'
+      priority: -800
+      rules:
+        - action: 'return'
+          direction: 'out'
+          priority: 500
+          protocols:
+            - id: 'mac'
+              srcmacaddr: '$MAC'
+        - action: 'drop'
+          direction: 'out'
+          priority: 500
+    fil_qemu-announce-self:
+      chain: 'root'
+      rules:
+        - action: 'accept'
+          direction: 'out'
+          priority: 500
+          protocols:
+            - id: 'mac'
+              protocolid: '0x835'
+    fil_qemu-announce-self-rarp:
+      chain: 'rarp'
+      priority: -400
+      rules:
+        - action: 'accept'
+          direction: 'out'
+          priority: 500
+          protocols:
+            - id: 'rarp'
+              srcmacaddr: '$MAC'
+              dstmacaddr: 'ff:ff:ff:ff:ff:ff'
+              opcode: 'Request_Reverse'
+              arpsrcmacaddr: '$MAC'
+              arpdstmacaddr: '$MAC'
+              arpsrcipaddr: '0.0.0.0'
+              arpdstipaddr: '0.0.0.0'
+        - action: 'accept'
+          direction: 'in'
+          priority: 500
+          protocols:
+            - id: 'rarp'
+              dstmacaddr: 'ff:ff:ff:ff:ff:ff'
+              opcode: 'Request_Reverse'
+              arpsrcmacaddr: '$MAC'
+              arpdstmacaddr: '$MAC'
+              arpsrcipaddr: '0.0.0.0'
+              arpdstipaddr: '0.0.0.0'

@@ -1,0 +1,43 @@
+<%- | String                      $filtername,
+      Libvirt::Nwfilter::Priority $priority,
+      Libvirt::Nwfilter::Chain    $chain,
+      Libvirt::Nwrules            $rules             = [],
+      Libvirt::Filterref          $filterref         = [],
+| -%>
+<filter name='<%= $filtername %>' chain='<%= $chain %>' priority='<%= $priority %>'>
+
+<% $rules.each | Libvirt::Nwfilter::Rule $rule | { -%>
+  <rule action='<%= $rule['action'] %>' direction='<%= $rule['direction'] %>'<% -%>
+  <%- %> priority='<%= pick($rule['priority'],500) %>'<% -%>
+  <%- if $rule['statematch'] { %> statematch='<%= $rule['statematch'] %>'<% } -%>
+  <%- if $rule['protocols'] { %>
+    <%- %>>
+    <%- $rule['protocols'].each | Hash $prot | { -%>
+      <<%= $prot['id'] -%>
+      <%- if $prot['match'] == 'no' { %> match='no'<% } -%>
+      <%- $prot.delete('id').delete('match').each | String[1] $key, Variant[String[1],Integer] $val | { -%>
+        <%- %> <%= $key %>='<%= $val %>'<% -%>
+      <%- } %>/>
+    <%- } -%>
+    </rule>
+  <% } else { -%>
+    <%- %>/>
+  <%- } -%>
+<% } -%>
+
+<% $filterref.each | $ref | { -%>
+  <filterref filter='<%= $ref['filter'] -%>'
+  <%- if $ref['parameters'] { -%>
+    <%- %>>
+    <%- $ref['parameters'].each | $param  | { -%>
+       <%- $param.each | $k, $v  | { -%>
+          <parameter name='<%= $k %>' value='<%= $v %>'/>
+       <%- } -%>
+    <%- } -%>
+    </filterref>
+  <%- } else { -%>
+    <%- %>/>
+  <% } -%>
+<% } -%>
+
+</filter>

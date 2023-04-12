@@ -7,4 +7,68 @@ lookup_options:
     merge: 'hash'
   libvirt::profiles::domconf:
     merge: 'hash'
+  libvirt::default_nwfilters:
+    merge: 'hash'
+  libvirt::profiles::domain_ignore:
+    merge: 'hash'
 
+# default filtering chain priorities
+# as descibed in 
+# https://libvirt.org/formatnwfilter.html#filtering-chain-priorities
+libvirt::filter_default_prio:
+  stp: -810
+  mac: -800
+  vlan: -750
+  ipv4: -700
+  ipv6: -600
+  arp: -500
+  rarp: -400
+
+# this tree is a hash of all elements in the xml, ordered in a tree
+# every value that is not in there is handled as a attribute in the 
+# generic template.
+libvirt::tree_network:
+  metadata: {}
+  bridge:   {}
+  domain:   {}
+  forward:
+    nat:
+      address: {}
+      port: {}
+    interface: {}
+    pf: {}
+    driver: {}
+    address: {}
+  bandwith:
+   inbound: {}
+   outbound: {}
+  vlan:
+    tag: {}
+  port: {}
+  virtualport:
+    parameters: {}
+  portgroup:
+    vlan:
+      tag: {}
+    bandwith:
+      inbound: {}
+      outbound: {}
+    virtualport:
+      parameters: {}
+  dns:
+    forwarder: {}
+    txt: {}
+    srv: {}
+    host:
+      hostname: {}
+  ip:
+    tftp: {}
+    dhcp:
+      range:
+        lease: {}
+      host:
+        lease: {}
+      bootp: {}
+  route: {}
+  dnsmasq:options:
+    dnsmasq:option: {}

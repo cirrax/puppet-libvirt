@@ -1,10 +1,12 @@
 #
 module Puppet::Parser::Functions
   newfunction(:libvirt_generate_mac, type: :rvalue, doc: <<-'ENDHEREDOC') do |args|
-    compute sha1 hash of all keys concatenated, only the first 6
-    hex digits will be used
+    Returns a MAC address in the QEMU/KVM MAC OID (52:54:00:...).
 
-    @return a mac address
+    It computes a sha1 hash of all keys concatenated, the first 6
+    hex digits will be used as mac address.
+
+    @return a mac address in the QEMU/KVM MAC OID (52:54:00:...)
 
     ENDHEREDOC
 

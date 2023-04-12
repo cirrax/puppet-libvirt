@@ -76,10 +76,22 @@ describe 'libvirt' do
         it {
           is_expected.to contain_libvirt__network('mynetwork')
             .with_bridge('test')
-          is_expected.to contain_exec('libvirt-network-autostart-mynetwork')
-          is_expected.to contain_exec('libvirt-network-mynetwork')
-          is_expected.to contain_exec('libvirt-network-start-mynetwork')
+          is_expected.to contain_libvirt_network('mynetwork')
         }
+      end
+
+      context 'with create_default nwfilter' do
+        let :params do
+          default_params.merge(
+            load_nwfilter_set: ['test'],
+            default_nwfilters: { 'test' => { 'filter' => {} } },
+          )
+        end
+
+        it_behaves_like 'libvirt shared examples'
+
+        it { is_expected.to contain_libvirt__nwfilter('filter').with_template('generic') }
+        it { is_expected.to contain_libvirt_nwfilter('filter') }
       end
 
       context 'with create_domain' do
@@ -94,9 +106,7 @@ describe 'libvirt' do
         it {
           is_expected.to contain_libvirt__domain('mydom')
             .with_devices_profile('myprofile')
-          is_expected.to contain_exec('libvirt-domain-mydom')
-          is_expected.to contain_exec('libvirt-domain-start-mydom')
-          is_expected.to contain_exec('libvirt-domain-autostart-mydom')
+          is_expected.to contain_libvirt_domain('mydom')
         }
       end
 
@@ -111,10 +121,8 @@ describe 'libvirt' do
         it {
           is_expected.to contain_libvirt__network('default')
             .with_ensure('absent')
+          is_expected.to contain_libvirt_network('default')
         }
-        it { is_expected.to contain_exec('libvirt-delete-network-default') }
-        it { is_expected.to contain_exec('libvirt-network-disable-autostart-default') }
-        it { is_expected.to contain_exec('libvirt-undefine-network-default') }
       end
 
       context 'with manage_service false' do

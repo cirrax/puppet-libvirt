@@ -1,0 +1,29 @@
+<%- | String[1]                      $name,
+      Hash                           $tree  = {},
+      Boolean                        $force_empty = false,
+      Optional[Variant[Hash, Array]] $attrs = undef,
+| -%>
+<%- if $attrs =~ Array { -%>
+  <%- $attrs.each | Hash $attr | { -%>
+    <%= epp('libvirt/network/sub-element.xml.epp', { 'name' => $name, 'attrs' => $attr, 'tree' => $tree, 'force_empty' => $force_empty }) -%>
+  <%- } -%>
+<%- } elsif $attrs and ! $force_empty { -%>
+  <%- %><<%= $name -%>
+  <%- $attrs.delete($tree.keys()).each | String[1] $a, Variant[String[1], Integer] $b | { -%>
+    <%- %> <%= $a %>='<%= $b %>'<% -%>
+  <%- } -%>
+  <%- if intersection($tree.keys(), $attrs.keys()) == [] { -%>
+    <%- %>/>
+  <%- } else { -%>
+    <%- %>>
+    <%- intersection($tree.keys(), $attrs.keys()).each | String[1] $key | { -%>
+       <%- if $attrs[$key] =~ Hash { -%>
+         <%= epp('libvirt/network/sub-element.xml.epp', { 'name' => $key, 'attrs' => $attrs[$key], 'tree' => $tree[$key] }) %>
+       <%- } elsif $attrs[$key] =~ Array { -%>
+         <%- $attrs[$key].each | Hash $k | { -%>
+           <%= epp('libvirt/network/sub-element.xml.epp', { 'name' => $key, 'attrs' => $k, 'tree' => $tree[$key] }) %>
+         <%- } -%>
+       <%- } -%>
+    <%- } -%></<%= $name %>>
+  <%- } %>
+<% } -%>

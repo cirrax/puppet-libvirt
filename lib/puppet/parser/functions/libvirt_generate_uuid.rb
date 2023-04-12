@@ -1,7 +1,7 @@
 #
 module Puppet::Parser::Functions
   newfunction(:libvirt_generate_uuid, type: :rvalue, doc: <<-'ENDHEREDOC') do |args|
-    compute sha1 hash of all keys concatenated
+    Return a uuid generated from an sha1 hash of all keys concatenated
     @summary
       compute sha1 hash of all keys concatenated
     @return [String]

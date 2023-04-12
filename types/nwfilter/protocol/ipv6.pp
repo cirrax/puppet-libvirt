@@ -1,0 +1,26 @@
+# nwfilter rule protocol of ipv6
+type Libvirt::Nwfilter::Protocol::Ipv6 = Struct[{
+    id              => Enum['ipv6'],
+    match           => Optional[Enum['no','yes']],
+    srcmacaddr      => Optional[String[1]],
+    srcmacmask      => Optional[String[1]],
+    dstmacaddr      => Optional[String[1]],
+    dstmacmask      => Optional[String[1]],
+    srcipaddr       => Optional[String[1]],
+    srcipmask       => Optional[String[1]],
+    dstipaddr       => Optional[String[1]],
+    dstipmask       => Optional[String[1]],
+    protocol        => Optional[Variant[
+        Integer[0,256],
+        Enum['tcp', 'udp', 'udplite', 'esp', 'ah', 'icmpv6', 'sctp'],
+    ]],
+    srcportstart    => Variant[Integer[0,65535],Libvirt::Nwfilter::Param, Undef],
+    srcportend      => Variant[Integer[0,65535],Libvirt::Nwfilter::Param, Undef],
+    dstportstart    => Variant[Integer[0,65535],Libvirt::Nwfilter::Param, Undef],
+    dstportend      => Variant[Integer[0,65535],Libvirt::Nwfilter::Param, Undef],
+    type            => Variant[Integer[0,246],Libvirt::Nwfilter::Param, Undef],
+    typeend         => Variant[Integer[0,246],Libvirt::Nwfilter::Param, Undef],
+    code            => Variant[Integer[0,246],Libvirt::Nwfilter::Param, Undef],
+    comment         => Optional[String[1,256]],
+    connlimit-above => Optional[Integer],
+}]

@@ -3,21 +3,31 @@ require 'spec_helper'
 
 describe 'libvirt::domain' do
   let :default_params do
-    { domain_title: '',
+    { ensure: 'present',
+      domain_title: '',
       description: '',
       boot: 'hd',
       disks: [],
       interfaces: [],
-      autostart: true }
+      autostart: true,
+      show_diff: true,
+      replace: false,
+      ignore: [], }
   end
 
   shared_examples 'libvirt::domain shared examples' do
     it { is_expected.to compile.with_all_deps }
 
+    it { is_expected.to contain_class('libvirt') }
+
     it {
-      is_expected.to contain_exec('libvirt-domain-' + title)
-        .with_provider('shell')
-        .with_creates('/etc/libvirt/qemu/' + title + '.xml')
+      is_expected.to contain_libvirt_domain(title)
+        .with_ensure(params[:ensure])
+        .with_autostart(params[:autostart])
+        .with_active(params[:active])
+        .with_show_diff(params[:show_diff])
+        .with_replace(params[:replace])
+        .with_tag('libvirt')
     }
   end
 
@@ -34,33 +44,34 @@ describe 'libvirt::domain' do
         end
 
         it_behaves_like 'libvirt::domain shared examples'
-
-        it {
-          is_expected.to contain_exec('libvirt-domain-autostart-' + title)
-            .with_command('virsh autostart ' + title)
-            .with_provider('shell')
-            .with_creates('/etc/libvirt/qemu/autostart/' + title + '.xml')
-        }
-
-        it {
-          is_expected.to contain_exec('libvirt-domain-start-' + title)
-            .with_command('virsh start ' + title)
-            .with_provider('shell')
-        }
       end
 
-      context 'whith no autostart' do
+      context 'whith parameters set' do
         let(:title) { 'mytitle' }
 
         let :params do
           default_params.merge(
+            show_diff: false,
             autostart: false,
+            active: true,
+            ignore: ['//domain/devices/controller'],
+            replace: true,
           )
         end
 
         it_behaves_like 'libvirt::domain shared examples'
-        it { is_expected.not_to contain_exec('libvirt-domain-autostart-' + title) }
-        it { is_expected.not_to contain_exec('libvirt-domain-start-' + title) }
+      end
+
+      context 'whith ensure absent' do
+        let(:title) { 'mytitle' }
+
+        let :params do
+          default_params.merge(
+            ensure: 'absent',
+          )
+        end
+
+        it_behaves_like 'libvirt::domain shared examples'
       end
     end
   end

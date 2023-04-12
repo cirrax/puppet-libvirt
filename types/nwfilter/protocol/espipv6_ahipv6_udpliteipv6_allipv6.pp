@@ -1,0 +1,20 @@
+# nwfilter rule protocol of ESP, AH, UDPLITE, ALL over IPv6
+type Libvirt::Nwfilter::Protocol::Espipv6_ahipv6_udpliteipv6_allipv6 = Struct[{
+    id         => Enum['esp-ipv6', 'ah-ipv6', 'udplite-ipv6', 'all-ipv6'],
+    match      => Optional[Enum['no','yes']],
+    srcmacaddr => Optional[String[1]],
+    srcipaddr  => Optional[String[1]],
+    srcipmask  => Optional[String[1]],
+    dstipaddr  => Optional[String[1]],
+    dstipmask  => Optional[String[1]],
+    srcipfrom  => Optional[String[1]],
+    srcipto    => Optional[String[1]],
+    dstipfrom  => Optional[String[1]],
+    dstipto    => Optional[String[1]],
+    dscp       => Optional[Integer[0,256]],
+    comment    => Optional[String[1,256]],
+    state      => Optional[String[1]],
+    ipset      => Optional[String[1]],
+    ipsetflags => Optional[String[1]],
+    connlimit-above => Optional[Integer],
+}]

@@ -1,0 +1,21 @@
+---
+# profiles/default_ignore.yaml for puppet-libvirt
+#
+# these are the default Xpaths to ignore when comparing
+# the libvirt XML autput with the puppet XML generated.
+#
+libvirt::profiles::ignore:
+  default: 
+    - '/domain/currentMemory'
+    - '/domain/devices/disk/address'
+    - '/domain/devices/emulator'
+    - '/domain/devices/graphics/@port'
+    - '/domain/devices/interface/address'
+    - '/domain/devices/memballoon/address'
+    - '/domain/devices/rng/address'
+    - '/domain/devices/serial/target/@type'
+    - '/domain/devices/serial/target/model'
+    - '/domain/devices/video/address'
+    - '/domain/devices/video/alias'
+    - '/domain/devices/video/model/@primary'
+    - '/domain/os/type/@machine'

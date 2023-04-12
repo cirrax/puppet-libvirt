@@ -1,42 +1,41 @@
-<%- |  Hash $elements,
-       Integer $trim,
+<%- |  Hash[String[1], Any] $elements,
     | -%>
 <%- $elements.each | $key, $element | { -%>
   <%- if $element =~ Array { -%>
     <%- $element.each | $ele | { -%>
-      <%- %><%= epp('libvirt/domain/generic.epp', { 'elements'=>{$key=>$ele}, 'trim'=>$trim}) -%>
+      <%- %><%= epp('libvirt/domain/generic.epp', { 'elements'=>{$key=>$ele}}) -%>
     <%- } -%>
   <%- } elsif $element =~ Hash { -%>
     <%- if $element.has_key('values') { -%>
       <%- if $element.has_key('attrs') { -%>
-        <%- %><%= String('', "%${trim}s") %><<%= $key -%>
+        <<%= $key -%>
         <%- if $element['values'] =~ Hash { -%>
           <%- $element['attrs'].each | $attrname, $attr | { %> <%= $attrname %>='<%= $attr %>'<%- } -%>>
-          <%- %><%= epp('libvirt/domain/generic.epp', { 'elements'=>$element['values'], 'trim'=>2+$trim}) -%>
-          <%- %><%= String('', "%${trim}s") %></<%= $key %>>
+          <%= epp('libvirt/domain/generic.epp', { 'elements'=>$element['values']}) -%>
+          </<%= $key %>>
         <%- } else { -%>
           <%- $element['attrs'].each | $attrname, $attr | { %> <%= $attrname %>='<%= $attr %>'<%- } -%>><% -%>
           <%- %><%= $element['values'] %></<%= $key %>>
         <%- } -%>
       <%- } else { -%>
         <%- if $element['values'] =~ Hash { -%>
-          <%- %><%= String('', "%${trim}s") %><<%= $key %>>
-          <%- %><%= epp('libvirt/domain/generic.epp', { 'elements'=>$element['values'], 'trim'=>2+$trim}) -%>
-          <%- %><%= String('', "%${trim}s") %></<%= $key %>>
+          <<%= $key %>>
+          <%= epp('libvirt/domain/generic.epp', { 'elements'=>$element['values']}) -%>
+          </<%= $key %>>
         <%- } else { -%>
-          <%- %><%= String('', "%${trim}s") %><<%= $key %>><% -%>
-          <%- %><%= $element['values'] %></<%= $key %>>
+          <<%= $key %>><% -%>
+          <%= $element['values'] %></<%= $key %>>
         <%- } -%>
       <%- } -%>
     <%- } else { -%>
       <%- if $element.has_key('attrs') { -%>
-        <%- %><%= String('', "%${trim}s") %><<%= $key -%>
+        <<%= $key -%>
         <%- $element['attrs'].each | $attrname, $attr | { %> <%= $attrname %>='<%= $attr %>'<% } -%>/>
       <%- } else { -%>
-        <%- %><%= String('', "%${trim}s") %><<%= $key %>/>
+        <<%= $key %>/>
       <%- } -%>
     <%- } -%>
   <%- } else { -%>
-     <%- %><%= String('', "%${trim}s") %><<%= $key %>><%= $element %></<%= $key %>>
+     <<%= $key %>><%= $element %></<%= $key %>>
   <%- } -%>
 <%- } -%>

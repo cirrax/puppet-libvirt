@@ -1,7 +1,7 @@
-<%- | Hash      $disk,
-      String[1] $ind,
-      Hash      $disk_src_attrs,
-      String    $boot,
+<%- | Libvirt::Domain::Disk $disk,
+      String[1]             $ind,
+      Hash                  $disk_src_attrs,
+      String                $boot,
     | -%>
     <disk type='<%= $disk['type'] %>' device='<%= $disk['device'] %>'>
       <source <% $disk_src_attrs[$disk['type']].each | $attr | { -%><%= $attr %>='<%= $disk['source'][$attr] %>' <% } -%>/>

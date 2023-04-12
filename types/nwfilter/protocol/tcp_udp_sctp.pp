@@ -1,0 +1,23 @@
+# nwfilter rule protocol of TCP/UDP/SCTP
+type Libvirt::Nwfilter::Protocol::Tcp_udp_sctp = Struct[{
+    id           => Enum['tcp', 'udp', 'sctp'],
+    match        => Optional[Enum['no','yes']],
+    srcmacaddr   => Optional[String[1]],
+    srcipaddr    => Optional[String[1]],
+    srcipmask    => Optional[String[1]],
+    dstipaddr    => Optional[String[1]],
+    dstipmask    => Optional[String[1]],
+    srcipfrom    => Optional[String[1]],
+    srcipto      => Optional[String[1]],
+    srcportstart => Optional[Integer[0,65535]],
+    srcportend   => Optional[Integer[0,65535]],
+    dstportstart => Optional[Integer[0,65535]],
+    dstportend   => Optional[Integer[0,65535]],
+    dscp         => Optional[Integer[0,256]],
+    comment      => Optional[String[1,256]],
+    state        => Optional[String[1]],
+    flags        => Optional[String[1]],
+    ipset        => Optional[String[1]],
+    ipsetflags   => Optional[String[1]],
+    connlimit-above => Optional[Integer],
+}]

@@ -98,14 +98,51 @@
 #   configuration file for managing domains.
 #   Defaults to '/etc/manage-domains.ini'
 # @param drop_default_net
-#   Boolean, don't create default network and bridge (virbr0)
-#   Defaults to false
+#   Boolean, if  true, purges the default network
+#   Deprecated, use $purge_network if you like to drop
+#   networks not managed with puppet.
 # @param diff_dir
 #   if this is set to a path, the directory is created and
 #   the xmls generated for the domains are kept and diffs
 #   are shown on changes by puppet.
 #   usefull for development (or on upgrade)
 #   defaults to `undef` (== disabled)
+# @param filter_default_prio
+#   default filter priorities per filter chain.
+#   defaults are taken from hiera.
+# @param default_nwfilters
+#   hash of default filters to load
+#   this parameter is hash merged.
+# @param load_nwfilter_set
+#   set of nwfilters to load
+#   this loads (create_resources) of all filters defined
+#   in $load_nwfilter_set.each |$i| {$default_nwfilters[$i]}
+#   see data/profiles/nwfilter_* for supported sets of filter
+#   will set the default template to 'generic'
+# @param purge_nwfilter
+#   what to do with nwfilters not managed with puppet:
+#    none: we do not care
+#    purge: remove the filters
+#    noop: warn (do a purge with noop parameter)
+# @param purge_network
+#   what to do with persistent networks not managed with puppet:
+#    none: we do not care
+#    purge: remove the network
+#    noop: warn (do a purge with noop parameter)
+#   Remark: non persistent networks are not affected.
+#   only persisten network are handled within this module.   
+# @param purge_domain
+#   what to do with persistent domains not managed with puppet:
+#    none: we do not care
+#    purge: remove the domain
+#    noop: warn (do a purge with noop parameter)
+#   Remark: non persistent domains are not affected.
+#   only persisten domains are handled within this module.
+# @param tree_network
+#   this is the tree of all elements available for network
+#   xml definition, which stears the xml generation
+#   everything not defined as element is treated as attribute.
+#   There is no need to change this !! Better file a bug !
 #
 # @example using a drbd hook
 #   class { 'libvirt':
@@ -140,10 +177,21 @@ class libvirt (
   String                                               $manage_domains_config = '/etc/manage-domains.ini',
   Boolean                                              $drop_default_net      = false,
   Optional[String]                                     $diff_dir              = undef,
+  Hash                                                 $filter_default_prio   = {},
+  Hash[String[1], Hash]                                $default_nwfilters     = {},
+  Array[String[1]]                                     $load_nwfilter_set     = [],
+  Enum['none','purge','noop']                          $purge_nwfilter        = 'none',
+  Enum['none','purge','noop']                          $purge_network         = 'none',
+  Enum['none','purge','noop']                          $purge_domain          = 'none',
+  Hash                                                 $tree_network          = {},
 ) {
+  # dependencies
   Class['Libvirt::Install']
   -> Class['Libvirt::Config']
-  -> Class['Libvirt::Service']
+  -> Service<| tag == 'libvirt' |>  # libvirt automatic tag !
+  -> Libvirt_network<| |>
+  -> Libvirt_nwfilter<| |>
+  -> Libvirt_domain<| |>
 
   include libvirt::install
   include libvirt::config
@@ -164,12 +212,55 @@ class libvirt (
     }
   }
 
+  # do nwfilter purge (if configured)
+  if $purge_nwfilter == 'purge' {
+    resources { 'libvirt_nwfilter':
+      purge => true,
+    }
+  } elsif $purge_nwfilter == 'noop' {
+    resources { 'libvirt_nwfilter':
+      purge => true,
+      noop  => true,
+    }
+  }
+
+  # do network purge (if configured !)
+  if $purge_network == 'purge' {
+    resources { 'libvirt_network':
+      purge => true,
+    }
+  } elsif $purge_network == 'noop' {
+    resources { 'libvirt_network':
+      purge => true,
+      noop  => true,
+    }
+  }
+
+  # do domain purge (if configured !)
+  if $purge_domain == 'purge' {
+    resources { 'libvirt_domain':
+      purge => true,
+    }
+  } elsif $purge_domain == 'noop' {
+    resources { 'libvirt_domain':
+      purge => true,
+      noop  => true,
+    }
+  }
+
   create_resources('::libvirt::network', $create_networks)
   create_resources('::libvirt::domain', $create_domains)
   create_resources('::libvirt::nwfilter', $create_nwfilters)
   create_resources('libvirt_pool', $create_pools)
 
+  $load_nwfilter_set.each | String[1] $i| {
+    create_resources('libvirt::nwfilter', $default_nwfilters[$i], {
+        'template' => 'generic',
+    })
+  }
+
   if ( $drop_default_net ) {
+    warning('deprecation: libvirt::drop_default_net parameter will be deprecated in future version, use purge_network parameter instead')
     libvirt::network { 'default':
       ensure => 'absent',
     }
