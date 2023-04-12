@@ -24,6 +24,9 @@ the resource name.
 
 ### Resource types
 
+* [`libvirt_domain`](#libvirt_domain): ensures a persistent domain (vm) (transient domains are ignored)
+* [`libvirt_network`](#libvirt_network): ensures a persistent network (transient networks are ignored)
+* [`libvirt_nwfilter`](#libvirt_nwfilter): ensures a nwfilter
 * [`libvirt_pool`](#libvirt_pool): Manages libvirt pools
 * [`libvirtd_conf`](#libvirtd_conf): setting name to manage value in libvirtd.conf
 * [`libvirtd_default`](#libvirtd_default): setting name to manage default for libvirtd
@@ -31,9 +34,48 @@ the resource name.
 ### Functions
 
 * [`libvirt::get_merged_profile`](#libvirt--get_merged_profile): merges profiles
-* [`libvirt_generate_mac`](#libvirt_generate_mac): compute sha1 hash of all keys concatenated, only the first 6 hex digits will be used
+* [`libvirt::normalxml`](#libvirt--normalxml): normalize a xml string
+* [`libvirt_generate_mac`](#libvirt_generate_mac): Returns a MAC address in the QEMU/KVM MAC OID (52:54:00:...).  It computes a sha1 hash of all keys concatenated, the first 6 hex digits will 
 * [`libvirt_generate_mac_addresses`](#libvirt_generate_mac_addresses): Generates MAC addresses for all interfaces in the array which do not yet have an address specified. The MAC addresses are based on the domain
 * [`libvirt_generate_uuid`](#libvirt_generate_uuid): compute sha1 hash of all keys concatenated
+
+### Data types
+
+* [`Libvirt::Domain::Device`](#Libvirt--Domain--Device): A device of a Domain
+* [`Libvirt::Domain::Disk`](#Libvirt--Domain--Disk): A disk of a Domain
+* [`Libvirt::Domain::Interface`](#Libvirt--Domain--Interface): A interface of a Domain
+* [`Libvirt::Filterref`](#Libvirt--Filterref): an array for nwfilter references
+* [`Libvirt::Net::Bandwith`](#Libvirt--Net--Bandwith): network metadata
+* [`Libvirt::Net::Bridge`](#Libvirt--Net--Bridge): network bridge
+* [`Libvirt::Net::Dns`](#Libvirt--Net--Dns): network dns
+* [`Libvirt::Net::Dnsmasq_options`](#Libvirt--Net--Dnsmasq_options): network dnsmasq_options
+* [`Libvirt::Net::Domain`](#Libvirt--Net--Domain): network domain
+* [`Libvirt::Net::Forward`](#Libvirt--Net--Forward): network forward
+* [`Libvirt::Net::IP`](#Libvirt--Net--IP): network ip: The IP element sets up NAT'ing and an optional DHCP server local to the host.
+* [`Libvirt::Net::Metadata`](#Libvirt--Net--Metadata): network metadata
+* [`Libvirt::Net::Port`](#Libvirt--Net--Port): network port
+* [`Libvirt::Net::Portgroup`](#Libvirt--Net--Portgroup): network portgroup
+* [`Libvirt::Net::Route`](#Libvirt--Net--Route): network route: static routes
+* [`Libvirt::Net::Virtualport`](#Libvirt--Net--Virtualport): network virtualport
+* [`Libvirt::Net::Vlan`](#Libvirt--Net--Vlan): network vlan
+* [`Libvirt::Nwfilter::Chain`](#Libvirt--Nwfilter--Chain): a nwfilter chain
+* [`Libvirt::Nwfilter::Param`](#Libvirt--Nwfilter--Param): a parameter for a nwfilter
+* [`Libvirt::Nwfilter::Priority`](#Libvirt--Nwfilter--Priority): a nwfilter priority
+* [`Libvirt::Nwfilter::Protocol::Arp_rarp`](#Libvirt--Nwfilter--Protocol--Arp_rarp): nwfilter rule protocol of ARP/RARP
+* [`Libvirt::Nwfilter::Protocol::Espipv6_ahipv6_udpliteipv6_allipv6`](#Libvirt--Nwfilter--Protocol--Espipv6_ahipv6_udpliteipv6_allipv6): nwfilter rule protocol of ESP, AH, UDPLITE, ALL over IPv6
+* [`Libvirt::Nwfilter::Protocol::Icmp`](#Libvirt--Nwfilter--Protocol--Icmp): nwfilter rule protocol of icmp
+* [`Libvirt::Nwfilter::Protocol::Icmpv6`](#Libvirt--Nwfilter--Protocol--Icmpv6): nwfilter rule protocol of icmpv6
+* [`Libvirt::Nwfilter::Protocol::Igmp_esp_ah_udplite_all`](#Libvirt--Nwfilter--Protocol--Igmp_esp_ah_udplite_all): nwfilter rule protocol of IGMP, ESP, AH, UDPLITE, ALL
+* [`Libvirt::Nwfilter::Protocol::Ipv4`](#Libvirt--Nwfilter--Protocol--Ipv4): nwfilter rule protocol of ipv4
+* [`Libvirt::Nwfilter::Protocol::Ipv6`](#Libvirt--Nwfilter--Protocol--Ipv6): nwfilter rule protocol of ipv6
+* [`Libvirt::Nwfilter::Protocol::Mac`](#Libvirt--Nwfilter--Protocol--Mac): nwfilter rule protocol of mac
+* [`Libvirt::Nwfilter::Protocol::Stp`](#Libvirt--Nwfilter--Protocol--Stp): nwfilter rule protocol of stp
+* [`Libvirt::Nwfilter::Protocol::Tcp_udp_sctp`](#Libvirt--Nwfilter--Protocol--Tcp_udp_sctp): nwfilter rule protocol of TCP/UDP/SCTP
+* [`Libvirt::Nwfilter::Protocol::Tcpipv6_udpipv6_sctpipv6`](#Libvirt--Nwfilter--Protocol--Tcpipv6_udpipv6_sctpipv6): nwfilter rule protocol of TCP/UDP/SCTP over IPV6
+* [`Libvirt::Nwfilter::Protocol::Vlan`](#Libvirt--Nwfilter--Protocol--Vlan): nwfilter rule protocol of VLAN
+* [`Libvirt::Nwfilter::Rule`](#Libvirt--Nwfilter--Rule): a single nwfilter rule
+* [`Libvirt::Nwrules`](#Libvirt--Nwrules): An array of Nwfilter rules
+* [`Libvirt::Profiles::Devices`](#Libvirt--Profiles--Devices): A device of a Domain
 
 ## Classes
 
@@ -82,6 +124,13 @@ The following parameters are available in the `libvirt` class:
 * [`manage_domains_config`](#-libvirt--manage_domains_config)
 * [`drop_default_net`](#-libvirt--drop_default_net)
 * [`diff_dir`](#-libvirt--diff_dir)
+* [`filter_default_prio`](#-libvirt--filter_default_prio)
+* [`default_nwfilters`](#-libvirt--default_nwfilters)
+* [`load_nwfilter_set`](#-libvirt--load_nwfilter_set)
+* [`purge_nwfilter`](#-libvirt--purge_nwfilter)
+* [`purge_network`](#-libvirt--purge_network)
+* [`purge_domain`](#-libvirt--purge_domain)
+* [`tree_network`](#-libvirt--tree_network)
 
 ##### <a name="-libvirt--service_name"></a>`service_name`
 
@@ -301,8 +350,9 @@ Default value: `'/etc/manage-domains.ini'`
 
 Data type: `Boolean`
 
-Boolean, don't create default network and bridge (virbr0)
-Defaults to false
+Boolean, if  true, purges the default network
+Deprecated, use $purge_network if you like to drop
+networks not managed with puppet.
 
 Default value: `false`
 
@@ -317,6 +367,84 @@ usefull for development (or on upgrade)
 defaults to `undef` (== disabled)
 
 Default value: `undef`
+
+##### <a name="-libvirt--filter_default_prio"></a>`filter_default_prio`
+
+Data type: `Hash`
+
+default filter priorities per filter chain.
+defaults are taken from hiera.
+
+Default value: `{}`
+
+##### <a name="-libvirt--default_nwfilters"></a>`default_nwfilters`
+
+Data type: `Hash[String[1], Hash]`
+
+hash of default filters to load
+this parameter is hash merged.
+
+Default value: `{}`
+
+##### <a name="-libvirt--load_nwfilter_set"></a>`load_nwfilter_set`
+
+Data type: `Array[String[1]]`
+
+set of nwfilters to load
+this loads (create_resources) of all filters defined
+in $load_nwfilter_set.each |$i| {$default_nwfilters[$i]}
+see data/profiles/nwfilter_* for supported sets of filter
+will set the default template to 'generic'
+
+Default value: `[]`
+
+##### <a name="-libvirt--purge_nwfilter"></a>`purge_nwfilter`
+
+Data type: `Enum['none','purge','noop']`
+
+what to do with nwfilters not managed with puppet:
+ none: we do not care
+ purge: remove the filters
+ noop: warn (do a purge with noop parameter)
+
+Default value: `'none'`
+
+##### <a name="-libvirt--purge_network"></a>`purge_network`
+
+Data type: `Enum['none','purge','noop']`
+
+what to do with persistent networks not managed with puppet:
+ none: we do not care
+ purge: remove the network
+ noop: warn (do a purge with noop parameter)
+Remark: non persistent networks are not affected.
+only persisten network are handled within this module.
+
+Default value: `'none'`
+
+##### <a name="-libvirt--purge_domain"></a>`purge_domain`
+
+Data type: `Enum['none','purge','noop']`
+
+what to do with persistent domains not managed with puppet:
+ none: we do not care
+ purge: remove the domain
+ noop: warn (do a purge with noop parameter)
+Remark: non persistent domains are not affected.
+only persisten domains are handled within this module.
+
+Default value: `'none'`
+
+##### <a name="-libvirt--tree_network"></a>`tree_network`
+
+Data type: `Hash`
+
+this is the tree of all elements available for network
+xml definition, which stears the xml generation
+everything not defined as element is treated as attribute.
+There is no need to change this !! Better file a bug !
+
+Default value: `{}`
 
 ### <a name="libvirt--config"></a>`libvirt::config`
 
@@ -463,7 +591,7 @@ The following parameters are available in the `libvirt::manage_domains_config` c
 
 ##### <a name="-libvirt--manage_domains_config--manage_domains_config"></a>`manage_domains_config`
 
-Data type: `String`
+Data type: `String[1]`
 
 file where the manage_domains configuration is.
 Defaults to $libvirt::manage_domains_config
@@ -484,10 +612,11 @@ The following parameters are available in the `libvirt::profiles` class:
 
 * [`devices`](#-libvirt--profiles--devices)
 * [`domconf`](#-libvirt--profiles--domconf)
+* [`ignore`](#-libvirt--profiles--ignore)
 
 ##### <a name="-libvirt--profiles--devices"></a>`devices`
 
-Data type: `Hash`
+Data type: `Libvirt::Profiles::Devices`
 
 devices profiles to load
 remark: parameter is hiera hash merged
@@ -498,6 +627,18 @@ Data type: `Hash`
 
 domconf profiles to load
 remark: parameter is hiera hash merged
+
+##### <a name="-libvirt--profiles--ignore"></a>`ignore`
+
+Data type: `Hash[String[1], Array[String[1]]]`
+
+an Array per profile of Xpath definitions to ignore when comparing the
+configured with the persistent/running configuration of a domain.
+Libvirt add some default configurations which should not be included
+in the XML we compare.
+remark: parameter is hiera hash merged
+
+Default value: `{}`
 
 ### <a name="libvirt--service"></a>`libvirt::service`
 
@@ -511,6 +652,7 @@ The following parameters are available in the `libvirt::service` class:
 * [`service_ensure`](#-libvirt--service--service_ensure)
 * [`service_enable`](#-libvirt--service--service_enable)
 * [`manage_service`](#-libvirt--service--manage_service)
+* [`modular_services`](#-libvirt--service--modular_services)
 
 ##### <a name="-libvirt--service--service_name"></a>`service_name`
 
@@ -548,6 +690,26 @@ Defaults to true
 
 Default value: `$libvirt::manage_service`
 
+##### <a name="-libvirt--service--modular_services"></a>`modular_services`
+
+Data type: `Optional[Hash[String[1], Hash]]`
+
+Hash of `service` resources for [modular drivers and sockets](https://libvirt.org/daemons.html#modular-driver-daemons).
+When this is set, `service_name`, `service_ensure`, and `service_enable` are ignored.
+Services tagged with libvirt-libvirtd-conf are notified from changes in Libvirtd_conf.
+
+Example usage: Use the following snippet, if your libvirtd>5.6.0 and you like TLS socket usage
+(former --listen and TLS option):
+  libvirt::service::modular_services:
+    libvirtd.service:
+      enable: false
+      tag: 'libvirt-libvirtd-conf'
+    libvirtd-tls.socket:
+      ensure: 'running'
+      enable: true
+
+Default value: `undef`
+
 ## Defined types
 
 ### <a name="libvirt--domain"></a>`libvirt::domain`
@@ -562,6 +724,7 @@ for more information.
 
 The following parameters are available in the `libvirt::domain` defined type:
 
+* [`ensure`](#-libvirt--domain--ensure)
 * [`type`](#-libvirt--domain--type)
 * [`domain_title`](#-libvirt--domain--domain_title)
 * [`description`](#-libvirt--domain--description)
@@ -570,19 +733,32 @@ The following parameters are available in the `libvirt::domain` defined type:
 * [`disks`](#-libvirt--domain--disks)
 * [`interfaces`](#-libvirt--domain--interfaces)
 * [`autostart`](#-libvirt--domain--autostart)
+* [`active`](#-libvirt--domain--active)
 * [`dom_profile`](#-libvirt--domain--dom_profile)
 * [`domconf`](#-libvirt--domain--domconf)
 * [`devices_profile`](#-libvirt--domain--devices_profile)
 * [`devices`](#-libvirt--domain--devices)
 * [`additionaldevices`](#-libvirt--domain--additionaldevices)
+* [`replace`](#-libvirt--domain--replace)
+* [`ignore_profile`](#-libvirt--domain--ignore_profile)
+* [`ignore`](#-libvirt--domain--ignore)
 * [`default_host`](#-libvirt--domain--default_host)
 * [`evacuation`](#-libvirt--domain--evacuation)
 * [`max_job_time`](#-libvirt--domain--max_job_time)
 * [`suspend_multiplier`](#-libvirt--domain--suspend_multiplier)
+* [`show_diff`](#-libvirt--domain--show_diff)
+
+##### <a name="-libvirt--domain--ensure"></a>`ensure`
+
+Data type: `Enum['present','absent']`
+
+if we ensure the VM present or absent.
+
+Default value: `'present'`
 
 ##### <a name="-libvirt--domain--type"></a>`type`
 
-Data type: `String`
+Data type: `String[1]`
 
 Specify the hypervisor used for running the domain.
 The allowed values are driver specific, but include "xen", "kvm", "qemu" and "lxc"
@@ -608,7 +784,7 @@ Default value: `undef`
 
 ##### <a name="-libvirt--domain--uuid"></a>`uuid`
 
-Data type: `String`
+Data type: `String[1]`
 
 UUID for the domain. The default is the uuid, generated
 with puppet.
@@ -617,7 +793,7 @@ Default value: `libvirt_generate_uuid($name)`
 
 ##### <a name="-libvirt--domain--boot"></a>`boot`
 
-Data type: `String`
+Data type: `String[1]`
 
 Default boot device. Valid values are any accepted by libvirt or the string
 'per-device' to set individual boot orders on disks or interfaces.
@@ -627,7 +803,7 @@ Default value: `'hd'`
 
 ##### <a name="-libvirt--domain--disks"></a>`disks`
 
-Data type: `Array`
+Data type: `Array[Libvirt::Domain::Disk]`
 
 Array of hashes defining the disks of this domain. Defaults to no disks
 at all. The hashes support the following keys:
@@ -655,7 +831,7 @@ Default value: `[]`
 
 ##### <a name="-libvirt--domain--interfaces"></a>`interfaces`
 
-Data type: `Array`
+Data type: `Array[Libvirt::Domain::Interface]`
 
 Array of hashes defining the network interfaces of this domain. Defaults to
 no network interfaces.
@@ -680,9 +856,18 @@ domains are started if the host is booted.
 
 Default value: `true`
 
+##### <a name="-libvirt--domain--active"></a>`active`
+
+Data type: `Optional[Boolean]`
+
+If true, this ensures the VM is running, if false ensures the machine
+is not running. Default: undef
+
+Default value: `undef`
+
 ##### <a name="-libvirt--domain--dom_profile"></a>`dom_profile`
 
-Data type: `String`
+Data type: `String[1]`
 
 profile to use for $domconf.
 Defaults to 'default' which is defined in data/profiles/xxx.yaml
@@ -706,7 +891,7 @@ Default value: `{}`
 
 ##### <a name="-libvirt--domain--devices_profile"></a>`devices_profile`
 
-Data type: `String`
+Data type: `String[1]`
 
 profile to use for $devices.
 Defaults to 'default' which is defined in data/profiles/xxx.yaml
@@ -717,7 +902,7 @@ Default value: `'default'`
 
 ##### <a name="-libvirt--domain--devices"></a>`devices`
 
-Data type: `Hash`
+Data type: `Hash[String[1],Libvirt::Domain::Device]`
 
 devices to attach to the vm
 this parameter is merged with the choosen profile,
@@ -730,7 +915,7 @@ Default value: `{}`
 
 ##### <a name="-libvirt--domain--additionaldevices"></a>`additionaldevices`
 
-Data type: `Hash`
+Data type: `Hash[String[1],Libvirt::Domain::Device]`
 
 additional devices to attach to the vm
 Same format as $devices, but without merging.
@@ -738,9 +923,45 @@ Defaults to {}
 
 Default value: `{}`
 
+##### <a name="-libvirt--domain--replace"></a>`replace`
+
+Data type: `Boolean`
+
+set this to true if you like to replace existing VM
+configurations with puppet definitions (or if you change the config in puppet)
+To avoid replacement in each puppet run, this needs to set the libvirt::domain::ignore
+parameter according the VM definition to filter the XML generated by virsh
+(virsh adds some state and automatic dependency information to the dumped XML).
+Since libvirt does not only add state information to result of the dumpxml command
+(which can be handled with the $ignore parameter)
+but does also not display certain elements used to generate a domain this functionality
+is not yet very usefull.
+
+Default value: `false`
+
+##### <a name="-libvirt--domain--ignore_profile"></a>`ignore_profile`
+
+Data type: `String[1]`
+
+the profile to take for the ignore parameters
+
+Default value: `'default'`
+
+##### <a name="-libvirt--domain--ignore"></a>`ignore`
+
+Data type: `Array[String[1]]`
+
+Array Xpath definitions to ignore when comparing the
+configured with the persistent/running configuration of a domain.
+Libvirt add some default configurations which should not be included
+in the XML we compare.
+This is merged with the configured profile (value of $ignore_profile).
+
+Default value: `[]`
+
 ##### <a name="-libvirt--domain--default_host"></a>`default_host`
 
-Data type: `Optional[String]`
+Data type: `Optional[String[1]]`
 
 FQDN for the default host of this domain. The manage-domains script uses
 this value to move a domain to it's default host if it's running elsewhere.
@@ -752,7 +973,7 @@ Default value: `undef`
 
 ##### <a name="-libvirt--domain--evacuation"></a>`evacuation`
 
-Data type: `Optional[String]`
+Data type: `Optional[String[1]]`
 
 Evacuation policy for this domain. Valid values are 'migrate', 'save' and
 'shutdown'. The default is to not set a value and to use the global default.
@@ -764,7 +985,7 @@ Default value: `undef`
 
 ##### <a name="-libvirt--domain--max_job_time"></a>`max_job_time`
 
-Data type: `Optional[String]`
+Data type: `Optional[String[1]]`
 
 Maximum job time in seconds when migrating, saving or shuting down this
 domain with the manage-domains script. The default is to not set a value
@@ -777,7 +998,7 @@ Default value: `undef`
 
 ##### <a name="-libvirt--domain--suspend_multiplier"></a>`suspend_multiplier`
 
-Data type: `Optional[String]`
+Data type: `Optional[String[1]]`
 
 suspend_multiplier for migrating domains with the manage-domains
 script. The default is to not set a value and to use the global default.
@@ -786,6 +1007,14 @@ redundant virtualization hosts synchronized over DRBD. They
 have no effect if qemu_hook is not set to drbd.
 
 Default value: `undef`
+
+##### <a name="-libvirt--domain--show_diff"></a>`show_diff`
+
+Data type: `Boolean`
+
+set to false, if you do not want to see the changes
+
+Default value: `true`
 
 ### <a name="libvirt--network"></a>`libvirt::network`
 
@@ -800,7 +1029,18 @@ for more information.
 The following parameters are available in the `libvirt::network` defined type:
 
 * [`ensure`](#-libvirt--network--ensure)
+* [`metadata`](#-libvirt--network--metadata)
 * [`bridge`](#-libvirt--network--bridge)
+* [`domain`](#-libvirt--network--domain)
+* [`forward`](#-libvirt--network--forward)
+* [`bandwith`](#-libvirt--network--bandwith)
+* [`vlan`](#-libvirt--network--vlan)
+* [`port`](#-libvirt--network--port)
+* [`ips`](#-libvirt--network--ips)
+* [`routes`](#-libvirt--network--routes)
+* [`dns`](#-libvirt--network--dns)
+* [`dnsmasq_options`](#-libvirt--network--dnsmasq_options)
+* [`virtualport`](#-libvirt--network--virtualport)
 * [`forward_mode`](#-libvirt--network--forward_mode)
 * [`virtualport_type`](#-libvirt--network--virtualport_type)
 * [`portgroups`](#-libvirt--network--portgroups)
@@ -813,20 +1053,123 @@ The following parameters are available in the `libvirt::network` defined type:
 * [`dhcp_end`](#-libvirt--network--dhcp_end)
 * [`dns_enable`](#-libvirt--network--dns_enable)
 * [`mtu`](#-libvirt--network--mtu)
+* [`template`](#-libvirt--network--template)
+* [`show_diff`](#-libvirt--network--show_diff)
 
 ##### <a name="-libvirt--network--ensure"></a>`ensure`
 
-Data type: `String`
+Data type: `Enum['present','absent']`
 
-
+if we ensure the network present or absent.
 
 Default value: `'present'`
 
+##### <a name="-libvirt--network--metadata"></a>`metadata`
+
+Data type: `Optional[Libvirt::Net::Metadata]`
+
+Network metadata
+only used for the 'generic' template
+
+Default value: `undef`
+
 ##### <a name="-libvirt--network--bridge"></a>`bridge`
 
-Data type: `Optional[String]`
+Data type: `Optional[Libvirt::Net::Bridge]`
 
-Name of the bridge device to use for this network.
+Name of the bridge device to use for this network as String or a
+Hash of attributes for the 'bridge' with 'name' attribute beeing mandatory.
+The default simple template only supports string.
+
+Default value: `undef`
+
+##### <a name="-libvirt--network--domain"></a>`domain`
+
+Data type: `Optional[Libvirt::Net::Domain]`
+
+DNS domain of the DHCP server
+only used for the 'generic' template
+
+Default value: `undef`
+
+##### <a name="-libvirt--network--forward"></a>`forward`
+
+Data type: `Optional[Libvirt::Net::Forward]`
+
+Determines the method of forwarding
+only used for the 'generic' template
+
+Default value: `undef`
+
+##### <a name="-libvirt--network--bandwith"></a>`bandwith`
+
+Data type: `Optional[Libvirt::Net::Bandwith]`
+
+setting quality of service for a particular network
+only used for the 'generic' template
+
+Default value: `undef`
+
+##### <a name="-libvirt--network--vlan"></a>`vlan`
+
+Data type: `Optional[Libvirt::Net::Vlan]`
+
+vlan tags
+only used for the 'generic' template
+
+Default value: `undef`
+
+##### <a name="-libvirt--network--port"></a>`port`
+
+Data type: `Optional[Libvirt::Net::Port]`
+
+for port isolation
+only used for the 'generic' template
+
+Default value: `undef`
+
+##### <a name="-libvirt--network--ips"></a>`ips`
+
+Data type: `Array[Optional[Libvirt::Net::Ip]]`
+
+ip adresses
+only used for the 'generic' template
+
+Default value: `[]`
+
+##### <a name="-libvirt--network--routes"></a>`routes`
+
+Data type: `Array[Optional[Libvirt::Net::Route]]`
+
+routes
+only used for the 'generic' template
+
+Default value: `[]`
+
+##### <a name="-libvirt--network--dns"></a>`dns`
+
+Data type: `Optional[Libvirt::Net::Dns]`
+
+dns
+only used for the 'generic' template
+
+Default value: `undef`
+
+##### <a name="-libvirt--network--dnsmasq_options"></a>`dnsmasq_options`
+
+Data type: `Optional[Libvirt::Net::Dnsmasq_options]`
+
+options for dnsmasq
+only used for the 'generic' template
+
+Default value: `undef`
+
+##### <a name="-libvirt--network--virtualport"></a>`virtualport`
+
+Data type: `Optional[Libvirt::Net::Virtualport]`
+
+virtual port
+only used for the 'generic' template
 
 Default value: `undef`
 
@@ -836,6 +1179,7 @@ Data type: `String`
 
 Network forward mode. Valid modes are 'nat', 'route', 'bridge', 'private',
 'vepa', 'passthrough' and 'hostdev'. The default is 'bridge'.
+only used for the 'simple' template
 
 Default value: `'bridge'`
 
@@ -845,20 +1189,22 @@ Data type: `Optional[String]`
 
 Set this to 'openvswitch' for an Open vSwitch bridge. Leave undefined
 otherwise.
+only used for the 'simple' template
 
 Default value: `undef`
 
 ##### <a name="-libvirt--network--portgroups"></a>`portgroups`
 
-Data type: `Array`
+Data type: `Array[Optional[Libvirt::Net::Portgroup]]`
 
 Array of hashes defining portgroups. This only works for Open vSwitch
-networks. The hash supports the following keys:
+networks. The hash supports the following keys (for the simple template):
 * name:     Name of the portgroup.
 * trunk:    Set to true if this is a trunk port. In this case, the
             vlan_tag element must contain an array of allowed VLAN
             tags.
 * vlan_tag: VLAN tag for this portgroup.
+to use all possible portgroup values you need to use the generic template.
 
 Default value: `[]`
 
@@ -875,6 +1221,7 @@ Default value: `true`
 Data type: `Optional[String]`
 
 The interface to forward, useful in bridge and route mode
+only used for the 'simple' template
 
 Default value: `undef`
 
@@ -883,6 +1230,7 @@ Default value: `undef`
 Data type: `Array`
 
 An array of interfaces to forwad
+only used for the 'simple' template
 
 Default value: `[]`
 
@@ -891,6 +1239,7 @@ Default value: `[]`
 Data type: `Optional[String]`
 
 The ip address for the device
+only used for the 'simple' template
 
 Default value: `undef`
 
@@ -899,6 +1248,7 @@ Default value: `undef`
 Data type: `Optional[String]`
 
 The netmask for the ip address
+only used for the 'simple' template
 
 Default value: `undef`
 
@@ -907,6 +1257,7 @@ Default value: `undef`
 Data type: `Optional[String]`
 
 Optional dhcp range start
+only used for the 'simple' template
 
 Default value: `undef`
 
@@ -915,6 +1266,7 @@ Default value: `undef`
 Data type: `Optional[String]`
 
 Optional dhcp range end
+only used for the 'simple' template
 
 Default value: `undef`
 
@@ -923,6 +1275,7 @@ Default value: `undef`
 Data type: `Optional[String]`
 
 Set this to 'no' to disable the DNS service. Leave undefined otherwise.
+only used for the 'simple' template
 
 Default value: `undef`
 
@@ -930,9 +1283,26 @@ Default value: `undef`
 
 Data type: `Optional[Integer]`
 
-Set a custom mtu value. Default is 1500.
+Set a custom mtu value. Default depending on the setting of the type of
+device being used, usually 1500.
 
 Default value: `undef`
+
+##### <a name="-libvirt--network--template"></a>`template`
+
+Data type: `Enum['simple','generic']`
+
+template to use to create the network xml
+
+Default value: `'simple'`
+
+##### <a name="-libvirt--network--show_diff"></a>`show_diff`
+
+Data type: `Boolean`
+
+set to false, if you do not want to see the changes
+
+Default value: `true`
 
 ### <a name="libvirt--nwfilter"></a>`libvirt::nwfilter`
 
@@ -947,26 +1317,85 @@ numbers.
 
 The following parameters are available in the `libvirt::nwfilter` defined type:
 
+* [`ensure`](#-libvirt--nwfilter--ensure)
 * [`uuid`](#-libvirt--nwfilter--uuid)
+* [`chain`](#-libvirt--nwfilter--chain)
+* [`priority`](#-libvirt--nwfilter--priority)
+* [`rules`](#-libvirt--nwfilter--rules)
+* [`filterref`](#-libvirt--nwfilter--filterref)
 * [`ip`](#-libvirt--nwfilter--ip)
 * [`publictcpservices`](#-libvirt--nwfilter--publictcpservices)
 * [`publicudpservices`](#-libvirt--nwfilter--publicudpservices)
 * [`customtcprules`](#-libvirt--nwfilter--customtcprules)
 * [`customudprules`](#-libvirt--nwfilter--customudprules)
+* [`template`](#-libvirt--nwfilter--template)
+* [`show_diff`](#-libvirt--nwfilter--show_diff)
+
+##### <a name="-libvirt--nwfilter--ensure"></a>`ensure`
+
+Data type: `Enum['present', 'absent']`
+
+if the resource should be present or absent.
+
+Default value: `'present'`
 
 ##### <a name="-libvirt--nwfilter--uuid"></a>`uuid`
 
-Data type: `String`
+Data type: `Optional[String]`
 
 The libvirt UUID, optional.
 
-Default value: `libvirt_generate_uuid($name)`
+Default value: `undef`
+
+##### <a name="-libvirt--nwfilter--chain"></a>`chain`
+
+Data type: `Libvirt::Nwfilter::Chain`
+
+filter chain to use
+
+Default value: `'root'`
+
+##### <a name="-libvirt--nwfilter--priority"></a>`priority`
+
+Data type: `Optional[Libvirt::Nwfilter::Priority]`
+
+filter priority
+only used if template is set to generic
+
+Default value: `undef`
+
+##### <a name="-libvirt--nwfilter--rules"></a>`rules`
+
+Data type: `Libvirt::Nwrules`
+
+the filter rules to apply
+only used if template is set to generic
+
+Default value: `[]`
+
+##### <a name="-libvirt--nwfilter--filterref"></a>`filterref`
+
+Data type: `Libvirt::Filterref`
+
+references to other filters to include
+only used if template is set to generic
+Example (yaml):
+filterref:
+  - filter: 'other filter'
+  - filter: 'filter with parameter'
+    parameters:
+      - IP: '127.0.0.1',
+      - PORT: '22',
+      - PORT: '80',
+
+Default value: `[]`
 
 ##### <a name="-libvirt--nwfilter--ip"></a>`ip`
 
 Data type: `Optional[String]`
 
 The VM's IP address, mandatory.
+only used if template is set to simple
 
 Default value: `undef`
 
@@ -976,6 +1405,7 @@ Data type: `Array`
 
 An array with portnumbers that should be accessible over
 TCP from anywhere
+only used if template is set to simple
 
 Default value: `[]`
 
@@ -985,6 +1415,7 @@ Data type: `Array`
 
 An array with portnumbers that should be accessible over
 UDP from anywhere
+only used if template is set to simple
 
 Default value: `[]`
 
@@ -995,6 +1426,7 @@ Data type: `Array`
 An array with rules that allow traffic to a specific TCP
 port from a specific address. Syntax:
 `[{remote_ip => port}, ... ]`
+only used if template is set to simple
 
 Default value: `[]`
 
@@ -1005,10 +1437,237 @@ Data type: `Array`
 An array with rules that allow traffic to a specific UDP
 port from a specific address. Syntax:
 `[{remote_ip => port}, ... ]`
+only used if template is set to simple
 
 Default value: `[]`
 
+##### <a name="-libvirt--nwfilter--template"></a>`template`
+
+Data type: `Enum['simple','generic']`
+
+template to use. default to the 'old' simple template.
+for new implementations you shoud use generic which is much
+more powerfull and should support all possible libvirt
+configurations.
+
+Default value: `'simple'`
+
+##### <a name="-libvirt--nwfilter--show_diff"></a>`show_diff`
+
+Data type: `Boolean`
+
+set to false, if you do not want to see the changes
+
+Default value: `true`
+
 ## Resource types
+
+### <a name="libvirt_domain"></a>`libvirt_domain`
+
+ensures a persistent domain (vm) (transient domains are ignored)
+
+#### Properties
+
+The following properties are available in the `libvirt_domain` type.
+
+##### `active`
+
+Valid values: `true`, `false`
+
+Whether the domain should be started (active=true), or shutdown (active=false)
+
+##### `autostart`
+
+Valid values: `true`, `false`
+
+Whether the domain should be autostarted.
+
+Default value: `false`
+
+##### `content`
+
+content of the domain formated as XML
+
+##### `ensure`
+
+Valid values: `present`, `absent`
+
+The basic property that the resource should be in.
+
+Default value: `present`
+
+#### Parameters
+
+The following parameters are available in the `libvirt_domain` type.
+
+* [`ignore`](#-libvirt_domain--ignore)
+* [`name`](#-libvirt_domain--name)
+* [`provider`](#-libvirt_domain--provider)
+* [`replace`](#-libvirt_domain--replace)
+* [`show_diff`](#-libvirt_domain--show_diff)
+* [`uuid`](#-libvirt_domain--uuid)
+
+##### <a name="-libvirt_domain--ignore"></a>`ignore`
+
+Array of Xpath definitions to ignore. Libvirt generates some configurations automatic
+wich are shown in the xml output. This array defines Xpath queries of such configurations
+
+Default value: `[]`
+
+##### <a name="-libvirt_domain--name"></a>`name`
+
+namevar
+
+name of the domain, name as namevar
+
+##### <a name="-libvirt_domain--provider"></a>`provider`
+
+The specific backend to use for this `libvirt_domain` resource. You will seldom need to specify this --- Puppet will
+usually discover the appropriate provider for your platform.
+
+##### <a name="-libvirt_domain--replace"></a>`replace`
+
+Valid values: `true`, `false`, `yes`, `no`
+
+Set this to true to replace a already existing VM. To avoid change the VM
+pn every puppet run, you need to set the ignore parameter according your VM definition.
+
+Default value: `false`
+
+##### <a name="-libvirt_domain--show_diff"></a>`show_diff`
+
+Valid values: `true`, `false`, `yes`, `no`
+
+Whether to display whole change when the xml changes, defaulting to
+false, since we do not want to fill up logs !
+
+Default value: `false`
+
+##### <a name="-libvirt_domain--uuid"></a>`uuid`
+
+uuid to use for creation of a new domain, if undef (default) automatic creation
+
+### <a name="libvirt_network"></a>`libvirt_network`
+
+ensures a persistent network (transient networks are ignored)
+
+#### Properties
+
+The following properties are available in the `libvirt_network` type.
+
+##### `active`
+
+Valid values: `true`, `false`
+
+Whether the network should be started. (active)
+
+Default value: `true`
+
+##### `autostart`
+
+Valid values: `true`, `false`
+
+Whether the network should be autostarted.
+
+Default value: `true`
+
+##### `content`
+
+content of the network formated as XML
+
+##### `ensure`
+
+Valid values: `present`, `absent`
+
+The basic property that the resource should be in.
+
+Default value: `present`
+
+#### Parameters
+
+The following parameters are available in the `libvirt_network` type.
+
+* [`name`](#-libvirt_network--name)
+* [`provider`](#-libvirt_network--provider)
+* [`show_diff`](#-libvirt_network--show_diff)
+* [`uuid`](#-libvirt_network--uuid)
+
+##### <a name="-libvirt_network--name"></a>`name`
+
+namevar
+
+name of the network, name as namevar
+
+##### <a name="-libvirt_network--provider"></a>`provider`
+
+The specific backend to use for this `libvirt_network` resource. You will seldom need to specify this --- Puppet will
+usually discover the appropriate provider for your platform.
+
+##### <a name="-libvirt_network--show_diff"></a>`show_diff`
+
+Valid values: `true`, `false`, `yes`, `no`
+
+Whether to display whole change when the xml changes, defaulting to
+false, since we do not want to fill up logs !
+
+Default value: `false`
+
+##### <a name="-libvirt_network--uuid"></a>`uuid`
+
+uuid to use for creation of a new network, if undef (default) automatic creation
+
+### <a name="libvirt_nwfilter"></a>`libvirt_nwfilter`
+
+ensures a nwfilter
+
+#### Properties
+
+The following properties are available in the `libvirt_nwfilter` type.
+
+##### `content`
+
+content of the nwfilter formated as XML
+
+##### `ensure`
+
+Valid values: `present`, `absent`
+
+The basic property that the resource should be in.
+
+Default value: `present`
+
+#### Parameters
+
+The following parameters are available in the `libvirt_nwfilter` type.
+
+* [`name`](#-libvirt_nwfilter--name)
+* [`provider`](#-libvirt_nwfilter--provider)
+* [`show_diff`](#-libvirt_nwfilter--show_diff)
+* [`uuid`](#-libvirt_nwfilter--uuid)
+
+##### <a name="-libvirt_nwfilter--name"></a>`name`
+
+namevar
+
+name of the filter, name as namevar
+
+##### <a name="-libvirt_nwfilter--provider"></a>`provider`
+
+The specific backend to use for this `libvirt_nwfilter` resource. You will seldom need to specify this --- Puppet will
+usually discover the appropriate provider for your platform.
+
+##### <a name="-libvirt_nwfilter--show_diff"></a>`show_diff`
+
+Valid values: `true`, `false`, `yes`, `no`
+
+Whether to display whole change when the xml changes, defaulting to
+false, since we do not want to fill up logs !
+
+Default value: `false`
+
+##### <a name="-libvirt_nwfilter--uuid"></a>`uuid`
+
+uuid to use for creation of a new nwfilter, if undef (default) automatic creation
 
 ### <a name="libvirt_pool"></a>`libvirt_pool`
 
@@ -1322,19 +1981,45 @@ Data type: `String`
 
 Name of the computed profile to return
 
+### <a name="libvirt--normalxml"></a>`libvirt::normalxml`
+
+Type: Ruby 4.x API
+
+For the providers to compare the xml string it needs exact matching.
+this function does the same for the input as it is done with the
+output of the dumpxml in the provider. (see resource libvirt_nwfilter)
+
+#### `libvirt::normalxml(String $value)`
+
+For the providers to compare the xml string it needs exact matching.
+this function does the same for the input as it is done with the
+output of the dumpxml in the provider. (see resource libvirt_nwfilter)
+
+Returns: `String` the normalized xml string.
+
+##### `value`
+
+Data type: `String`
+
+the xml string
+
 ### <a name="libvirt_generate_mac"></a>`libvirt_generate_mac`
 
 Type: Ruby 3.x API
 
-compute sha1 hash of all keys concatenated, only the first 6
-hex digits will be used
+Returns a MAC address in the QEMU/KVM MAC OID (52:54:00:...).
+
+It computes a sha1 hash of all keys concatenated, the first 6
+hex digits will be used as mac address.
 
 #### `libvirt_generate_mac()`
 
-compute sha1 hash of all keys concatenated, only the first 6
-hex digits will be used
+Returns a MAC address in the QEMU/KVM MAC OID (52:54:00:...).
 
-Returns: `Any` a mac address
+It computes a sha1 hash of all keys concatenated, the first 6
+hex digits will be used as mac address.
+
+Returns: `Any` a mac address in the QEMU/KVM MAC OID (52:54:00:...)
 
 ### <a name="libvirt_generate_mac_addresses"></a>`libvirt_generate_mac_addresses`
 
@@ -1342,13 +2027,13 @@ Type: Ruby 3.x API
 
 Generates MAC addresses for all interfaces in the array which do not yet have an
 address specified. The MAC addresses are based on the domain name, network and
-portgroup.
+portgroup. The function libvirt_generate_mac is used to generate a single mac address.
 
 #### `libvirt_generate_mac_addresses(Any $hash)`
 
 Generates MAC addresses for all interfaces in the array which do not yet have an
 address specified. The MAC addresses are based on the domain name, network and
-portgroup.
+portgroup. The function libvirt_generate_mac is used to generate a single mac address.
 
 Returns: `Any` the interfacess with mac address
 
@@ -1362,11 +2047,821 @@ of interfaces
 
 Type: Ruby 3.x API
 
-compute sha1 hash of all keys concatenated
+Return a uuid generated from an sha1 hash of all keys concatenated
 
 #### `libvirt_generate_uuid()`
 
-compute sha1 hash of all keys concatenated
+Return a uuid generated from an sha1 hash of all keys concatenated
 
 Returns: `String` the computed uuid
+
+## Data types
+
+### <a name="Libvirt--Domain--Device"></a>`Libvirt::Domain::Device`
+
+A device of a Domain
+
+Alias of
+
+```puppet
+Variant[Array[Libvirt::Domain::Device], String[1], Integer, Struct[{
+      values => Optional[Variant[Hash, String[1],Integer, Libvirt::Domain::Device]],
+      attrs  => Optional[Variant[String[1], Integer, Hash]],
+  }], Hash[String[1], Libvirt::Domain::Device]]
+```
+
+### <a name="Libvirt--Domain--Disk"></a>`Libvirt::Domain::Disk`
+
+A disk of a Domain
+
+Alias of
+
+```puppet
+Struct[{
+    type       => Enum['file', 'block', 'network', 'volume'],
+    device     => Enum['floppy', 'disk', 'cdrom', 'lun'],
+    bus        => String[1],
+    driver     => Optional[Hash[String[1],String[1]]],
+    boot_order => Optional[Integer],
+    source     => Optional[Hash[String[1], String[1]]],
+}]
+```
+
+### <a name="Libvirt--Domain--Interface"></a>`Libvirt::Domain::Interface`
+
+A interface of a Domain
+
+Alias of
+
+```puppet
+Struct[{
+    type      => Optional[String[1]],
+    network   => String[1],
+    portgroup => Optional[String[1]],
+    mac       => Optional[String[1]],
+    filter    => Optional[Variant[
+        String[1],
+        Struct[{
+            filterref  => String[1],
+            parameters => Optional[Hash[
+                String[1],
+                Variant[String[1],Array[String[1]]]
+            ]],
+        }],
+    ]],
+    boot_order => Optional[Integer],
+}]
+```
+
+### <a name="Libvirt--Filterref"></a>`Libvirt::Filterref`
+
+an array for nwfilter references
+
+Alias of
+
+```puppet
+Array[Optional[
+    Struct[{
+        filter     => String[1],
+        parameters => Optional[
+          Array[
+            Hash[
+              Pattern[/\A[A-Z]/],
+              Variant[String[1],Integer],
+            ]
+          ]
+        ]
+    }]
+]]
+```
+
+### <a name="Libvirt--Net--Bandwith"></a>`Libvirt::Net::Bandwith`
+
+network metadata
+
+Alias of
+
+```puppet
+Struct[{
+    inbound  => Optional[Struct[{
+          average => Optional[Integer],
+          peak    => Optional[Integer],
+          burst   => Optional[Integer],
+          floot   => Optional[Integer],
+    }]],
+    outbound => Optional[Struct[{
+          average => Optional[Integer],
+          peak    => Optional[Integer],
+          burst   => Optional[Integer],
+    }]],
+}]
+```
+
+### <a name="Libvirt--Net--Bridge"></a>`Libvirt::Net::Bridge`
+
+network bridge
+
+Alias of
+
+```puppet
+Variant[String[1], Struct[{
+      name            => String[1],
+      stp             => Optional[Enum['on','off']],
+      delay           => Optional[Integer],
+      macTableManager => Optional[Enum['kernel','libvirt']],
+      zone            => Optional[String[1]],
+  }]]
+```
+
+### <a name="Libvirt--Net--Dns"></a>`Libvirt::Net::Dns`
+
+network dns
+
+Alias of
+
+```puppet
+Struct[{
+    enable => Optional[Enum['yes','no']],
+    forwardPlainNames => Optional[Enum['yes','no']],
+    forwarder => Optional[Array[Struct[{
+            addr => Optional[String[1]],
+            domain => Optional[String[1]],
+    }]]],
+    txt => Optional[Array[Struct[{
+            name => Optional[String[1]],
+            value => Optional[String[1]],
+    }]]],
+    srv => Optional[Array[Struct[{
+            service => String[1],
+            protocol => String[1],
+            domain => Optional[String[1]],
+            target => Optional[String[1]],
+            port => Optional[Integer],
+            priority => Optional[Integer],
+            weight => Optional[Integer],
+    }]]],
+    host => Optional[Array[Struct[{
+            ip => String[1],
+            hostname => Array[String[1]],
+    }]]],
+}]
+```
+
+### <a name="Libvirt--Net--Dnsmasq_options"></a>`Libvirt::Net::Dnsmasq_options`
+
+network dnsmasq_options
+
+Alias of
+
+```puppet
+Array[Struct[{
+      'dnsmasq:option' => Struct[{
+          value => String[1],
+      }],
+}]]
+```
+
+### <a name="Libvirt--Net--Domain"></a>`Libvirt::Net::Domain`
+
+network domain
+
+Alias of
+
+```puppet
+Struct[{
+    name                => String[1],
+    localOnly           => Optional[Enum['yes','no']],
+}]
+```
+
+### <a name="Libvirt--Net--Forward"></a>`Libvirt::Net::Forward`
+
+network forward
+
+Alias of
+
+```puppet
+Struct[{
+    mode => Enum['nat','route','open','bridge','private','vepa','passthrough','hostdev'],
+    managed => Optional[Enum['yes','no']],
+    dev  => Optional[String[1]],
+    nat  => Optional[Struct[{
+          addresses => Optional[Array[Struct[{
+                  start => String[1],
+                  end   => String[1],
+          }]]],
+          port => Optional[Struct[{
+                start => Integer,
+                end   => Integer,
+          }]],
+          ipv6 => Optional[Enum['yes']],
+    }]],
+    interfaces => Optional[Array[Struct[{
+            dev => String[1],
+    }]]],
+    pf => Optional[Struct[{
+          dev => String[1],
+    }]],
+    driver    => Optional[Struct[{
+          name => Enum['vfio','kvm'],
+    }]],
+    address => Optional[Array[Struct[{
+            type     => Optional[String[1]],
+            domain   => Optional[String[1]],
+            bus      => Optional[String[1]],
+            slot     => Optional[String[1]],
+            function => Optional[String[1]],
+    }]]],
+}]
+```
+
+### <a name="Libvirt--Net--IP"></a>`Libvirt::Net::IP`
+
+network ip:
+The IP element sets up NAT'ing and an optional DHCP server local to the host.
+
+Alias of
+
+```puppet
+Struct[{
+    address => Optional[String[1]],
+    netmask => Optional[String[1]],
+    prefix => Optional[String[1]],
+    family => Optional[String[1]],
+    localPtr => Optional[String[1]],
+    tftp    => Optional[Array[Struct[{
+            root => String[1],
+    }]]],
+    dhcp => Optional[Struct[{
+          range => Optional[Array[Struct[{
+                  start => String[1],
+                  end   => String[1],
+                  lease => Optional[Array[Struct[{
+                          expiry => Integer,
+                          unit   => Optional[Enum['seconds', 'minutes', 'hours']],
+                  }]]],
+                  unit   => Optional[String[1]],
+          }]]],
+          host => Optional[Array[Struct[{
+                  mac => Optional[String[1]],
+                  id => Optional[String[1]],
+                  name => Optional[String[1]],
+                  ip => String[1],
+                  lease => Optional[Array[Struct[{
+                          expiry => Integer,
+                          unit   => Optional[Enum['seconds', 'minutes', 'hours']],
+                  }]]],
+          }]]],
+          bootp => Optional[Struct[{
+                file => Optional[String[1]],
+                server => Optional[String[1]],
+          }]],
+    }]],
+}]
+```
+
+### <a name="Libvirt--Net--Metadata"></a>`Libvirt::Net::Metadata`
+
+network metadata
+
+Alias of
+
+```puppet
+Struct[{
+    ipv6                => Optional[Enum['yes','no']],
+    trustGuestRxFilters => Optional[Enum['yes','no']],
+}]
+```
+
+### <a name="Libvirt--Net--Port"></a>`Libvirt::Net::Port`
+
+network port
+
+Alias of
+
+```puppet
+Struct[{
+    isolated => Optional[Enum['yes', 'no']],
+}]
+```
+
+### <a name="Libvirt--Net--Portgroup"></a>`Libvirt::Net::Portgroup`
+
+network portgroup
+
+Alias of
+
+```puppet
+Struct[{
+    name                => String[1],
+    trunk               => Optional[Boolean],                             # for simple template only
+    vlan_tag            => Optional[Variant[String[1],Array[String[1]]]], # for simple template only
+    vlan                => Optional[Libvirt::Net::Vlan],
+    bandwith            => Optional[Libvirt::Net::Bandwith],
+    virtualport         => Optional[Libvirt::Net::Virtualport],
+    'default'           => Optional[Enum['yes']],
+    trustGuestRxFilters => Optional[Enum['yes', 'no']],
+}]
+```
+
+### <a name="Libvirt--Net--Route"></a>`Libvirt::Net::Route`
+
+network route:
+static routes
+
+Alias of
+
+```puppet
+Struct[{
+    family => Optional[Enum['ipv6']],
+    address => String[1],
+    gateway => String[1],
+    netmask => Optional[String[1]],
+    prefix => Optional[String[1]],
+    metric => Optional[Integer],
+}]
+```
+
+### <a name="Libvirt--Net--Virtualport"></a>`Libvirt::Net::Virtualport`
+
+network virtualport
+
+Alias of
+
+```puppet
+Struct[{
+    type => Optional[Enum['802.1Qbg', 'openvswitch']],
+    parameters => Optional[Array[Struct[{
+            interfaceid => Optional[String[1]],
+            managerid => Optional[Integer],
+            typeid    => Optional[Integer],
+            typeidversion => Optional[Integer],
+            instanceid => Optional[String[1]],
+            profileid => Optional[String[1]],
+    }]]],
+}]
+```
+
+### <a name="Libvirt--Net--Vlan"></a>`Libvirt::Net::Vlan`
+
+network vlan
+
+Alias of
+
+```puppet
+Struct[{
+    trunk => Optional[Enum['yes']],
+    tag => Array[Struct[{
+          id         => Integer,
+          nativeMode => Optional[Enum['untagged', 'tagged']],
+    }]],
+}]
+```
+
+### <a name="Libvirt--Nwfilter--Chain"></a>`Libvirt::Nwfilter::Chain`
+
+a nwfilter chain
+
+Alias of `Variant[Enum['root','mac','stp','vlan','arp','rarp','ipv4','ipv6'], Pattern[/\Amac-.+\Z/,/\Astp-.+\Z/,/\Avlan-.+\Z/,/\Ar*arp-.+\Z/,/\Aipv[46]-.+\Z/]]`
+
+### <a name="Libvirt--Nwfilter--Param"></a>`Libvirt::Nwfilter::Param`
+
+a parameter for a nwfilter
+
+Alias of `Pattern[/\$[A-Z]+/]`
+
+### <a name="Libvirt--Nwfilter--Priority"></a>`Libvirt::Nwfilter::Priority`
+
+a nwfilter priority
+
+Alias of `Integer[-1000, 1000]`
+
+### <a name="Libvirt--Nwfilter--Protocol--Arp_rarp"></a>`Libvirt::Nwfilter::Protocol::Arp_rarp`
+
+nwfilter rule protocol of ARP/RARP
+
+Alias of
+
+```puppet
+Struct[{
+    id            => Enum['arp', 'rarp'],
+    match         => Optional[Enum['no','yes']],
+    srcmacaddr    => Optional[String[1]],
+    srcmacmask    => Optional[String[1]],
+    dstmacaddr    => Optional[String[1]],
+    dstmacmask    => Optional[String[1]],
+    hwtype        => Optional[Integer[0,256]],
+    protocoltype  => Optional[Integer[0,256]],
+    opcode        => Optional[Variant[
+        Integer[0,256],
+        Enum['Request',
+          'Reply',
+          'Request_Reverse',
+          'Reply_Reverse',
+          'DRARP_Request',
+          'DRARP_Reply',
+          'DRARP_Error',
+          'InARP_Request',
+        'ARP_NAK'],
+    ]],
+    arpsrcmacaddr => Optional[String[1]],
+    arpdstmacaddr => Optional[String[1]],
+    arpsrcipaddr  => Optional[String[1]],
+    arpsrcipmask  => Optional[String[1]],
+    arpdstipaddr  => Optional[String[1]],
+    arpdstipmask  => Optional[String[1]],
+    gratuitous    => Optional[Boolean],
+    comment       => Optional[String[1,256]],
+    connlimit-above => Optional[Integer],
+}]
+```
+
+### <a name="Libvirt--Nwfilter--Protocol--Espipv6_ahipv6_udpliteipv6_allipv6"></a>`Libvirt::Nwfilter::Protocol::Espipv6_ahipv6_udpliteipv6_allipv6`
+
+nwfilter rule protocol of ESP, AH, UDPLITE, ALL over IPv6
+
+Alias of
+
+```puppet
+Struct[{
+    id         => Enum['esp-ipv6', 'ah-ipv6', 'udplite-ipv6', 'all-ipv6'],
+    match      => Optional[Enum['no','yes']],
+    srcmacaddr => Optional[String[1]],
+    srcipaddr  => Optional[String[1]],
+    srcipmask  => Optional[String[1]],
+    dstipaddr  => Optional[String[1]],
+    dstipmask  => Optional[String[1]],
+    srcipfrom  => Optional[String[1]],
+    srcipto    => Optional[String[1]],
+    dstipfrom  => Optional[String[1]],
+    dstipto    => Optional[String[1]],
+    dscp       => Optional[Integer[0,256]],
+    comment    => Optional[String[1,256]],
+    state      => Optional[String[1]],
+    ipset      => Optional[String[1]],
+    ipsetflags => Optional[String[1]],
+    connlimit-above => Optional[Integer],
+}]
+```
+
+### <a name="Libvirt--Nwfilter--Protocol--Icmp"></a>`Libvirt::Nwfilter::Protocol::Icmp`
+
+nwfilter rule protocol of icmp
+
+Alias of
+
+```puppet
+Struct[{
+    id         => Enum['icmp'],
+    match      => Optional[Enum['no','yes']],
+    srcmacaddr => Optional[String[1]],
+    srcmacmask => Optional[Stdlib::MAC],
+    dstmacaddr => Optional[String[1]],
+    dstmacmask => Optional[Stdlib::MAC],
+    srcipaddr  => Optional[String[1]],
+    srcipmask  => Optional[String[1]],
+    dstipaddr  => Optional[String[1]],
+    dstipmask  => Optional[String[1]],
+    srcipfrom  => Optional[String[1]],
+    srcipto    => Optional[String[1]],
+    dstipfrom  => Optional[String[1]],
+    dstipto    => Optional[String[1]],
+    type       => Optional[Integer[0,65535]],
+    code       => Optional[Integer[0,65535]],
+    dscp       => Optional[Integer[0,256]],
+    comment    => Optional[String[1,256]],
+    state      => Optional[String[1]],
+    ipset      => Optional[String[1]],
+    ipsetflags => Optional[String[1]],
+    connlimit-above => Optional[Integer],
+}]
+```
+
+### <a name="Libvirt--Nwfilter--Protocol--Icmpv6"></a>`Libvirt::Nwfilter::Protocol::Icmpv6`
+
+nwfilter rule protocol of icmpv6
+
+Alias of
+
+```puppet
+Struct[{
+    id         => Enum['icmpv6'],
+    match      => Optional[Enum['no','yes']],
+    srcmacaddr => Optional[String[1]],
+    srcipaddr  => Optional[String[1]],
+    srcipmask  => Optional[String[1]],
+    dstipaddr  => Optional[String[1]],
+    dstipmask  => Optional[String[1]],
+    srcipfrom  => Optional[String[1]],
+    srcipto    => Optional[String[1]],
+    dstipfrom  => Optional[String[1]],
+    dstipto    => Optional[String[1]],
+    type       => Optional[Integer[0,65535]],
+    code       => Optional[Integer[0,65535]],
+    dscp       => Optional[Integer[0,256]],
+    comment    => Optional[String[1,256]],
+    state      => Optional[String[1]],
+    ipset      => Optional[String[1]],
+    ipsetflags => Optional[String[1]],
+    connlimit-above => Optional[Integer],
+}]
+```
+
+### <a name="Libvirt--Nwfilter--Protocol--Igmp_esp_ah_udplite_all"></a>`Libvirt::Nwfilter::Protocol::Igmp_esp_ah_udplite_all`
+
+nwfilter rule protocol of IGMP, ESP, AH, UDPLITE, ALL
+
+Alias of
+
+```puppet
+Struct[{
+    id         => Enum['igmp', 'esp', 'ah', 'udplite', 'all'],
+    match      => Optional[Enum['no','yes']],
+    srcmacaddr => Optional[String[1]],
+    srcmacmask => Optional[String[1]],
+    dstmacaddr => Optional[String[1]],
+    dstmacmask => Optional[String[1]],
+    srcipaddr  => Optional[String[1]],
+    srcipmask  => Optional[String[1]],
+    dstipaddr  => Optional[String[1]],
+    dstipmask  => Optional[String[1]],
+    srcipfrom  => Optional[String[1]],
+    srcipto    => Optional[String[1]],
+    dstipfrom  => Optional[String[1]],
+    dstipto    => Optional[String[1]],
+    dscp       => Optional[Integer[0,256]],
+    comment    => Optional[String[1,256]],
+    state      => Optional[String[1]],
+    ipset      => Optional[String[1]],
+    ipsetflags => Optional[String[1]],
+    connlimit-above => Optional[Integer],
+}]
+```
+
+### <a name="Libvirt--Nwfilter--Protocol--Ipv4"></a>`Libvirt::Nwfilter::Protocol::Ipv4`
+
+nwfilter rule protocol of ipv4
+
+Alias of
+
+```puppet
+Struct[{
+    id           => Enum['ip'],
+    match        => Optional[Enum['no','yes']],
+    srcmacaddr   => Optional[String[1]],
+    srcmacmask   => Optional[String[1]],
+    dstmacaddr   => Optional[String[1]],
+    dstmacmask   => Optional[String[1]],
+    srcipaddr    => Optional[String[1]],
+    srcipmask    => Optional[String[1]],
+    dstipaddr    => Optional[String[1]],
+    dstipmask    => Optional[String[1]],
+    protocol     => Optional[Variant[
+        Integer[0,256],
+        Enum['tcp', 'udp', 'udplite', 'esp', 'ah', 'icmp', 'igmp', 'sctp'],
+    ]],
+    srcportstart    => Variant[Integer[0,65535],Libvirt::Nwfilter::Param, Undef],
+    srcportend      => Variant[Integer[0,65535],Libvirt::Nwfilter::Param, Undef],
+    dstportstart    => Variant[Integer[0,65535],Libvirt::Nwfilter::Param, Undef],
+    dstportend      => Variant[Integer[0,65535],Libvirt::Nwfilter::Param, Undef],
+    dscp            => Variant[Integer[0,256],Libvirt::Nwfilter::Param, Undef],
+    protocolid      => Variant[Integer[0,65535],Libvirt::Nwfilter::Param, Undef],
+    comment         => Optional[String[1,256]],
+    connlimit-above => Variant[Integer,Libvirt::Nwfilter::Param, Undef],
+}]
+```
+
+### <a name="Libvirt--Nwfilter--Protocol--Ipv6"></a>`Libvirt::Nwfilter::Protocol::Ipv6`
+
+nwfilter rule protocol of ipv6
+
+Alias of
+
+```puppet
+Struct[{
+    id              => Enum['ipv6'],
+    match           => Optional[Enum['no','yes']],
+    srcmacaddr      => Optional[String[1]],
+    srcmacmask      => Optional[String[1]],
+    dstmacaddr      => Optional[String[1]],
+    dstmacmask      => Optional[String[1]],
+    srcipaddr       => Optional[String[1]],
+    srcipmask       => Optional[String[1]],
+    dstipaddr       => Optional[String[1]],
+    dstipmask       => Optional[String[1]],
+    protocol        => Optional[Variant[
+        Integer[0,256],
+        Enum['tcp', 'udp', 'udplite', 'esp', 'ah', 'icmpv6', 'sctp'],
+    ]],
+    srcportstart    => Variant[Integer[0,65535],Libvirt::Nwfilter::Param, Undef],
+    srcportend      => Variant[Integer[0,65535],Libvirt::Nwfilter::Param, Undef],
+    dstportstart    => Variant[Integer[0,65535],Libvirt::Nwfilter::Param, Undef],
+    dstportend      => Variant[Integer[0,65535],Libvirt::Nwfilter::Param, Undef],
+    type            => Variant[Integer[0,246],Libvirt::Nwfilter::Param, Undef],
+    typeend         => Variant[Integer[0,246],Libvirt::Nwfilter::Param, Undef],
+    code            => Variant[Integer[0,246],Libvirt::Nwfilter::Param, Undef],
+    comment         => Optional[String[1,256]],
+    connlimit-above => Optional[Integer],
+}]
+```
+
+### <a name="Libvirt--Nwfilter--Protocol--Mac"></a>`Libvirt::Nwfilter::Protocol::Mac`
+
+nwfilter rule protocol of mac
+
+Alias of
+
+```puppet
+Struct[{
+    id         => Enum['mac'],
+    match      => Optional[Enum['no','yes']],
+    srcmacaddr => Optional[String[1]],
+    srcmacmask => Optional[String[1]],
+    dstmacaddr => Optional[String[1]],
+    dstmacmask => Optional[String[1]],
+    protocolid => Optional[Variant[
+        Enum['arp', 'rarp', 'ipv4', 'ipv6'],
+        Pattern[/\A0x[0-9]{1,4}\Z/],
+    ]],
+    comment    => Optional[String[1,256]],
+    connlimit-above => Optional[Integer],
+}]
+```
+
+### <a name="Libvirt--Nwfilter--Protocol--Stp"></a>`Libvirt::Nwfilter::Protocol::Stp`
+
+nwfilter rule protocol of stp
+
+Alias of
+
+```puppet
+Struct[{
+    id                  => Enum['stp'],
+    match               => Optional[Enum['no','yes']],
+    srcmacaddr          => Optional[String[1]],
+    srcmacmask          => Optional[String[1]],
+    type                => Optional[Integer[0,256]],
+    flags               => Optional[Integer[0,256]],
+    root-priority       => Optional[Integer[0,65535]],
+    root-priority-hi    => Optional[Integer[0,65535]],
+    root-address        => Optional[String[1]],
+    root-address-mask   => Optional[String[1]],
+    root-cost           => Optional[Integer[0,2147483647]],
+    root-cost-hi        => Optional[Integer[0,2147483647]],
+    sender-priority     => Optional[Integer[0,65535]],
+    sender-priority-hi  => Optional[Integer[0,65535]],
+    sender-address      => Optional[String[1]],
+    sender-address-mask => Optional[String[1]],
+    port                => Optional[Integer[0,65535]],
+    port-hi             => Optional[Integer[0,65535]],
+    msg-age             => Optional[Integer[0,65535]],
+    msg-age-hi          => Optional[Integer[0,65535]],
+    max-age             => Optional[Integer[0,65535]],
+    max-age-hi          => Optional[Integer[0,65535]],
+    hello-time          => Optional[Integer[0,65535]],
+    hello-time-hi       => Optional[Integer[0,65535]],
+    forward-delay       => Optional[Integer[0,65535]],
+    forward-delay-hi    => Optional[Integer[0,65535]],
+    comment             => Optional[String[1,256]],
+    connlimit-above => Optional[Integer],
+}]
+```
+
+### <a name="Libvirt--Nwfilter--Protocol--Tcp_udp_sctp"></a>`Libvirt::Nwfilter::Protocol::Tcp_udp_sctp`
+
+nwfilter rule protocol of TCP/UDP/SCTP
+
+Alias of
+
+```puppet
+Struct[{
+    id           => Enum['tcp', 'udp', 'sctp'],
+    match        => Optional[Enum['no','yes']],
+    srcmacaddr   => Optional[String[1]],
+    srcipaddr    => Optional[String[1]],
+    srcipmask    => Optional[String[1]],
+    dstipaddr    => Optional[String[1]],
+    dstipmask    => Optional[String[1]],
+    srcipfrom    => Optional[String[1]],
+    srcipto      => Optional[String[1]],
+    srcportstart => Optional[Integer[0,65535]],
+    srcportend   => Optional[Integer[0,65535]],
+    dstportstart => Optional[Integer[0,65535]],
+    dstportend   => Optional[Integer[0,65535]],
+    dscp         => Optional[Integer[0,256]],
+    comment      => Optional[String[1,256]],
+    state        => Optional[String[1]],
+    flags        => Optional[String[1]],
+    ipset        => Optional[String[1]],
+    ipsetflags   => Optional[String[1]],
+    connlimit-above => Optional[Integer],
+}]
+```
+
+### <a name="Libvirt--Nwfilter--Protocol--Tcpipv6_udpipv6_sctpipv6"></a>`Libvirt::Nwfilter::Protocol::Tcpipv6_udpipv6_sctpipv6`
+
+nwfilter rule protocol of TCP/UDP/SCTP over IPV6
+
+Alias of
+
+```puppet
+Struct[{
+    id           => Enum['tcp-ipv6', 'udp-ipv6', 'sctp-ipv6'],
+    match        => Optional[Enum['no','yes']],
+    srcmacaddr   => Optional[String[1]],
+    srcipaddr    => Optional[String[1]],
+    srcipmask    => Optional[String[1]],
+    dstipaddr    => Optional[String[1]],
+    dstipmask    => Optional[String[1]],
+    srcipfrom    => Optional[String[1]],
+    srcipto      => Optional[String[1]],
+    dstipfrom    => Optional[String[1]],
+    dstipto      => Optional[String[1]],
+    srcportstart => Optional[Integer[0,65535]],
+    srcportend   => Optional[Integer[0,65535]],
+    dstportstart => Optional[Integer[0,65535]],
+    dstportend   => Optional[Integer[0,65535]],
+    dscp         => Optional[Integer[0,256]],
+    comment      => Optional[String[1,256]],
+    state        => Optional[String[1]],
+    flags        => Optional[String[1]],
+    ipset        => Optional[String[1]],
+    ipsetflags   => Optional[String[1]],
+    connlimit-above => Optional[Integer],
+}]
+```
+
+### <a name="Libvirt--Nwfilter--Protocol--Vlan"></a>`Libvirt::Nwfilter::Protocol::Vlan`
+
+nwfilter rule protocol of VLAN
+
+Alias of
+
+```puppet
+Struct[{
+    id             => Enum['vlan'],
+    match          => Optional[Enum['no','yes']],
+    srcmacaddr     => Optional[String[1]],
+    srcmacmask     => Optional[String[1]],
+    dstmacaddr     => Optional[String[1]],
+    dstmacmask     => Optional[String[1]],
+    vlanid         => Optional[Integer[0,4095]],
+    encap_protocol => Optional[Variant[
+        Enum['arp','ipv4','ipv6'],
+        Integer[0,65535]
+    ]],
+    comment        => Optional[String[1,256]],
+    connlimit-above => Optional[Integer],
+}]
+```
+
+### <a name="Libvirt--Nwfilter--Rule"></a>`Libvirt::Nwfilter::Rule`
+
+a single nwfilter rule
+
+Alias of
+
+```puppet
+Struct[{
+    action     => Enum['drop','reject','accept','return','continue'],
+    direction  => Enum['in','out','inout'],
+    priority   => Optional[Libvirt::Nwfilter::Priority],
+    statematch => Optional[Enum['0','false','1','true']],
+    protocols  => Optional[Array[Optional[Variant[
+            Libvirt::Nwfilter::Protocol::Mac,
+            Libvirt::Nwfilter::Protocol::Vlan,
+            Libvirt::Nwfilter::Protocol::Stp,
+            Libvirt::Nwfilter::Protocol::Arp_rarp,
+            Libvirt::Nwfilter::Protocol::Ipv4,
+            Libvirt::Nwfilter::Protocol::Ipv6,
+            Libvirt::Nwfilter::Protocol::Tcp_udp_sctp,
+            Libvirt::Nwfilter::Protocol::Icmp,
+            Libvirt::Nwfilter::Protocol::Igmp_esp_ah_udplite_all,
+            Libvirt::Nwfilter::Protocol::Tcpipv6_udpipv6_sctpipv6,
+            Libvirt::Nwfilter::Protocol::Icmpv6,
+            Libvirt::Nwfilter::Protocol::Espipv6_ahipv6_udpliteipv6_allipv6,
+    ]]]]
+}]
+```
+
+### <a name="Libvirt--Nwrules"></a>`Libvirt::Nwrules`
+
+An array of Nwfilter rules
+
+Alias of `Array[Optional[Libvirt::Nwfilter::Rule]]`
+
+### <a name="Libvirt--Profiles--Devices"></a>`Libvirt::Profiles::Devices`
+
+A device of a Domain
+
+Alias of
+
+```puppet
+Hash[String[1], Variant[
+    Struct[{
+        'profileconfig' => Optional[Struct[{ 'base' => Optional[String[1]] }]],
+    }],
+    Libvirt::Domain::Device,
+  ]]
+```
 
