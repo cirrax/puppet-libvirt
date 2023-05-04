@@ -2256,7 +2256,7 @@ Struct[{
           }]],
           ipv6 => Optional[Enum['yes']],
     }]],
-    interfaces => Optional[Array[Struct[{
+    interface => Optional[Array[Struct[{
             dev => String[1],
     }]]],
     pf => Optional[Struct[{
