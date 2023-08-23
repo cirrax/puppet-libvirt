@@ -2,10 +2,10 @@
        String $boot,
     | -%>
     <interface type='network'>
-<%- if $iface.has_key('mac') { -%>
+<%- if 'mac' in $iface { -%>
       <mac address='<%= $iface['mac'] %>'/>
 <%- } -%>
-<%- if $iface.has_key('filter') { -%>
+<%- if 'filter' in $iface { -%>
    <%- if $iface['filter'] =~ String { -%>
       <filterref filter='<%= $iface['filter'] %>'/>
    <%- } else { -%>
@@ -22,9 +22,9 @@
       </filterref>
    <%- } -%>
 <%- } -%>
-      <source network='<%= $iface['network'] %>'<% if $iface.has_key('portgroup') { %> portgroup='<%= $iface['portgroup'] %>'<% } %>/>
-      <model type='<% if $iface.has_key('type') { %><%= $iface['type'] %><% }else{ %>virtio<% } %>'/>
-<%- if $boot == 'per-device' and $iface.has_key('boot_order') { -%>
+      <source network='<%= $iface['network'] %>'<% if 'portgroup' in $iface { %> portgroup='<%= $iface['portgroup'] %>'<% } %>/>
+      <model type='<% if 'type' in $iface { %><%= $iface['type'] %><% }else{ %>virtio<% } %>'/>
+<%- if $boot == 'per-device' and 'boot_order' in $iface { -%>
       <boot order='<%= $iface['boot_order'] %>'/>
 <%- } -%>
     </interface>

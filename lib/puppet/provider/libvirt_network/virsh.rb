@@ -39,8 +39,8 @@ Puppet::Type.type(:libvirt_network).provide(:virsh) do
       new(
         ensure: :present,
         name: Regexp.last_match(1),
-        active: Regexp.last_match(2) == 'active' ? :true : :false,
-        autostart: Regexp.last_match(3) == 'yes' ? :true : :false,
+        active: (Regexp.last_match(2) == 'active') ? :true : :false,
+        autostart: (Regexp.last_match(3) == 'yes') ? :true : :false,
         uuid: virsh('--quiet', '--readonly', 'net-uuid', '--network', Regexp.last_match(1)),
       )
     end
