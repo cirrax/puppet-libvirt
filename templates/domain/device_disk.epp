@@ -6,12 +6,12 @@
     <disk type='<%= $disk['type'] %>' device='<%= $disk['device'] %>'>
       <source <% $disk_src_attrs[$disk['type']].each | $attr | { -%><%= $attr %>='<%= $disk['source'][$attr] %>' <% } -%>/>
       <target dev='vd<%= $ind %>' bus='<%= $disk.dig('bus').lest || { 'virtio' } %>'/>
-    <%- if $disk.has_key('driver') { -%>
+    <%- if 'driver' in $disk { -%>
       <driver <% $disk['driver'].each |$attr| { -%><%= $attr[0] %>='<%= $attr[1] %>' <% } -%>/>
     <%- } else { -%>
       <driver name='qemu' type='raw' io='native' cache='none' />
     <%- } -%>
-    <%- if $boot == 'per-device' and $disk.has_key('boot_order') { -%>
+    <%- if $boot == 'per-device' and 'boot_order' in $disk { -%>
       <boot order='<%= $disk['boot_order'] %>'/>
     <%- } -%>
     </disk>

@@ -6,8 +6,8 @@
       <%- %><%= epp('libvirt/domain/generic.epp', { 'elements'=>{$key=>$ele}}) -%>
     <%- } -%>
   <%- } elsif $element =~ Hash { -%>
-    <%- if $element.has_key('values') { -%>
-      <%- if $element.has_key('attrs') { -%>
+    <%- if 'values' in  $element { -%>
+      <%- if 'attrs' in $element { -%>
         <<%= $key -%>
         <%- if $element['values'] =~ Hash { -%>
           <%- $element['attrs'].each | $attrname, $attr | { %> <%= $attrname %>='<%= $attr %>'<%- } -%>>
@@ -28,7 +28,7 @@
         <%- } -%>
       <%- } -%>
     <%- } else { -%>
-      <%- if $element.has_key('attrs') { -%>
+      <%- if 'attrs' in $element { -%>
         <<%= $key -%>
         <%- $element['attrs'].each | $attrname, $attr | { %> <%= $attrname %>='<%= $attr %>'<% } -%>/>
       <%- } else { -%>
