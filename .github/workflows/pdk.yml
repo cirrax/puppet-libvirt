@@ -2,6 +2,7 @@ name: PDK
 
 on:
   - 'push'
+  - 'pull_request'
 
 jobs:
   validate:
