@@ -42,8 +42,8 @@ Puppet::Type.type(:libvirt_domain).provide(:virsh) do
       new(
         ensure: :present,
         name: Regexp.last_match(2),
-        active: Regexp.last_match(1) == '-' ? :false : :true, # only active domains have a number
-        autostart: Regexp.last_match(4) == 'autostart' ? :true : :false,
+        active: (Regexp.last_match(1) == '-') ? :false : :true, # only active domains have a number
+        autostart: (Regexp.last_match(4) == 'autostart') ? :true : :false,
       )
     end
   end
