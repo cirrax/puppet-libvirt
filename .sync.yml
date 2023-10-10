@@ -12,4 +12,6 @@ Gemfile:
     ':development':
       - gem: 'puppet-blacksmith'
       - gem: 'github_changelog_generator'
-
+      - gem: 'rexml'
+        version: '~> 3.2'
+        condition: "Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('3')"

@@ -37,6 +37,7 @@ group :development do
   gem "rb-readline", '= 0.5.5',                  require: false, platforms: [:mswin, :mingw, :x64_mingw]
   gem "puppet-blacksmith",                       require: false
   gem "github_changelog_generator",              require: false
+  gem "rexml", '~> 3.2',                         require: false if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('3')
 end
 group :system_tests do
   gem "puppet_litmus", '~> 1.0', require: false, platforms: [:ruby, :x64_mingw]

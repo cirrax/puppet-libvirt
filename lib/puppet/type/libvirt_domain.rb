@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'puppet/parameter/boolean'
+
 Puppet::Type.newtype(:libvirt_domain) do
   @doc = 'ensures a persistent domain (vm) (transient domains are ignored)
          '
