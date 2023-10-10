@@ -17,6 +17,13 @@
 5. [Contributing](#contributing)
 
 ## Upgrade warnings:
+
+Upgrading to puppet 8 comes with Ruby 3, which doesn't have the `rexml` gem bundled.
+It should be [installed on the puppetserver](https://www.puppet.com/docs/puppet/7/server/gems.html#installing-and-removing-gems).
+```
+sudo puppetserver gem install rexml
+```
+
 Upgrade to version 5.x.x introduced types/providers for network, nwfilter and domains 
 replacing the execs used before version 5.0.0. To compare the XML's generated with puppet and
 the actual running XML's generated with virsh they are sorted which leads to display lots of 
