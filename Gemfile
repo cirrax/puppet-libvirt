@@ -57,6 +57,7 @@ gems['puppet'] = location_for(puppet_version)
 gems['facter'] = location_for(facter_version) if facter_version
 gems['hiera'] = location_for(hiera_version) if hiera_version
 if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new("3")
+  # rexml is not a bundled gem in ruby 3
   # https://stackoverflow.com/questions/65479863/rails-6-1-ruby-3-0-0-tests-error-as-they-cannot-load-rexml
   gems['rexml'] = '~> 3.2'
 endif
