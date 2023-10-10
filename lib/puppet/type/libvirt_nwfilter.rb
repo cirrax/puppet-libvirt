@@ -2,7 +2,6 @@
 
 require 'puppet/parameter/boolean'
 
-
 Puppet::Type.newtype(:libvirt_nwfilter) do
   @doc = 'ensures a nwfilter
          '
