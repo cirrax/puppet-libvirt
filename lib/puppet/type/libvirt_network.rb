@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require 'puppet/parameter/boolean'
+
+
 Puppet::Type.newtype(:libvirt_network) do
   @doc = 'ensures a persistent network (transient networks are ignored)
          '
