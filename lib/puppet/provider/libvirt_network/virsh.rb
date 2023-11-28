@@ -93,8 +93,8 @@ Puppet::Type.type(:libvirt_network).provide(:virsh) do
     xml.root.elements.delete('//mac')
     # remove the connections
     xml.root.attributes.delete('connections')
-    xml.root.elements.each("//forward/interface[@connections]") do |el|
-      el.attributes.delete('connections');
+    xml.root.elements.each('//forward/interface[@connections]') do |el|
+      el.attributes.delete('connections')
     end
     formatter = REXML::Formatters::Pretty.new(2)
     formatter.compact = true
