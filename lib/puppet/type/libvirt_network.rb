@@ -48,17 +48,17 @@ Puppet::Type.newtype(:libvirt_network) do
 
     def change_to_s(current, desire)
       if @resource[:show_diff]
-        current_exp = Tempfile.new("current", "/tmp").open
+        current_exp = Tempfile.new('current', '/tmp').open
         current_exp.write(current.to_s)
         current_exp.close
         current_path = current_exp.path
-        desire_exp = Tempfile.new("desire", "/tmp").open
+        desire_exp = Tempfile.new('desire', '/tmp').open
         desire_exp.write(desire.to_s)
         desire_exp.close
         desire_path = desire_exp.path
         system "diff -u #{current_path} #{desire_path}"
       else
-        '{md5}' + Digest::MD5.hexdigest(current.to_s) + " to: " + '{md5}' + Digest::MD5.hexdigest(desire.to_s)
+        '{md5}' + Digest::MD5.hexdigest(current.to_s) + ' to: ' + '{md5}' + Digest::MD5.hexdigest(desire.to_s)
       end
     end
 
