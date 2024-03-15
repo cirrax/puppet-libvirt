@@ -96,7 +96,16 @@ Puppet::Type.type(:libvirt_network).provide(:virsh) do
     formatter = REXML::Formatters::Pretty.new(2)
     formatter.compact = true
     output = ''.dup
-    formatter.write(recursive_sort(xml.root), output)
+
+    xml = recursive_sort(xml.root)
+    sorted_portgroups = xml.root.get_elements('//portgroup').sort_by { |obj| obj.attributes['name'] }
+
+    REXML::XPath.match(xml, '//portgroup').each(&:remove)
+    sorted_portgroups.each do |pg|
+      xml.root.add_element pg
+    end
+
+    formatter.write(xml.root, output)
     output
   end
 
