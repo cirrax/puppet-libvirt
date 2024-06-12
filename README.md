@@ -125,7 +125,7 @@ Define a domain (VM):
       devices_profile => 'default',
       dom_profile     => 'default',
       boot            => 'hd',
-      domconf         => { memory: { values => '2048', attrs => { unit => 'MiB' }}},
+      domconf         => { memory => { values => '2048', attrs => { unit => 'MiB' }}},
       disks           => [{'type' => 'block',
                            'device' => 'disk',
                            'source' => {'dev' => '/dev/vm-pool/my-domain.img'},
