@@ -37,7 +37,6 @@ group :development do
   gem "rexml", '>= 3.0.0', '< 3.2.7',            require: false
   gem "puppet-blacksmith",                       require: false
   gem "github_changelog_generator",              require: false
-  gem "rexml", '~> 3.2',                         require: false if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('3')
 end
 group :development, :release_prep do
   gem "puppet-strings", '~> 4.0',         require: false
