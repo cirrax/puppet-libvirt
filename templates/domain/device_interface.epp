@@ -1,7 +1,11 @@
 <%- |  Libvirt::Domain::Interface   $iface,
        String $boot,
     | -%>
+<%- if $iface['bridge_network'] and $iface['bridge_network'] == true { -%>
+    <interface type='bridge'>
+<%- } else { -%>
     <interface type='network'>
+<%- } -%>
 <%- if 'mac' in $iface { -%>
       <mac address='<%= $iface['mac'] %>'/>
 <%- } -%>
@@ -22,7 +26,11 @@
       </filterref>
    <%- } -%>
 <%- } -%>
+    <%- if $iface['bridge_network'] and $iface['bridge_network'] == true { -%>
+      <source bridge='<%= $iface['network'] %>'/>
+    <%- } else { -%>
       <source network='<%= $iface['network'] %>'<% if 'portgroup' in $iface { %> portgroup='<%= $iface['portgroup'] %>'<% } %>/>
+    <%- } -%>
       <model type='<% if 'type' in $iface { %><%= $iface['type'] %><% }else{ %>virtio<% } %>'/>
 <%- if $boot == 'per-device' and 'boot_order' in $iface { -%>
       <boot order='<%= $iface['boot_order'] %>'/>

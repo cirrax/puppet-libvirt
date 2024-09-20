@@ -14,5 +14,6 @@ type Libvirt::Domain::Interface = Struct[{
             ]],
         }],
     ]],
-    boot_order => Optional[Integer],
+    boot_order     => Optional[Integer],
+    bridge_network => Optional[Boolean],
 }]
