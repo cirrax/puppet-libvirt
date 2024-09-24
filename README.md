@@ -24,9 +24,9 @@ It should be [installed on the puppetserver](https://www.puppet.com/docs/puppet/
 sudo puppetserver gem install rexml
 ```
 
-Upgrade to version 5.x.x introduced types/providers for network, nwfilter and domains 
+Upgrade to version 5.x.x introduced types/providers for network, nwfilter and domains
 replacing the execs used before version 5.0.0. To compare the XML's generated with puppet and
-the actual running XML's generated with virsh they are sorted which leads to display lots of 
+the actual running XML's generated with virsh they are sorted which leads to display lots of
 changes if you use the diff_dir functionality.
 
 Version 5.0.0 also introduce a generic template for network and nwfilter which should be more flexible
@@ -50,7 +50,7 @@ with disk replication over DRBD. But this is completely optional.
 
 Remark: Debian >= 12 (bullseye) and Ubuntu >= 21.10 uses architecture
         specific packages. Currently amd64 is configured. Merge requests
-        for other architectures are welcome! 
+        for other architectures are welcome!
 
 ## Description
 
@@ -81,78 +81,89 @@ modules in addition to this module:
 
 Install libvirt:
 
-    class {'libvirt': }
-
+```puppet
+include 'libvirt'
+```
 Install including the DRBD hook:
 
-    class {'libvirt':
-      qemu_hook => 'drbd',
-    }
+```puppet
+class {'libvirt':
+  qemu_hook => 'drbd',
+}
+```
 
-If you want to see the diffs of the xml file generated, set libvirt::diff_dir to a 
+If you want to see the diffs of the xml file generated, set libvirt::diff_dir to a
 directory. As a result all generated XML files are stored there, and diffs are
 visible.
 
 Define a network (basic linux bridge example):
 
-    libvirt::network { 'net-simple':
-        forward_mode   => 'bridge',
-        bridge         => 'br-simple',
-    }
+```puppet
+libvirt::network { 'net-simple':
+  forward_mode => 'bridge',
+  bridge       => 'br-simple',
+}
+```
 
 Define a network (advanced openvswitch example):
 
-    libvirt::network { 'net-ovs':
-      forward_mode     => 'bridge',
-      bridge           => 'br-ovs',
-      virtualport_type => 'openvswitch',
-      autostart        => true,
-      portgroups       => [
-                           {'name'     => 'intern',
-                            'trunk'    => false,
-                            'vlan_tag' => '2',
-                            },
-                           {'name'     => 'trunk',
-                            'trunk'    => true,
-                            'vlan_tag' => ['100', '101', '102', ],
-                            },
-                           ],
-    }
+```puppet
+libvirt::network { 'net-ovs':
+  forward_mode     => 'bridge',
+  bridge           => 'br-ovs',
+  virtualport_type => 'openvswitch',
+  autostart        => true,
+  portgroups       => [
+                       {'name'     => 'intern',
+                        'trunk'    => false,
+                        'vlan_tag' => '2',
+                        },
+                       {'name'     => 'trunk',
+                        'trunk'    => true,
+                        'vlan_tag' => ['100', '101', '102', ],
+                        },
+                       ],
+}
+```
 
 Define a domain (VM):
 
-    libvirt::domain { 'my-domain':
-      devices_profile => 'default',
-      dom_profile     => 'default',
-      boot            => 'hd',
-      domconf         => { memory => { values => '2048', attrs => { unit => 'MiB' }}},
-      disks           => [{'type' => 'block',
-                           'device' => 'disk',
-                           'source' => {'dev' => '/dev/vm-pool/my-domain.img'},
-                           },
-                          {'type'   => 'file',
-                           'device' => 'disk',
-                           'source' => {'dev' => '/var/lib/libvirt/images/my-disk.qcow2'},
-                           'bus'    => 'virtio',
-                           'driver' => {'name'  => 'qemu',
-                                        'type'  => 'qcow2',
-                                        'cache' => 'none',
-                                        },
-                          ],
-      interfaces      => [{'network' => 'net-simple'},],
-      autostart       => true,
-    }
+```
+libvirt::domain { 'my-domain':
+  devices_profile => 'default',
+  dom_profile     => 'default',
+  boot            => 'hd',
+  domconf         => { memory => { values => '2048', attrs => { unit => 'MiB' }}},
+  disks           => [{'type' => 'block',
+                       'device' => 'disk',
+                       'source' => {'dev' => '/dev/vm-pool/my-domain.img'},
+                       },
+                      {'type'   => 'file',
+                       'device' => 'disk',
+                       'source' => {'dev' => '/var/lib/libvirt/images/my-disk.qcow2'},
+                       'bus'    => 'virtio',
+                       'driver' => {'name'  => 'qemu',
+                                    'type'  => 'qcow2',
+                                    'cache' => 'none',
+                                    },
+                      ],
+  interfaces      => [{'network' => 'net-simple'},],
+  autostart       => true,
+}
+```
 
 Define a storage pool:
 
-    libvirt_pool { 'default' :
-		ensure     => present,
-		type       => 'logical',
-		autostart  => true,
-		sourcedev  => '/dev/sda5',
-		sourcename => 'vm',
-		target     => '/dev/vm',
-    }
+```puppet
+libvirt_pool { 'default' :
+  ensure     => present,
+  type       => 'logical',
+  autostart  => true,
+  sourcedev  => '/dev/sda5',
+  sourcename => 'vm',
+  target     => '/dev/vm',
+}
+```
 
 Complete documentation is included in puppet doc format in the
 manifest files or in the REFERENCE.md file.
@@ -169,33 +180,41 @@ The default profile used is defined in hiera in the data/profiles directory.
 The profiles in hiera are hash merged, so you can define you're own profiles easily.
 Here is an example:
 
-    libvirt::profiles::devices:
-      myprofile:
-        hostdev:
-          attrs:
-            mode: 'capabilities'
-            type: 'misc'
-          values:
-            source:
-               values: '/dev/input/event3'
+```yaml
+libvirt::profiles::devices:
+  myprofile:
+    hostdev:
+      attrs:
+        mode: 'capabilities'
+        type: 'misc'
+      values:
+        source:
+           values: '/dev/input/event3'
+```
 
 will result in a device (without the default devices...):
-    <hostdev mode='capabilities' type='misc'>
-      <source>
-        <char>/dev/input/event3</char>
-      </source>
-    </hostdev>
+
+```xml
+<hostdev mode='capabilities' type='misc'>
+  <source>
+    <char>/dev/input/event3</char>
+  </source>
+</hostdev>
+```
 
 To not repeat all profile values you can 'inherit' a profile, meaning you set a base profile with wich the profile will be merged.
 Let's take enlarge our profile:
 
-    libvirt::profiles::devices:
-      myprofile:
-        profileconfig:
-          base: 'default'
-          merge: 'merge'
-        hostdev:
-          ...
+```yaml
+---
+libvirt::profiles::devices:
+  myprofile:
+    profileconfig:
+      base: 'default'
+      merge: 'merge'
+    hostdev:
+      ...
+```
 
 which results in the hostdev been added to the default profile. Merge parameter in profileconfig defines how to merge,
 valid values are merge (default) or deep for a deep merge.
@@ -207,7 +226,7 @@ Hint: To better see what is changing you can set libvirt::diff_dir to a director
 Things currently not supported:
 * Operating Systems other than Debian, Ubuntu or RedHat. Adding support for other
   systems is a matter of defining the relevant parameters in hiera.
-* Documentation always needs some love ;) I would especially appreciate some examples of 
+* Documentation always needs some love ;) I would especially appreciate some examples of
   profiles you are using.
 
 Patches to support any of these (or other) missing features are welcome.
