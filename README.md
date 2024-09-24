@@ -153,6 +153,36 @@ libvirt::domain { 'my-domain':
   autostart       => true,
 }
 ```
+	
+Define a domain (VM) with a bridged network:
+*the network device must exists*
+```
+    libvirt::domain { 'my-domain':
+      devices_profile => 'default',
+      dom_profile     => 'default',
+      boot            => 'hd',
+      domconf         => { memory => { values => '2048', attrs => { unit => 'MiB' }}},
+      disks           => [{'type' => 'block',
+                           'device' => 'disk',
+                           'source' => {'dev' => '/dev/vm-pool/my-domain.img'},
+                           },
+                          {'type'   => 'file',
+                           'device' => 'disk',
+                           'source' => {'dev' => '/var/lib/libvirt/images/my-disk.qcow2'},
+                           'bus'    => 'virtio',
+                           'driver' => {'name'  => 'qemu',
+                                        'type'  => 'qcow2',
+                                        'cache' => 'none',
+                                        },
+                          ],
+      interfaces      => [{
+		  'network' => virbr0', 
+		  'bridge_network' => true,
+		  },
+		  ],
+      autostart       => true,
+    }
+```
 
 Define a storage pool:
 
