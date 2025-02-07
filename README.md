@@ -9,18 +9,19 @@
 #### Table of Contents
 
 1. [Overview](#overview)
-2. [Description](#description)
-3. [Usage](#usage)
-3. [Reference](#reference)
-3. [Profiles](#profiles)
-4. [Limitations](#limitations)
-5. [Contributing](#contributing)
+1. [Description](#description)
+1. [Usage](#usage)
+1. [Reference](#reference)
+1. [Profiles](#profiles)
+1. [Limitations](#limitations)
+1. [Contributing](#contributing)
 
-## Upgrade warnings:
+## Upgrade warnings
 
 Upgrading to puppet 8 comes with Ruby 3, which doesn't have the `rexml` gem bundled.
 It should be [installed on the puppetserver](https://www.puppet.com/docs/puppet/7/server/gems.html#installing-and-removing-gems).
-```
+
+```bash
 sudo puppetserver gem install rexml
 ```
 
@@ -84,6 +85,7 @@ Install libvirt:
 ```puppet
 include 'libvirt'
 ```
+
 Install including the DRBD hook:
 
 ```puppet
@@ -128,7 +130,7 @@ libvirt::network { 'net-ovs':
 
 Define a domain (VM):
 
-```
+```puppet
 libvirt::domain { 'my-domain':
   devices_profile => 'default',
   dom_profile     => 'default',
@@ -169,10 +171,12 @@ Complete documentation is included in puppet doc format in the
 manifest files or in the REFERENCE.md file.
 
 ## Reference
+
 The detailed configuration of all parameters is found in the REFERENCE.md file generated from
 the strings in the manifests.
 
 ## Profiles
+
 Profiles are a set of values to add to the configuration, eg. some devices you like to add
 to all VM's (keyboard etc.)
 
@@ -224,6 +228,7 @@ Hint: To better see what is changing you can set libvirt::diff_dir to a director
 ## Limitations
 
 Things currently not supported:
+
 * Operating Systems other than Debian, Ubuntu or RedHat. Adding support for other
   systems is a matter of defining the relevant parameters in hiera.
 * Documentation always needs some love ;) I would especially appreciate some examples of
