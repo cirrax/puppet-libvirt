@@ -153,7 +153,7 @@ libvirt::domain { 'my-domain':
 ```
 	
 Define a domain (VM) with a bridged network:
-*the network device must exists*
+*the network device must exist*
 ```
     libvirt::domain { 'my-domain':
       devices_profile => 'default',
