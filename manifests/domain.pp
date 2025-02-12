@@ -52,14 +52,23 @@
 #   Array of hashes defining the network interfaces of this domain. Defaults to
 #   no network interfaces.
 #   The hashes support the following keys:
-#     * mac:        MAC address of the interface. Without a mac key, a random
-#                   address will be assigned by libvirt. The MAC address should
-#                   start with 52:54:00.
-#     * network:    libvirt network to attach to (mandatory).
-#     * portgroup:  portgroup to attach to (optional).
-#     * type:       Type of network card. Defaults to 'virtio'.
-#     * boot_order: Integer starting at 1 for the highest priority (shared with
-#                   disks).
+#     * interface_type: the type of the interface, currently supported:
+#                       'network', 'bridge', 'vdpa', 'mcast', 'server', 'client', 'null', 'vds',
+#                       defaults to 'network' if unset.
+#     * mac:            MAC address of the interface. Without a mac key, a random
+#                       address will be assigned by libvirt. The MAC address should
+#                       start with 52:54:00.
+#     * source:         Hash of the source (network/bridge to attach to) (optional)
+#                       this will translate to keyX = valueX for all key value pairs
+#                       in the hash added as attributes to the source tag in the resulting XML
+#     * type:           Type of network card. Defaults to 'virtio'.
+#     * boot_order:     Integer starting at 1 for the highest priority (shared with
+#                       disks).
+#     Deprecated keys:
+#     * network:        libvirt network to attach to (optional, depracated, use source).
+#                       instead of this parameter, use source = { '[network|bridge]' => NETWORK }
+#     * portgroup:      portgroup to attach to (optional, deprecated, use source).
+#                       instead of this parameter, use source = { '[network|bridge]' => NETWORK, 'portgroup' => 'GROUP }
 # @param autostart
 #   Wheter the libvirt autostart flag should be set. Defaults to true. Autostart
 #   domains are started if the host is booted.
