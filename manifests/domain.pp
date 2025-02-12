@@ -48,6 +48,9 @@
 #                   See the libvirt domain XML documentation for all possible values.
 #    * boot_order:  Integer starting at 1 for the highest priority (shared with
 #                   interfaces).
+#
+#   Hint: if a special configuration is not possible using this parameter, you can use the
+#         $devices or $additionadevices parameter which make any configuration libvirt supports possible
 # @param interfaces
 #   Array of hashes defining the network interfaces of this domain. Defaults to
 #   no network interfaces.
@@ -69,6 +72,9 @@
 #                       instead of this parameter, use source = { '[network|bridge]' => NETWORK }
 #     * portgroup:      portgroup to attach to (optional, deprecated, use source).
 #                       instead of this parameter, use source = { '[network|bridge]' => NETWORK, 'portgroup' => 'GROUP }
+#
+#   Hint: if a special configuration is not possible using this parameter, you can use the
+#         $devices or $additionadevices parameter which make any configuration libvirt supports possible
 # @param autostart
 #   Wheter the libvirt autostart flag should be set. Defaults to true. Autostart
 #   domains are started if the host is booted.
@@ -99,10 +105,12 @@
 #   to generate the final configuration.
 #   Defaults to {} which does not change the profile.
 #   see also libvirt::profiles for how to use profiles
+#   Hint: This parameters allows to configure disks/network interfaces also
 # @param additionaldevices
 #   additional devices to attach to the vm
 #   Same format as $devices, but without merging.
 #   Defaults to {}
+#   Hint: This parameters allows to configure disks/network interfaces also
 # @param replace
 #   set this to true if you like to replace existing VM
 #   configurations with puppet definitions (or if you change the config in puppet)
