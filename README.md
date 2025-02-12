@@ -149,7 +149,7 @@ libvirt::domain { 'my-domain':
                                     'cache' => 'none',
                                     },
                       ],
-  interfaces      => [{'network' => 'net-simple'},],
+  interfaces      => [{'source' => {'network' => 'net-simple'}}],
   autostart       => true,
 }
 ```
@@ -175,11 +175,9 @@ Define a domain (VM) with a bridged network:
                                         'cache' => 'none',
                                         },
                           ],
-      interfaces      => [{
-		  'network' => virbr0', 
-		  'bridge_network' => true,
-		  },
-		  ],
+      interfaces      => [{ 'interface_type => 'bridge',
+                            'source'        => { 'bridge' => virbr0', },
+		         }],
       autostart       => true,
     }
 ```
