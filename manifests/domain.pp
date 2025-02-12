@@ -64,6 +64,8 @@
 #     * source:         Hash of the source (network/bridge to attach to) (optional)
 #                       this will translate to keyX = valueX for all key value pairs
 #                       in the hash added as attributes to the source tag in the resulting XML
+#     * address:        Hash of the address sub-element to decribe where the device is placed on the
+#                       virtual bus presented to the guest.
 #     * type:           Type of network card. Defaults to 'virtio'.
 #     * boot_order:     Integer starting at 1 for the highest priority (shared with
 #                       disks).

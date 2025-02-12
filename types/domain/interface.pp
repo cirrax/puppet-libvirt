@@ -5,6 +5,7 @@ type Libvirt::Domain::Interface = Struct[{
     network        => Optional[String[1]],  # deprecated, do not use
     source         => Optional[Hash[String[1],String[1]]],
     portgroup      => Optional[String[1]],  # deprecated, do not use, use source hash instead
+    address        => Optional[Hash[String[1],String[1]]],
     mac            => Optional[String[1]],
     filter         => Optional[Variant[
         String[1],

@@ -848,6 +848,8 @@ The hashes support the following keys:
   * source:         Hash of the source (network/bridge to attach to) (optional)
                     this will translate to keyX = valueX for all key value pairs
                     in the hash added as attributes to the source tag in the resulting XML
+  * address:        Hash of the address sub-element to decribe where the device is placed on the
+                    virtual bus presented to the guest.
   * type:           Type of network card. Defaults to 'virtio'.
   * boot_order:     Integer starting at 1 for the highest priority (shared with
                     disks).
@@ -2117,6 +2119,7 @@ Struct[{
     network        => Optional[String[1]],  # deprecated, do not use
     source         => Optional[Hash[String[1],String[1]]],
     portgroup      => Optional[String[1]],  # deprecated, do not use, use source hash instead
+    address        => Optional[Hash[String[1],String[1]]],
     mac            => Optional[String[1]],
     filter         => Optional[Variant[
         String[1],
