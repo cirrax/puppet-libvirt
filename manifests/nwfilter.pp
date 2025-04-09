@@ -76,7 +76,7 @@ define libvirt::nwfilter (
 
   if $ensure == 'absent' {
     libvirt_nwfilter { $title:
-      ensure  => 'absent',
+      ensure => 'absent',
     }
   } else {
     if $template == 'simple' {
