@@ -22,9 +22,12 @@ group :development do
   gem "racc", '~> 1.4.0',                        require: false if Gem::Requirement.create(['>= 2.7.0', '< 3.0.0']).satisfied_by?(Gem::Version.new(RUBY_VERSION.dup))
   gem "deep_merge", '~> 1.2.2',                  require: false
   gem "voxpupuli-puppet-lint-plugins", '~> 5.0', require: false
-  gem "facterdb", '~> 2.1',                      require: false
+  gem "facterdb", '~> 2.1',                      require: false if Gem::Requirement.create(['< 3.0.0']).satisfied_by?(Gem::Version.new(RUBY_VERSION.dup))
+  gem "facterdb", '~> 3.0',                      require: false if Gem::Requirement.create(['>= 3.0.0']).satisfied_by?(Gem::Version.new(RUBY_VERSION.dup))
   gem "metadata-json-lint", '~> 4.0',            require: false
-  gem "rspec-puppet-facts", '~> 4.0',            require: false
+  gem "json-schema", '< 5.1.1',                  require: false
+  gem "rspec-puppet-facts", '~> 4.0',            require: false if Gem::Requirement.create(['< 3.0.0']).satisfied_by?(Gem::Version.new(RUBY_VERSION.dup))
+  gem "rspec-puppet-facts", '~> 5.0',            require: false if Gem::Requirement.create(['>= 3.0.0']).satisfied_by?(Gem::Version.new(RUBY_VERSION.dup))
   gem "dependency_checker", '~> 1.0.0',          require: false
   gem "parallel_tests", '= 3.12.1',              require: false
   gem "pry", '~> 0.10',                          require: false
@@ -34,13 +37,11 @@ group :development do
   gem "rubocop-performance", '= 1.16.0',         require: false
   gem "rubocop-rspec", '= 2.19.0',               require: false
   gem "rb-readline", '= 0.5.5',                  require: false, platforms: [:mswin, :mingw, :x64_mingw]
-  gem "rexml", '>= 3.0.0', '< 3.2.7',            require: false
-  gem "puppet-blacksmith",                       require: false
-  gem "github_changelog_generator",              require: false
 end
 group :development, :release_prep do
   gem "puppet-strings", '~> 4.0',         require: false
-  gem "puppetlabs_spec_helper", '~> 7.0', require: false
+  gem "puppetlabs_spec_helper", '~> 8.0', require: false
+  gem "puppet-blacksmith", '~> 7.0',      require: false
 end
 group :system_tests do
   gem "puppet_litmus", '~> 1.0',   require: false, platforms: [:ruby, :x64_mingw]
@@ -48,18 +49,21 @@ group :system_tests do
   gem "serverspec", '~> 2.41',     require: false
 end
 
-puppet_version = ENV['PUPPET_GEM_VERSION']
-facter_version = ENV['FACTER_GEM_VERSION']
-hiera_version = ENV['HIERA_GEM_VERSION']
-
 gems = {}
+puppet_version = ENV.fetch('PUPPET_GEM_VERSION', nil)
+facter_version = ENV.fetch('FACTER_GEM_VERSION', nil)
+hiera_version = ENV.fetch('HIERA_GEM_VERSION', nil)
 
-gems['puppet'] = location_for(puppet_version)
+# If PUPPET_FORGE_TOKEN is set then use authenticated source for both puppet and facter, since facter is a transitive dependency of puppet
+# Otherwise, do as before and use location_for to fetch gems from the default source
+if !ENV['PUPPET_FORGE_TOKEN'].to_s.empty?
+  gems['puppet'] = ['~> 8.11', { require: false, source: 'https://rubygems-puppetcore.puppet.com' }]
+  gems['facter'] = ['~> 4.11', { require: false, source: 'https://rubygems-puppetcore.puppet.com' }]
+else
+  gems['puppet'] = location_for(puppet_version)
+  gems['facter'] = location_for(facter_version) if facter_version
+end
 
-# If facter or hiera versions have been specified via the environment
-# variables
-
-gems['facter'] = location_for(facter_version) if facter_version
 gems['hiera'] = location_for(hiera_version) if hiera_version
 
 gems.each do |gem_name, gem_params|
