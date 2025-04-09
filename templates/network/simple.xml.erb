@@ -27,9 +27,6 @@
   <%- if @dns_enable -%>
   <dns enable='<%= @dns_enable %>'/>
   <%- end -%>
-  <%- if @virtualport_type -%>
-  <virtualport type='<%= @virtualport_type %>'/>
-  <%- end -%>
   <%- @portgroups.each do |pg| -%>
   <portgroup name='<%= pg['name'] %>'>
     <%- if pg['trunk'] -%>
@@ -44,5 +41,8 @@
     </vlan>
     <%- end -%>
   </portgroup>
+  <%- end -%>
+  <%- if @virtualport_type -%>
+  <virtualport type='<%= @virtualport_type %>'/>
   <%- end -%>
 </network>
