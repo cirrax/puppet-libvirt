@@ -35,8 +35,8 @@
   <%- %><%= epp('libvirt/network/sub-element.xml.epp', { 'name' => 'bandwith', 'attrs' => $bandwith, 'tree' => $tree['bandwith'] }) -%>
   <%- %><%= epp('libvirt/network/sub-element.xml.epp', { 'name' => 'vlan', 'attrs' => $vlan, 'tree' => $tree['vlan'] }) -%>
   <%- %><%= epp('libvirt/network/sub-element.xml.epp', { 'name' => 'port', 'attrs' => $port, 'tree' => $tree['port'] }) -%>
-  <%- %><%= epp('libvirt/network/sub-element.xml.epp', { 'name' => 'virtualport', 'attrs' => $virtualport, 'tree' => $tree['virtualport'] }) -%>
   <%- %><%= epp('libvirt/network/sub-element.xml.epp', { 'name' => 'portgroup', 'attrs' => $portgroups, 'tree' => $tree['portgroup'] }) -%>
+  <%- %><%= epp('libvirt/network/sub-element.xml.epp', { 'name' => 'virtualport', 'attrs' => $virtualport, 'tree' => $tree['virtualport'] }) -%>
   <%- %><%= epp('libvirt/network/sub-element.xml.epp', { 'name' => 'ip', 'attrs' => $ips, 'tree' => $tree['ip'] }) -%>
   <%- %><%= epp('libvirt/network/sub-element.xml.epp', { 'name' => 'route', 'attrs' => $routes, 'tree' => $tree['route'] }) -%>
   <%- %><%= epp('libvirt/network/sub-element.xml.epp', { 'name' => 'dns', 'attrs' => $dns, 'tree' => $tree['dns'] }) -%>

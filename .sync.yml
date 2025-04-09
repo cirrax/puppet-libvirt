@@ -6,12 +6,3 @@ spec/spec_helper.rb:
   hiera_config: 'spec/fixtures/hiera.yaml'
   coverage_report: true
   mock_with: ':rspec'
-
-Gemfile:
-  required:
-    ':development':
-      - gem: 'puppet-blacksmith'
-      - gem: 'github_changelog_generator'
-#      - gem: 'rexml'
-#        version: '~> 3.2'
-#        condition: "Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('3')"

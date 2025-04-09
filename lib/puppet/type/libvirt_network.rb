@@ -61,21 +61,5 @@ Puppet::Type.newtype(:libvirt_network) do
         '{md5}' + Digest::MD5.hexdigest(current.to_s) + ' to: ' + '{md5}' + Digest::MD5.hexdigest(desire.to_s)
       end
     end
-
-    def should_to_s(value)
-      if @resource[:show_diff]
-        ":\n" + value + "\n"
-      else
-        '{md5}' + Digest::MD5.hexdigest(value.to_s)
-      end
-    end
-
-    def is_to_s(value) # rubocop:disable Naming/PredicateName
-      if @resource[:show_diff]
-        ":\n" + value + "\n"
-      else
-        '{md5}' + Digest::MD5.hexdigest(value.to_s)
-      end
-    end
   end
 end
