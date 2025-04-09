@@ -827,6 +827,9 @@ at all. The hashes support the following keys:
  * boot_order:  Integer starting at 1 for the highest priority (shared with
                 interfaces).
 
+Hint: if a special configuration is not possible using this parameter, you can use the
+      $devices or $additionadevices parameter which make any configuration libvirt supports possible
+
 Default value: `[]`
 
 ##### <a name="-libvirt--domain--interfaces"></a>`interfaces`
@@ -836,14 +839,28 @@ Data type: `Array[Libvirt::Domain::Interface]`
 Array of hashes defining the network interfaces of this domain. Defaults to
 no network interfaces.
 The hashes support the following keys:
-  * mac:        MAC address of the interface. Without a mac key, a random
-                address will be assigned by libvirt. The MAC address should
-                start with 52:54:00.
-  * network:    libvirt network to attach to (mandatory).
-  * portgroup:  portgroup to attach to (optional).
-  * type:       Type of network card. Defaults to 'virtio'.
-  * boot_order: Integer starting at 1 for the highest priority (shared with
-                disks).
+  * interface_type: the type of the interface, currently supported:
+                    'network', 'bridge', 'vdpa', 'mcast', 'server', 'client', 'null', 'vds',
+                    defaults to 'network' if unset.
+  * mac:            MAC address of the interface. Without a mac key, a random
+                    address will be assigned by libvirt. The MAC address should
+                    start with 52:54:00.
+  * source:         Hash of the source (network/bridge to attach to) (optional)
+                    this will translate to keyX = valueX for all key value pairs
+                    in the hash added as attributes to the source tag in the resulting XML
+  * address:        Hash of the address sub-element to decribe where the device is placed on the
+                    virtual bus presented to the guest.
+  * type:           Type of network card. Defaults to 'virtio'.
+  * boot_order:     Integer starting at 1 for the highest priority (shared with
+                    disks).
+  Deprecated keys:
+  * network:        libvirt network to attach to (optional, depracated, use source).
+                    instead of this parameter, use source = { '[network|bridge]' => NETWORK }
+  * portgroup:      portgroup to attach to (optional, deprecated, use source).
+                    instead of this parameter, use source = { '[network|bridge]' => NETWORK, 'portgroup' => 'GROUP }
+
+Hint: if a special configuration is not possible using this parameter, you can use the
+      $devices or $additionadevices parameter which make any configuration libvirt supports possible
 
 Default value: `[]`
 
@@ -910,6 +927,7 @@ this parameter is merged with the choosen profile,
 to generate the final configuration.
 Defaults to {} which does not change the profile.
 see also libvirt::profiles for how to use profiles
+Hint: This parameters allows to configure disks/network interfaces also
 
 Default value: `{}`
 
@@ -920,6 +938,7 @@ Data type: `Hash[String[1],Libvirt::Domain::Device]`
 additional devices to attach to the vm
 Same format as $devices, but without merging.
 Defaults to {}
+Hint: This parameters allows to configure disks/network interfaces also
 
 Default value: `{}`
 
@@ -2095,11 +2114,14 @@ Alias of
 
 ```puppet
 Struct[{
-    type      => Optional[String[1]],
-    network   => String[1],
-    portgroup => Optional[String[1]],
-    mac       => Optional[String[1]],
-    filter    => Optional[Variant[
+    type           => Optional[String[1]],
+    interface_type => Optional[Enum['network','bridge', 'vdpa', 'mcast', 'server', 'client', 'null', 'vds']],
+    network        => Optional[String[1]],  # deprecated, do not use
+    source         => Optional[Hash[String[1],String[1]]],
+    portgroup      => Optional[String[1]],  # deprecated, do not use, use source hash instead
+    address        => Optional[Hash[String[1],String[1]]],
+    mac            => Optional[String[1]],
+    filter         => Optional[Variant[
         String[1],
         Struct[{
             filterref  => String[1],
@@ -2109,7 +2131,7 @@ Struct[{
             ]],
         }],
     ]],
-    boot_order => Optional[Integer],
+    boot_order     => Optional[Integer],
 }]
 ```
 
