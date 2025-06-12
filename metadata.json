@@ -48,7 +48,8 @@
     {
       "operatingsystem": "AlmaLinux",
       "operatingsystemrelease": [
-        "9"
+        "9",
+        "10"
       ]
     }
   ],
