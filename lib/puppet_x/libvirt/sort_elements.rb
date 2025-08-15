@@ -6,8 +6,11 @@
 #
 def recursive_sort(elements)
   if elements.has_elements?
-    el = elements.elements.sort_by(&:name)
-    el.each do |element|
+    # Materialize first and sort by a flat String key 
+    # to avoid JRuby Enumerable.sort_by recursion
+    els = elements.elements.to_a
+    els.sort! { |a, b| a.name.to_s <=> b.name.to_s }
+    els.each do |element|
       # remove text with only space
       elements.elements.delete(element)
       element.each do |child|
