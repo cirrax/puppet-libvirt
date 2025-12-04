@@ -1799,7 +1799,7 @@ usually discover the appropriate provider for your platform.
 
 ##### <a name="-libvirt_pool--sourcedev"></a>`sourcedev`
 
-Valid values: `%r{(\/)?(\w)}`
+Valid values: `%r{(/)?(\w)}`
 
 The source device.
 
@@ -1823,13 +1823,13 @@ The source name.
 
 ##### <a name="-libvirt_pool--sourcepath"></a>`sourcepath`
 
-Valid values: `%r{(\/)?(\w)}`
+Valid values: `%r{(/)?(\w)}`
 
 The source path.
 
 ##### <a name="-libvirt_pool--target"></a>`target`
 
-Valid values: `%r{(\/)?(\w)}`
+Valid values: `%r{(/)?(\w)}`
 
 The target.
 

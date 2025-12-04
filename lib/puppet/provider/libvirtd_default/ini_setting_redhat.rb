@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 Puppet::Type.type(:libvirtd_default).provide(
   :redhat,
-  parent: Puppet::Type.type(:libvirtd_default).provider(:ini_setting),
+  parent: Puppet::Type.type(:libvirtd_default).provider(:ini_setting)
 ) do
   desc '
     @summary add config to /etc/sysconfig/libvirtd (for redhat family)
