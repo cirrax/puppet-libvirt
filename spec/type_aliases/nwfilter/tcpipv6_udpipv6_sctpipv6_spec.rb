@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'Libvirt::Nwfilter::Protocol::Tcpipv6_udpipv6_sctpipv6' do

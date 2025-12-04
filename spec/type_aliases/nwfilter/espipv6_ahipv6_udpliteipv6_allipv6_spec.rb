@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'Libvirt::Nwfilter::Protocol::Espipv6_ahipv6_udpliteipv6_allipv6' do

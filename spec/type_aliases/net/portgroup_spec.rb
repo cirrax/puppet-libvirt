@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'Libvirt::Net::Portgroup' do
@@ -6,8 +8,8 @@ describe 'Libvirt::Net::Portgroup' do
       [
         { 'name' => 'blah' },
         { 'name' => 'blah', 'default' => 'yes' },
-        { 'name' => 'blah', 'vlan_tag' => '1', 'trunk' => false },  # for simple template
-        { 'name' => 'blah', 'vlan_tag' => ['1', '2'], 'trunk' => true },  # for simple template
+        { 'name' => 'blah', 'vlan_tag' => '1', 'trunk' => false }, # for simple template
+        { 'name' => 'blah', 'vlan_tag' => %w[1 2], 'trunk' => true }, # for simple template
       ].each do |value|
         describe value.inspect do
           it { is_expected.to allow_value(value) }
