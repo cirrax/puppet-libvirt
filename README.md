@@ -149,7 +149,7 @@ libvirt::domain { 'my-domain':
   autostart       => true,
 }
 ```
-	
+
 Define a domain (VM) with a bridged network:
 *the network device must exist*
 ```
