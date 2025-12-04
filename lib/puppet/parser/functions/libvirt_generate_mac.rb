@@ -1,6 +1,7 @@
-#
+# frozen_string_literal: true
+
 module Puppet::Parser::Functions
-  newfunction(:libvirt_generate_mac, type: :rvalue, doc: <<-'ENDHEREDOC') do |args|
+  newfunction(:libvirt_generate_mac, type: :rvalue, doc: <<-ENDHEREDOC) do |args|
     Returns a MAC address in the QEMU/KVM MAC OID (52:54:00:...).
 
     It computes a sha1 hash of all keys concatenated, the first 6
@@ -8,11 +9,11 @@ module Puppet::Parser::Functions
 
     @return a mac address in the QEMU/KVM MAC OID (52:54:00:...)
 
-    ENDHEREDOC
+  ENDHEREDOC
 
-    sha1 = Digest::SHA1.hexdigest(args.join(''))
+    sha1 = Digest::SHA1.hexdigest(args.join)
 
     # generate address in the QEMU/KVM MAC OID
-    '52:54:00:' + "#{sha1[0..1]}:#{sha1[2..3]}:#{sha1[4..5]}"
+    "52:54:00:#{sha1[0..1]}:#{sha1[2..3]}:#{sha1[4..5]}"
   end
 end

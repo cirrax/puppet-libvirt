@@ -13,7 +13,7 @@ lookup_options:
     merge: 'hash'
 
 # default filtering chain priorities
-# as descibed in 
+# as descibed in
 # https://libvirt.org/formatnwfilter.html#filtering-chain-priorities
 libvirt::filter_default_prio:
   stp: -810
@@ -25,12 +25,12 @@ libvirt::filter_default_prio:
   rarp: -400
 
 # this tree is a hash of all elements in the xml, ordered in a tree
-# every value that is not in there is handled as a attribute in the 
+# every value that is not in there is handled as a attribute in the
 # generic template.
 libvirt::tree_network:
   metadata: {}
-  bridge:   {}
-  domain:   {}
+  bridge: {}
+  domain: {}
   forward:
     nat:
       address: {}
@@ -40,8 +40,8 @@ libvirt::tree_network:
     driver: {}
     address: {}
   bandwith:
-   inbound: {}
-   outbound: {}
+    inbound: {}
+    outbound: {}
   vlan:
     tag: {}
   port: {}

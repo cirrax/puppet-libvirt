@@ -5,7 +5,7 @@
 # the libvirt XML autput with the puppet XML generated.
 #
 libvirt::profiles::ignore:
-  default: 
+  default:
     - '/domain/currentMemory'
     - '/domain/devices/disk/address'
     - '/domain/devices/emulator'

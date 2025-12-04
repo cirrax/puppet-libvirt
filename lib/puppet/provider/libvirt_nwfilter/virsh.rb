@@ -4,8 +4,8 @@
 # This file contains a provider for the resource type `libvirt_nwfilter`,
 #
 require 'tempfile'
-require_relative '../../../puppet_x/libvirt/rexml_sorted_attributes.rb'
-require_relative '../../../puppet_x/libvirt/sort_elements.rb'
+require_relative '../../../puppet_x/libvirt/rexml_sorted_attributes'
+require_relative '../../../puppet_x/libvirt/sort_elements'
 
 Puppet::Type.type(:libvirt_nwfilter).provide(:virsh) do
   desc "@summary provider for the resource type `libvirt_nwfilter`,
@@ -16,9 +16,7 @@ Puppet::Type.type(:libvirt_nwfilter).provide(:virsh) do
 
   def virsh_define(content)
     xml = REXML::Document.new(content)
-    if @property_hash[:uuid]
-      xml.root.add_element('uuid').add_text(@property_hash[:uuid])
-    end
+    xml.root.add_element('uuid').add_text(@property_hash[:uuid]) if @property_hash[:uuid]
     tmpfile = Tempfile.new(@resource[:name])
     tmpfile.write(xml.to_s)
     tmpfile.rewind
@@ -36,10 +34,11 @@ Puppet::Type.type(:libvirt_nwfilter).provide(:virsh) do
   def self.instances
     virsh('--quiet', '--readonly', 'nwfilter-list').split("\n").map do |line|
       raise Puppet::Error, "Cannot parse invalid nwfilter line: #{line}" unless line =~ %r{^\s*(\S+)\s+(\S+)$}
+
       new(
         ensure: :present,
         name: Regexp.last_match(2),
-        uuid: Regexp.last_match(1),
+        uuid: Regexp.last_match(1)
       )
     end
   end
@@ -69,10 +68,11 @@ Puppet::Type.type(:libvirt_nwfilter).provide(:virsh) do
 
   def content
     return '' unless @property_hash[:ensure] == :present
+
     begin
       xml = REXML::Document.new(virsh('--quiet', '--readonly', 'nwfilter-dumpxml', @resource[:name]))
-    rescue REXML::ParseException => msg
-      raise Puppet::ParseError, "libvirt_nwfilter: cannot parse xml: #{msg}"
+    rescue REXML::ParseException => e
+      raise Puppet::ParseError, "libvirt_nwfilter: cannot parse xml: #{e}"
     end
     # remove the uuid
     xml.root.elements.delete('//uuid')
@@ -89,6 +89,7 @@ Puppet::Type.type(:libvirt_nwfilter).provide(:virsh) do
 
   def flush
     return if @property_flush.empty?
+
     content = @property_flush[:content] || @resource[:content]
     virsh_define(content)
     @property_flush.clear

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Most of the code of this file comes from https://github.com/thias/puppet-libvirt/blob/master/lib/puppet/type/libvirt_pool.rb
 # Kudos to Thias for it :)
 #
@@ -49,9 +51,7 @@ Puppet::Type.newtype(:libvirt_pool) do
     end
 
     newvalue(:absent) do
-      if provider.exists?
-        provider.destroy
-      end
+      provider.destroy if provider.exists?
     end
 
     def retrieve
@@ -76,12 +76,12 @@ Puppet::Type.newtype(:libvirt_pool) do
 
   newparam(:sourcepath) do
     desc 'The source path.'
-    newvalues(%r{(\/)?(\w)})
+    newvalues(%r{(/)?(\w)})
   end
 
   newparam(:sourcedev) do
     desc 'The source device.'
-    newvalues(%r{(\/)?(\w)})
+    newvalues(%r{(/)?(\w)})
   end
 
   newparam(:sourcename) do
@@ -96,7 +96,7 @@ Puppet::Type.newtype(:libvirt_pool) do
 
   newparam(:target) do
     desc 'The target.'
-    newvalues(%r{(\/)?(\w)})
+    newvalues(%r{(/)?(\w)})
   end
 
   newparam(:target_owner) do
@@ -130,8 +130,6 @@ Puppet::Type.newtype(:libvirt_pool) do
 
   validate do
     # https://libvirt.org/formatstorage.html#StoragePoolTarget
-    if (self[:target_owner] || self[:target_group] || self[:target_mode]) && ![:fs, :dir].include?(self[:type])
-      Puppet.warning('target_(owner|group|mode) is currently only useful for directory or filesystem based pools')
-    end
+    Puppet.warning('target_(owner|group|mode) is currently only useful for directory or filesystem based pools') if (self[:target_owner] || self[:target_group] || self[:target_mode]) && !%i[fs dir].include?(self[:type])
   end
 end

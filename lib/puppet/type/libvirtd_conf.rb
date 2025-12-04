@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 Puppet::Type.newtype(:libvirtd_conf) do
   ensurable
@@ -11,19 +12,20 @@ Puppet::Type.newtype(:libvirtd_conf) do
     desc 'The value of the setting to be defined.'
 
     munge do |value|
-      value = if value.is_a?(Integer)
+      value = case value
+              when Integer
                 value.to_s.strip
-              elsif %r{^\[.*\]$}.match?(value)
+              when %r{^\[.*\]$}
                 value.to_s.strip
-              elsif value.is_a?(String)
-                '"' + value + '"'
+              when String
+                "\"#{value}\""
               else
                 value.to_s.strip
               end
       value
     end
 
-    def is_to_s(currentvalue) # rubocop:disable Style/PredicateName
+    def is_to_s(currentvalue)
       if resource.secret?
         '[old secret redacted]'
       else

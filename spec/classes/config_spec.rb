@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 require 'spec_helper'
 
@@ -31,7 +32,7 @@ describe 'libvirt::config' do
       context 'with qemu_hook' do
         let :params do
           default_params.merge(
-            qemu_hook: 'drbd',
+            qemu_hook: 'drbd'
           )
         end
 
@@ -47,7 +48,7 @@ describe 'libvirt::config' do
       context 'with qemu.conf' do
         let :params do
           default_params.merge(
-            qemu_conf: { 'string' => 'test', 'integer' => 2, 'array' => ['A', 'B'] },
+            qemu_conf: { 'string' => 'test', 'integer' => 2, 'array' => %w[A B] }
           )
         end
 
@@ -66,7 +67,7 @@ describe 'libvirt::config' do
       context 'with uri_aliases' do
         let :params do
           default_params.merge(
-            uri_aliases: ['te=qemu:///system', 'hail=qemu+ssh://root@hail.cloud.example.com/system'],
+            uri_aliases: ['te=qemu:///system', 'hail=qemu+ssh://root@hail.cloud.example.com/system']
           )
         end
 
@@ -82,7 +83,7 @@ describe 'libvirt::config' do
       context 'with uri_default' do
         let :params do
           default_params.merge(
-            uri_default: 'qemu:///system',
+            uri_default: 'qemu:///system'
           )
         end
 

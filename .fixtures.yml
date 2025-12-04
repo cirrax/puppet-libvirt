@@ -4,5 +4,3 @@ fixtures:
     concat: puppetlabs/concat
     stdlib: puppetlabs/stdlib
     inifile: puppetlabs/inifile
-  symlinks:
-    libvirt: "#{source_dir}"

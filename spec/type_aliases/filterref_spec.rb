@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'Libvirt::Filterref' do
@@ -5,7 +7,7 @@ describe 'Libvirt::Filterref' do
     context 'with valid types' do
       [
         [{ 'filter' => 'blah' }],
-        [{ 'filter' => 'blah', parameters: [ { 'TEST' => '1' }] }],
+        [{ 'filter' => 'blah', parameters: [{ 'TEST' => '1' }] }],
       ].each do |value|
         describe value.inspect do
           it { is_expected.to allow_value(value) }

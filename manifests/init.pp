@@ -255,7 +255,7 @@ class libvirt (
 
   $load_nwfilter_set.each | String[1] $i| {
     create_resources('libvirt::nwfilter', $default_nwfilters[$i], {
-        'template' => 'generic',
+      'template' => 'generic',
     })
   }
 

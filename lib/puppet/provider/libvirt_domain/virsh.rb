@@ -4,8 +4,8 @@
 # This file contains a provider for the resource type `libvirt_domain`,
 #
 require 'tempfile'
-require_relative '../../../puppet_x/libvirt/rexml_sorted_attributes.rb'
-require_relative '../../../puppet_x/libvirt/sort_elements.rb'
+require_relative '../../../puppet_x/libvirt/rexml_sorted_attributes'
+require_relative '../../../puppet_x/libvirt/sort_elements'
 
 Puppet::Type.type(:libvirt_domain).provide(:virsh) do
   desc "@summary provider for the resource type `libvirt_domain`,
@@ -16,9 +16,7 @@ Puppet::Type.type(:libvirt_domain).provide(:virsh) do
 
   def virsh_define(content)
     xml = REXML::Document.new(content)
-    if @property_hash[:uuid]
-      xml.root.add_element('uuid').add_text(@property_hash[:uuid])
-    end
+    xml.root.add_element('uuid').add_text(@property_hash[:uuid]) if @property_hash[:uuid]
     tmpfile = Tempfile.new(@resource[:name])
     tmpfile.write(xml.to_s)
     tmpfile.rewind
@@ -39,11 +37,12 @@ Puppet::Type.type(:libvirt_domain).provide(:virsh) do
     virshlines << virsh('--quiet', '--readonly', 'list', '--table', '--all', '--persistent', '--autostart').gsub("\n", " autostart\n")
     virshlines.split("\n").map do |line|
       raise Puppet::Error, "Cannot parse invalid network line: #{line}" unless line =~ %r{^\s*(\S+)\s+(\S+)\s+(\w.*)\s+(\S+)$}
+
       new(
         ensure: :present,
         name: Regexp.last_match(2),
-        active: (Regexp.last_match(1) == '-') ? :false : :true, # only active domains have a number
-        autostart: (Regexp.last_match(4) == 'autostart') ? :true : :false,
+        active: Regexp.last_match(1) == '-' ? :false : :true, # only active domains have a number
+        autostart: Regexp.last_match(4) == 'autostart' ? :true : :false
       )
     end
   end
@@ -71,7 +70,7 @@ Puppet::Type.type(:libvirt_domain).provide(:virsh) do
   def destroy
     begin
       virsh('--quiet', 'destroy', @resource[:name])
-    rescue
+    rescue StandardError
       # do nothing
     end
 
@@ -86,10 +85,11 @@ Puppet::Type.type(:libvirt_domain).provide(:virsh) do
   def content
     return '' unless @property_hash[:ensure] == :present
     return @resource[:content] unless @resource[:replace]
+
     begin
       xml = REXML::Document.new(virsh('--quiet', '--readonly', 'dumpxml', @resource[:name]))
-    rescue REXML::ParseException => msg
-      raise Puppet::ParseError, "libvirt_domain: cannot parse xml: #{msg}"
+    rescue REXML::ParseException => e
+      raise Puppet::ParseError, "libvirt_domain: cannot parse xml: #{e}"
     end
     # remove the elements to ignore
     @resource[:ignore].each do |rem|
@@ -137,6 +137,7 @@ Puppet::Type.type(:libvirt_domain).provide(:virsh) do
 
   def flush
     return if @property_flush.empty?
+
     content = @property_flush[:content] || @resource[:content]
     virsh_define(content)
     @property_flush.clear

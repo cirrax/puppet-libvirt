@@ -1,0 +1,49 @@
+---
+name: run VoxBox checks
+
+env:
+  VOXBOX: 'ghcr.io/voxpupuli/voxbox:8'
+
+# yamllint disable-line rule:truthy
+on:
+  pull_request: {}
+
+
+concurrency:
+  group: ${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  build-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Podman
+        run: |
+          sudo apt update
+          sudo apt-get -y install podman
+          podman pull ${VOXBOX}
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: run validate
+        run: |
+          podman run -it --rm -v $PWD:/repo:Z ${VOXBOX} validate
+      - name: run check
+        run: |
+          podman run -it --rm -v $PWD:/repo:Z ${VOXBOX} check
+      - name: run lint
+        run: |
+          podman run -it --rm -v $PWD:/repo:Z ${VOXBOX} lint
+      - name: run yamllint
+        run: |
+          podman run -it --rm -v $PWD:/repo:Z --entrypoint yamllint ${VOXBOX} .
+      - name: run rubocop
+        run: |
+          podman run -it --rm -v $PWD:/repo:Z ${VOXBOX} rubocop
+      - name: check syntax
+        run: |
+          podman run -it --rm -v $PWD:/repo:Z ${VOXBOX} strings:validate:reference
+      - name: run spec tests
+        run: |
+          podman run -it --rm -v $PWD:/repo:Z ${VOXBOX} fixtures:clean
+          podman run -it --rm -v $PWD:/repo:Z ${VOXBOX} fixtures:prep
+          podman run -it --rm -v $PWD:/repo:Z ${VOXBOX} spec

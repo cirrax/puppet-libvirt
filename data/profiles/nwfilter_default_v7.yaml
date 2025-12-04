@@ -330,7 +330,7 @@ libvirt::default_nwfilters:
       filterref:
         - filter: 'qemu-announce-self-rarp'
         - filter: 'no-other-rarp-traffic'
-  
+
     fil_no-arp-mac-spoofing:
       chain: 'arp-mac'
       priority: -520
