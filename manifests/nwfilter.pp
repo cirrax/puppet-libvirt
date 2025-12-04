@@ -83,11 +83,11 @@ define libvirt::nwfilter (
       $content = libvirt::normalxml(template('libvirt/nwfilter/simple.xml.erb'))
     } else {
       $content = libvirt::normalxml(epp('libvirt/nwfilter/generic.xml.epp', {
-            filtername => $title,
-            chain      => $chain,
-            priority   => pick($priority, $libvirt::filter_default_prio[$chain], 500),
-            rules      => $rules,
-            filterref  => $filterref,
+        filtername => $title,
+        chain      => $chain,
+        priority   => pick($priority, $libvirt::filter_default_prio[$chain], 500),
+        rules      => $rules,
+        filterref  => $filterref,
       }))
     }
   }

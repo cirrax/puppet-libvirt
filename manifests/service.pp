@@ -44,10 +44,10 @@ class libvirt::service (
     Libvirtd_conf <| |> ~> Service<| tag=='libvirt-libvirtd-conf' |>
 
     pick($modular_services, { 'libvirtd' => {
-          'ensure' => $service_ensure,
-          'name'   => $service_name,
-          'enable' => $service_enable,
-          'tag'    => 'libvirt-libvirtd-conf',
+      'ensure' => $service_ensure,
+      'name'   => $service_name,
+      'enable' => $service_enable,
+      'tag'    => 'libvirt-libvirtd-conf',
     } }).each |$key, $value| {
       service { $key:
         * => $value,
