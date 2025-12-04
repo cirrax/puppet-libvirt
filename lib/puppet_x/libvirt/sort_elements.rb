@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #
 # @summary function which recursivly sorts
 #           the elements by name of an XML tree.
@@ -11,13 +13,9 @@ def recursive_sort(elements)
       # remove text with only space
       elements.elements.delete(element)
       element.each do |child|
-        if (child.class == REXML::Text) && %r{^\s*$}.match?(child.to_s)
-          element.delete(child)
-        end
+        element.delete(child) if child.instance_of?(REXML::Text) && %r{^\s*$}.match?(child.to_s)
       end
-      if %r{^\s*$}.match?(element.text)
-        element.delete element.get_text
-      end
+      element.delete element.get_text if %r{^\s*$}.match?(element.text)
       elements.elements.add(recursive_sort(element))
     end
   end
