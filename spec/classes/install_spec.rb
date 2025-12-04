@@ -1,17 +1,19 @@
+# frozen_string_literal: true
 
 require 'spec_helper'
 
 describe 'libvirt::install' do
   let :default_params do
     {
-      packages: ['qemu', 'libvirt-daemon-system', 'libvirt-bin'],
-      qemu_hook_packages: { drbd: ['xmlstarlet', 'python-libvirt'] },
+      packages: %w[qemu libvirt-daemon-system libvirt-bin],
+      qemu_hook_packages: { drbd: %w[xmlstarlet python-libvirt] },
       package_ensure: 'installed',
     }
   end
 
   shared_examples 'libvirt::install shared examples' do
     it { is_expected.to compile.with_all_deps }
+
     it {
       params[:packages].each do |package|
         is_expected.to contain_package(package)
@@ -41,7 +43,7 @@ describe 'libvirt::install' do
         let :params do
           default_params.merge(
             package_ensure: 'actual',
-            packages: [ 'libvirt-clients', 'libvirt', 'qemu-kvm', 'qemu-system-x86'],
+            packages: %w[libvirt-clients libvirt qemu-kvm qemu-system-x86]
           )
         end
 
@@ -53,7 +55,7 @@ describe 'libvirt::install' do
         let :params do
           default_params.merge(
             qemu_hook: 'drbd',
-            manage_domain_file: 'puppet:///modules/libvirt/dummy',
+            manage_domain_file: 'puppet:///modules/libvirt/dummy'
           )
         end
 
