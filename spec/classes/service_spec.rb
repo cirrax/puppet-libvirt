@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 require 'spec_helper'
 
@@ -37,7 +38,7 @@ describe 'libvirt::service' do
           default_params.merge(
             service_ensure: 'stopped',
             service_enable: false,
-            service_name: 'dtrivbil',
+            service_name: 'dtrivbil'
           )
         end
 
@@ -47,7 +48,7 @@ describe 'libvirt::service' do
       context 'without managing service' do
         let :params do
           default_params.merge(
-            manage_service: false,
+            manage_service: false
           )
         end
 
@@ -59,13 +60,14 @@ describe 'libvirt::service' do
       context 'with modular services' do
         let :params do
           default_params.merge(
-            modular_services: { 'virtqemud' => { 'ensure' => 'running', 'enable' => true } },
+            modular_services: { 'virtqemud' => { 'ensure' => 'running', 'enable' => true } }
           )
         end
 
         it {
           is_expected.not_to contain_service('libvirtd')
         }
+
         it {
           is_expected.to contain_service('virtqemud')
             .with_ensure('running')

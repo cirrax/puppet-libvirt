@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Most of the code of this file comes from https://github.com/thias/puppet-libvirt/blob/master/lib/puppet/provider/libvirt_pool/virsh.rb
 # Kudos to Thias for it :)
 #
@@ -13,24 +15,22 @@ Puppet::Type.type(:libvirt_pool).provide(:virsh) do
 
   def self.instances
     list = virsh('-q', 'pool-list', '--all')
-    list.split(%r{\n})[0..-1].map do |line|
+    list.split(%r{\n})[0..].map do |line|
       values = line.strip.split(%r{ +})
       new(
         name: values[0],
         active: %r{^act}.match?(values[1]) ? :true : :false,
         autostart: values[2].include?('no') ? :false : :true,
-        provider: name,
+        provider: name
       )
     end
   end
 
   def status
     list = virsh('-q', 'pool-list', '--all')
-    list.split(%r{\n})[0..-1].find do |line|
+    list.split(%r{\n})[0..].find do |line|
       fields = line.strip.split(%r{ +})
-      if %r{^#{resource[:name]}$}.match?(fields[0])
-        return :present
-      end
+      return :present if %r{^#{resource[:name]}$}.match?(fields[0])
     end
     :absent
   end
@@ -86,7 +86,7 @@ Puppet::Type.type(:libvirt_pool).provide(:virsh) do
 
   def buildpool
     virsh('pool-build', '--pool', resource[:name])
-  rescue
+  rescue StandardError
     # Unable to build the pool maybe because
     # it is already defined (it this case we should consider
     # to continue execution)
@@ -198,5 +198,5 @@ Puppet::Type.type(:libvirt_pool).provide(:virsh) do
     end
 
     root.to_s
-  end # buildpoolxml
+  end
 end

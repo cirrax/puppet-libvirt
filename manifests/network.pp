@@ -134,22 +134,22 @@ define libvirt::network (
   if ($ensure != 'absent') {
     if $template == 'generic' {
       $content = libvirt::normalxml(epp('libvirt/network/generic.xml.epp', {
-            'networkname' => $title,
-            'tree'        => $libvirt::tree_network,
-            'metadata'    => $metadata,
-            'mtu'         => $mtu,
-            'bridge'      => $bridge,
-            'domain'      => $domain,
-            'forward'     => $forward,
-            'bandwith'    => $bandwith,
-            'vlan'        => $vlan,
-            'port'        => $port,
-            'portgroups'  => $portgroups,
-            'ips'         => $ips,
-            'routes'      => $routes,
-            'dns'         => $dns,
-            'dnsmasq_options' => $dnsmasq_options,
-            'virtualport'     => $virtualport,
+        'networkname' => $title,
+        'tree'        => $libvirt::tree_network,
+        'metadata'    => $metadata,
+        'mtu'         => $mtu,
+        'bridge'      => $bridge,
+        'domain'      => $domain,
+        'forward'     => $forward,
+        'bandwith'    => $bandwith,
+        'vlan'        => $vlan,
+        'port'        => $port,
+        'portgroups'  => $portgroups,
+        'ips'         => $ips,
+        'routes'      => $routes,
+        'dns'         => $dns,
+        'dnsmasq_options' => $dnsmasq_options,
+        'virtualport'     => $virtualport,
       }))
     } else {
       if ! ($bridge =~ Undef or $bridge =~ String) {

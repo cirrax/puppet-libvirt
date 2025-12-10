@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 Puppet::Type.newtype(:libvirtd_default) do
   ensurable
@@ -14,7 +15,7 @@ Puppet::Type.newtype(:libvirtd_default) do
       value
     end
 
-    def is_to_s(currentvalue) # rubocop:disable Style/PredicateName
+    def is_to_s(currentvalue)
       if resource.secret?
         '[old secret redacted]'
       else

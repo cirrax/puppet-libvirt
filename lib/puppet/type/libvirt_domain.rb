@@ -62,17 +62,17 @@ Puppet::Type.newtype(:libvirt_domain) do
 
     def should_to_s(value)
       if @resource[:show_diff]
-        ":\n" + value + "\n"
+        ":\n#{value}\n"
       else
-        '{md5}' + Digest::MD5.hexdigest(value.to_s)
+        "{md5}#{Digest::MD5.hexdigest(value.to_s)}"
       end
     end
 
-    def is_to_s(value) # rubocop:disable Naming/PredicateName
+    def is_to_s(value)
       if @resource[:show_diff]
-        ":\n" + value + "\n"
+        ":\n#{value}\n"
       else
-        '{md5}' + Digest::MD5.hexdigest(value.to_s)
+        "{md5}#{Digest::MD5.hexdigest(value.to_s)}"
       end
     end
   end

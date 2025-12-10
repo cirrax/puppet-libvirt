@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 require 'spec_helper'
 
@@ -15,12 +16,14 @@ describe 'libvirt::network' do
 
   shared_examples 'libvirt::network shared examples' do
     it { is_expected.to compile.with_all_deps }
+
     it {
       is_expected.to contain_libvirt_network(title)
         .with_ensure(params[:ensure])
         .with_uuid(params[:uuid])
         .with_show_diff(params[:show_diff])
     }
+
     it { is_expected.to contain_class('libvirt') }
   end
 
@@ -32,7 +35,7 @@ describe 'libvirt::network' do
         let(:title) { 'mytitle' }
         let :params do
           default_params.merge(
-            bridge: 'test',
+            bridge: 'test'
           )
         end
 
@@ -45,7 +48,7 @@ describe 'libvirt::network' do
         let :params do
           default_params.merge(
             bridge: 'test',
-            autostart: false,
+            autostart: false
           )
         end
 
@@ -57,7 +60,7 @@ describe 'libvirt::network' do
 
         let :params do
           default_params.merge(
-            ensure: 'absent',
+            ensure: 'absent'
           )
         end
 

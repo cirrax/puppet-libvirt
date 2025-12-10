@@ -1799,7 +1799,7 @@ usually discover the appropriate provider for your platform.
 
 ##### <a name="-libvirt_pool--sourcedev"></a>`sourcedev`
 
-Valid values: `%r{(\/)?(\w)}`
+Valid values: `%r{(/)?(\w)}`
 
 The source device.
 
@@ -1823,13 +1823,13 @@ The source name.
 
 ##### <a name="-libvirt_pool--sourcepath"></a>`sourcepath`
 
-Valid values: `%r{(\/)?(\w)}`
+Valid values: `%r{(/)?(\w)}`
 
 The source path.
 
 ##### <a name="-libvirt_pool--target"></a>`target`
 
-Valid values: `%r{(\/)?(\w)}`
+Valid values: `%r{(/)?(\w)}`
 
 The target.
 
@@ -2084,8 +2084,8 @@ Alias of
 
 ```puppet
 Variant[Array[Libvirt::Domain::Device], String[1], Integer, Struct[{
-      values => Optional[Variant[Hash, String[1],Integer, Libvirt::Domain::Device]],
-      attrs  => Optional[Variant[String[1], Integer, Hash]],
+    values => Optional[Variant[Hash, String[1],Integer, Libvirt::Domain::Device]],
+    attrs  => Optional[Variant[String[1], Integer, Hash]],
   }], Hash[String[1], Libvirt::Domain::Device]]
 ```
 
@@ -2097,12 +2097,12 @@ Alias of
 
 ```puppet
 Struct[{
-    type       => Enum['file', 'block', 'network', 'volume'],
-    device     => Enum['floppy', 'disk', 'cdrom', 'lun'],
-    bus        => String[1],
-    driver     => Optional[Hash[String[1],String[1]]],
-    boot_order => Optional[Integer],
-    source     => Optional[Hash[String[1], String[1]]],
+  type       => Enum['file', 'block', 'network', 'volume'],
+  device     => Enum['floppy', 'disk', 'cdrom', 'lun'],
+  bus        => String[1],
+  driver     => Optional[Hash[String[1],String[1]]],
+  boot_order => Optional[Integer],
+  source     => Optional[Hash[String[1], String[1]]],
 }]
 ```
 
@@ -2114,24 +2114,24 @@ Alias of
 
 ```puppet
 Struct[{
-    type           => Optional[String[1]],
-    interface_type => Optional[Enum['network','bridge', 'vdpa', 'mcast', 'server', 'client', 'null', 'vds']],
-    network        => Optional[String[1]],  # deprecated, do not use
-    source         => Optional[Hash[String[1],String[1]]],
-    portgroup      => Optional[String[1]],  # deprecated, do not use, use source hash instead
-    address        => Optional[Hash[String[1],String[1]]],
-    mac            => Optional[String[1]],
-    filter         => Optional[Variant[
+  type           => Optional[String[1]],
+  interface_type => Optional[Enum['network','bridge', 'vdpa', 'mcast', 'server', 'client', 'null', 'vds']],
+  network        => Optional[String[1]],  # deprecated, do not use
+  source         => Optional[Hash[String[1],String[1]]],
+  portgroup      => Optional[String[1]],  # deprecated, do not use, use source hash instead
+  address        => Optional[Hash[String[1],String[1]]],
+  mac            => Optional[String[1]],
+  filter         => Optional[Variant[
+    String[1],
+    Struct[{
+      filterref  => String[1],
+      parameters => Optional[Hash[
         String[1],
-        Struct[{
-            filterref  => String[1],
-            parameters => Optional[Hash[
-                String[1],
-                Variant[String[1],Array[String[1]]]
-            ]],
-        }],
-    ]],
-    boot_order     => Optional[Integer],
+        Variant[String[1],Array[String[1]]]
+      ]],
+    }],
+  ]],
+  boot_order     => Optional[Integer],
 }]
 ```
 
@@ -2143,17 +2143,17 @@ Alias of
 
 ```puppet
 Array[Optional[
-    Struct[{
-        filter     => String[1],
-        parameters => Optional[
-          Array[
-            Hash[
-              Pattern[/\A[A-Z]/],
-              Variant[String[1],Integer],
-            ]
-          ]
+  Struct[{
+    filter     => String[1],
+    parameters => Optional[
+      Array[
+        Hash[
+          Pattern[/\A[A-Z]/],
+          Variant[String[1],Integer],
         ]
-    }]
+      ]
+    ]
+  }]
 ]]
 ```
 
@@ -2165,17 +2165,17 @@ Alias of
 
 ```puppet
 Struct[{
-    inbound  => Optional[Struct[{
-          average => Optional[Integer],
-          peak    => Optional[Integer],
-          burst   => Optional[Integer],
-          floot   => Optional[Integer],
-    }]],
-    outbound => Optional[Struct[{
-          average => Optional[Integer],
-          peak    => Optional[Integer],
-          burst   => Optional[Integer],
-    }]],
+  inbound  => Optional[Struct[{
+    average => Optional[Integer],
+    peak    => Optional[Integer],
+    burst   => Optional[Integer],
+    floot   => Optional[Integer],
+  }]],
+  outbound => Optional[Struct[{
+    average => Optional[Integer],
+    peak    => Optional[Integer],
+    burst   => Optional[Integer],
+  }]],
 }]
 ```
 
@@ -2187,11 +2187,11 @@ Alias of
 
 ```puppet
 Variant[String[1], Struct[{
-      name            => String[1],
-      stp             => Optional[Enum['on','off']],
-      delay           => Optional[Integer],
-      macTableManager => Optional[Enum['kernel','libvirt']],
-      zone            => Optional[String[1]],
+    name            => String[1],
+    stp             => Optional[Enum['on','off']],
+    delay           => Optional[Integer],
+    macTableManager => Optional[Enum['kernel','libvirt']],
+    zone            => Optional[String[1]],
   }]]
 ```
 
@@ -2203,29 +2203,29 @@ Alias of
 
 ```puppet
 Struct[{
-    enable => Optional[Enum['yes','no']],
-    forwardPlainNames => Optional[Enum['yes','no']],
-    forwarder => Optional[Array[Struct[{
-            addr => Optional[String[1]],
-            domain => Optional[String[1]],
-    }]]],
-    txt => Optional[Array[Struct[{
-            name => Optional[String[1]],
-            value => Optional[String[1]],
-    }]]],
-    srv => Optional[Array[Struct[{
-            service => String[1],
-            protocol => String[1],
-            domain => Optional[String[1]],
-            target => Optional[String[1]],
-            port => Optional[Integer],
-            priority => Optional[Integer],
-            weight => Optional[Integer],
-    }]]],
-    host => Optional[Array[Struct[{
-            ip => String[1],
-            hostname => Array[String[1]],
-    }]]],
+  enable => Optional[Enum['yes','no']],
+  forwardPlainNames => Optional[Enum['yes','no']],
+  forwarder => Optional[Array[Struct[{
+    addr => Optional[String[1]],
+    domain => Optional[String[1]],
+  }]]],
+  txt => Optional[Array[Struct[{
+    name => Optional[String[1]],
+    value => Optional[String[1]],
+  }]]],
+  srv => Optional[Array[Struct[{
+    service => String[1],
+    protocol => String[1],
+    domain => Optional[String[1]],
+    target => Optional[String[1]],
+    port => Optional[Integer],
+    priority => Optional[Integer],
+    weight => Optional[Integer],
+  }]]],
+  host => Optional[Array[Struct[{
+    ip => String[1],
+    hostname => Array[String[1]],
+  }]]],
 }]
 ```
 
@@ -2237,9 +2237,9 @@ Alias of
 
 ```puppet
 Array[Struct[{
-      'dnsmasq:option' => Struct[{
-          value => String[1],
-      }],
+  'dnsmasq:option' => Struct[{
+    value => String[1],
+  }],
 }]]
 ```
 
@@ -2251,8 +2251,8 @@ Alias of
 
 ```puppet
 Struct[{
-    name                => String[1],
-    localOnly           => Optional[Enum['yes','no']],
+  name                => String[1],
+  localOnly           => Optional[Enum['yes','no']],
 }]
 ```
 
@@ -2264,36 +2264,36 @@ Alias of
 
 ```puppet
 Struct[{
-    mode => Enum['nat','route','open','bridge','private','vepa','passthrough','hostdev'],
-    managed => Optional[Enum['yes','no']],
-    dev  => Optional[String[1]],
-    nat  => Optional[Struct[{
-          addresses => Optional[Array[Struct[{
-                  start => String[1],
-                  end   => String[1],
-          }]]],
-          port => Optional[Struct[{
-                start => Integer,
-                end   => Integer,
-          }]],
-          ipv6 => Optional[Enum['yes']],
-    }]],
-    interface => Optional[Array[Struct[{
-            dev => String[1],
+  mode => Enum['nat','route','open','bridge','private','vepa','passthrough','hostdev'],
+  managed => Optional[Enum['yes','no']],
+  dev  => Optional[String[1]],
+  nat  => Optional[Struct[{
+    addresses => Optional[Array[Struct[{
+      start => String[1],
+      end   => String[1],
     }]]],
-    pf => Optional[Struct[{
-          dev => String[1],
+    port => Optional[Struct[{
+      start => Integer,
+      end   => Integer,
     }]],
-    driver    => Optional[Struct[{
-          name => Enum['vfio','kvm'],
-    }]],
-    address => Optional[Array[Struct[{
-            type     => Optional[String[1]],
-            domain   => Optional[String[1]],
-            bus      => Optional[String[1]],
-            slot     => Optional[String[1]],
-            function => Optional[String[1]],
-    }]]],
+    ipv6 => Optional[Enum['yes']],
+  }]],
+  interface => Optional[Array[Struct[{
+    dev => String[1],
+  }]]],
+  pf => Optional[Struct[{
+    dev => String[1],
+  }]],
+  driver    => Optional[Struct[{
+    name => Enum['vfio','kvm'],
+  }]],
+  address => Optional[Array[Struct[{
+    type     => Optional[String[1]],
+    domain   => Optional[String[1]],
+    bus      => Optional[String[1]],
+    slot     => Optional[String[1]],
+    function => Optional[String[1]],
+  }]]],
 }]
 ```
 
@@ -2306,39 +2306,39 @@ Alias of
 
 ```puppet
 Struct[{
-    address => Optional[String[1]],
-    netmask => Optional[String[1]],
-    prefix => Optional[String[1]],
-    family => Optional[String[1]],
-    localPtr => Optional[String[1]],
-    tftp    => Optional[Array[Struct[{
-            root => String[1],
+  address => Optional[String[1]],
+  netmask => Optional[String[1]],
+  prefix => Optional[String[1]],
+  family => Optional[String[1]],
+  localPtr => Optional[String[1]],
+  tftp    => Optional[Array[Struct[{
+    root => String[1],
+  }]]],
+  dhcp => Optional[Struct[{
+    range => Optional[Array[Struct[{
+      start => String[1],
+      end   => String[1],
+      lease => Optional[Array[Struct[{
+        expiry => Integer,
+        unit   => Optional[Enum['seconds', 'minutes', 'hours']],
+      }]]],
+      unit   => Optional[String[1]],
     }]]],
-    dhcp => Optional[Struct[{
-          range => Optional[Array[Struct[{
-                  start => String[1],
-                  end   => String[1],
-                  lease => Optional[Array[Struct[{
-                          expiry => Integer,
-                          unit   => Optional[Enum['seconds', 'minutes', 'hours']],
-                  }]]],
-                  unit   => Optional[String[1]],
-          }]]],
-          host => Optional[Array[Struct[{
-                  mac => Optional[String[1]],
-                  id => Optional[String[1]],
-                  name => Optional[String[1]],
-                  ip => String[1],
-                  lease => Optional[Array[Struct[{
-                          expiry => Integer,
-                          unit   => Optional[Enum['seconds', 'minutes', 'hours']],
-                  }]]],
-          }]]],
-          bootp => Optional[Struct[{
-                file => Optional[String[1]],
-                server => Optional[String[1]],
-          }]],
+    host => Optional[Array[Struct[{
+      mac => Optional[String[1]],
+      id => Optional[String[1]],
+      name => Optional[String[1]],
+      ip => String[1],
+      lease => Optional[Array[Struct[{
+        expiry => Integer,
+        unit   => Optional[Enum['seconds', 'minutes', 'hours']],
+      }]]],
+    }]]],
+    bootp => Optional[Struct[{
+      file => Optional[String[1]],
+      server => Optional[String[1]],
     }]],
+  }]],
 }]
 ```
 
@@ -2350,8 +2350,8 @@ Alias of
 
 ```puppet
 Struct[{
-    ipv6                => Optional[Enum['yes','no']],
-    trustGuestRxFilters => Optional[Enum['yes','no']],
+  ipv6                => Optional[Enum['yes','no']],
+  trustGuestRxFilters => Optional[Enum['yes','no']],
 }]
 ```
 
@@ -2363,7 +2363,7 @@ Alias of
 
 ```puppet
 Struct[{
-    isolated => Optional[Enum['yes', 'no']],
+  isolated => Optional[Enum['yes', 'no']],
 }]
 ```
 
@@ -2375,14 +2375,14 @@ Alias of
 
 ```puppet
 Struct[{
-    name                => String[1],
-    trunk               => Optional[Boolean],                             # for simple template only
-    vlan_tag            => Optional[Variant[String[1],Array[String[1]]]], # for simple template only
-    vlan                => Optional[Libvirt::Net::Vlan],
-    bandwith            => Optional[Libvirt::Net::Bandwith],
-    virtualport         => Optional[Libvirt::Net::Virtualport],
-    'default'           => Optional[Enum['yes']],
-    trustGuestRxFilters => Optional[Enum['yes', 'no']],
+  name                => String[1],
+  trunk               => Optional[Boolean],                             # for simple template only
+  vlan_tag            => Optional[Variant[String[1],Array[String[1]]]], # for simple template only
+  vlan                => Optional[Libvirt::Net::Vlan],
+  bandwith            => Optional[Libvirt::Net::Bandwith],
+  virtualport         => Optional[Libvirt::Net::Virtualport],
+  'default'           => Optional[Enum['yes']],
+  trustGuestRxFilters => Optional[Enum['yes', 'no']],
 }]
 ```
 
@@ -2395,12 +2395,12 @@ Alias of
 
 ```puppet
 Struct[{
-    family => Optional[Enum['ipv6']],
-    address => String[1],
-    gateway => String[1],
-    netmask => Optional[String[1]],
-    prefix => Optional[String[1]],
-    metric => Optional[Integer],
+  family => Optional[Enum['ipv6']],
+  address => String[1],
+  gateway => String[1],
+  netmask => Optional[String[1]],
+  prefix => Optional[String[1]],
+  metric => Optional[Integer],
 }]
 ```
 
@@ -2412,15 +2412,15 @@ Alias of
 
 ```puppet
 Struct[{
-    type => Optional[Enum['802.1Qbg', 'openvswitch']],
-    parameters => Optional[Array[Struct[{
-            interfaceid => Optional[String[1]],
-            managerid => Optional[Integer],
-            typeid    => Optional[Integer],
-            typeidversion => Optional[Integer],
-            instanceid => Optional[String[1]],
-            profileid => Optional[String[1]],
-    }]]],
+  type => Optional[Enum['802.1Qbg', 'openvswitch']],
+  parameters => Optional[Array[Struct[{
+    interfaceid => Optional[String[1]],
+    managerid => Optional[Integer],
+    typeid    => Optional[Integer],
+    typeidversion => Optional[Integer],
+    instanceid => Optional[String[1]],
+    profileid => Optional[String[1]],
+  }]]],
 }]
 ```
 
@@ -2432,11 +2432,11 @@ Alias of
 
 ```puppet
 Struct[{
-    trunk => Optional[Enum['yes']],
-    tag => Array[Struct[{
-          id         => Integer,
-          nativeMode => Optional[Enum['untagged', 'tagged']],
-    }]],
+  trunk => Optional[Enum['yes']],
+  tag => Array[Struct[{
+    id         => Integer,
+    nativeMode => Optional[Enum['untagged', 'tagged']],
+  }]],
 }]
 ```
 
@@ -2466,35 +2466,35 @@ Alias of
 
 ```puppet
 Struct[{
-    id            => Enum['arp', 'rarp'],
-    match         => Optional[Enum['no','yes']],
-    srcmacaddr    => Optional[String[1]],
-    srcmacmask    => Optional[String[1]],
-    dstmacaddr    => Optional[String[1]],
-    dstmacmask    => Optional[String[1]],
-    hwtype        => Optional[Integer[0,256]],
-    protocoltype  => Optional[Integer[0,256]],
-    opcode        => Optional[Variant[
-        Integer[0,256],
-        Enum['Request',
-          'Reply',
-          'Request_Reverse',
-          'Reply_Reverse',
-          'DRARP_Request',
-          'DRARP_Reply',
-          'DRARP_Error',
-          'InARP_Request',
-        'ARP_NAK'],
-    ]],
-    arpsrcmacaddr => Optional[String[1]],
-    arpdstmacaddr => Optional[String[1]],
-    arpsrcipaddr  => Optional[String[1]],
-    arpsrcipmask  => Optional[String[1]],
-    arpdstipaddr  => Optional[String[1]],
-    arpdstipmask  => Optional[String[1]],
-    gratuitous    => Optional[Boolean],
-    comment       => Optional[String[1,256]],
-    connlimit-above => Optional[Integer],
+  id            => Enum['arp', 'rarp'],
+  match         => Optional[Enum['no','yes']],
+  srcmacaddr    => Optional[String[1]],
+  srcmacmask    => Optional[String[1]],
+  dstmacaddr    => Optional[String[1]],
+  dstmacmask    => Optional[String[1]],
+  hwtype        => Optional[Integer[0,256]],
+  protocoltype  => Optional[Integer[0,256]],
+  opcode        => Optional[Variant[
+    Integer[0,256],
+    Enum['Request',
+      'Reply',
+      'Request_Reverse',
+      'Reply_Reverse',
+      'DRARP_Request',
+      'DRARP_Reply',
+      'DRARP_Error',
+      'InARP_Request',
+    'ARP_NAK'],
+  ]],
+  arpsrcmacaddr => Optional[String[1]],
+  arpdstmacaddr => Optional[String[1]],
+  arpsrcipaddr  => Optional[String[1]],
+  arpsrcipmask  => Optional[String[1]],
+  arpdstipaddr  => Optional[String[1]],
+  arpdstipmask  => Optional[String[1]],
+  gratuitous    => Optional[Boolean],
+  comment       => Optional[String[1,256]],
+  connlimit-above => Optional[Integer],
 }]
 ```
 
@@ -2506,23 +2506,23 @@ Alias of
 
 ```puppet
 Struct[{
-    id         => Enum['esp-ipv6', 'ah-ipv6', 'udplite-ipv6', 'all-ipv6'],
-    match      => Optional[Enum['no','yes']],
-    srcmacaddr => Optional[String[1]],
-    srcipaddr  => Optional[String[1]],
-    srcipmask  => Optional[String[1]],
-    dstipaddr  => Optional[String[1]],
-    dstipmask  => Optional[String[1]],
-    srcipfrom  => Optional[String[1]],
-    srcipto    => Optional[String[1]],
-    dstipfrom  => Optional[String[1]],
-    dstipto    => Optional[String[1]],
-    dscp       => Optional[Integer[0,256]],
-    comment    => Optional[String[1,256]],
-    state      => Optional[String[1]],
-    ipset      => Optional[String[1]],
-    ipsetflags => Optional[String[1]],
-    connlimit-above => Optional[Integer],
+  id         => Enum['esp-ipv6', 'ah-ipv6', 'udplite-ipv6', 'all-ipv6'],
+  match      => Optional[Enum['no','yes']],
+  srcmacaddr => Optional[String[1]],
+  srcipaddr  => Optional[String[1]],
+  srcipmask  => Optional[String[1]],
+  dstipaddr  => Optional[String[1]],
+  dstipmask  => Optional[String[1]],
+  srcipfrom  => Optional[String[1]],
+  srcipto    => Optional[String[1]],
+  dstipfrom  => Optional[String[1]],
+  dstipto    => Optional[String[1]],
+  dscp       => Optional[Integer[0,256]],
+  comment    => Optional[String[1,256]],
+  state      => Optional[String[1]],
+  ipset      => Optional[String[1]],
+  ipsetflags => Optional[String[1]],
+  connlimit-above => Optional[Integer],
 }]
 ```
 
@@ -2534,28 +2534,28 @@ Alias of
 
 ```puppet
 Struct[{
-    id         => Enum['icmp'],
-    match      => Optional[Enum['no','yes']],
-    srcmacaddr => Optional[String[1]],
-    srcmacmask => Optional[Stdlib::MAC],
-    dstmacaddr => Optional[String[1]],
-    dstmacmask => Optional[Stdlib::MAC],
-    srcipaddr  => Optional[String[1]],
-    srcipmask  => Optional[String[1]],
-    dstipaddr  => Optional[String[1]],
-    dstipmask  => Optional[String[1]],
-    srcipfrom  => Optional[String[1]],
-    srcipto    => Optional[String[1]],
-    dstipfrom  => Optional[String[1]],
-    dstipto    => Optional[String[1]],
-    type       => Optional[Integer[0,65535]],
-    code       => Optional[Integer[0,65535]],
-    dscp       => Optional[Integer[0,256]],
-    comment    => Optional[String[1,256]],
-    state      => Optional[String[1]],
-    ipset      => Optional[String[1]],
-    ipsetflags => Optional[String[1]],
-    connlimit-above => Optional[Integer],
+  id         => Enum['icmp'],
+  match      => Optional[Enum['no','yes']],
+  srcmacaddr => Optional[String[1]],
+  srcmacmask => Optional[Stdlib::MAC],
+  dstmacaddr => Optional[String[1]],
+  dstmacmask => Optional[Stdlib::MAC],
+  srcipaddr  => Optional[String[1]],
+  srcipmask  => Optional[String[1]],
+  dstipaddr  => Optional[String[1]],
+  dstipmask  => Optional[String[1]],
+  srcipfrom  => Optional[String[1]],
+  srcipto    => Optional[String[1]],
+  dstipfrom  => Optional[String[1]],
+  dstipto    => Optional[String[1]],
+  type       => Optional[Integer[0,65535]],
+  code       => Optional[Integer[0,65535]],
+  dscp       => Optional[Integer[0,256]],
+  comment    => Optional[String[1,256]],
+  state      => Optional[String[1]],
+  ipset      => Optional[String[1]],
+  ipsetflags => Optional[String[1]],
+  connlimit-above => Optional[Integer],
 }]
 ```
 
@@ -2567,25 +2567,25 @@ Alias of
 
 ```puppet
 Struct[{
-    id         => Enum['icmpv6'],
-    match      => Optional[Enum['no','yes']],
-    srcmacaddr => Optional[String[1]],
-    srcipaddr  => Optional[String[1]],
-    srcipmask  => Optional[String[1]],
-    dstipaddr  => Optional[String[1]],
-    dstipmask  => Optional[String[1]],
-    srcipfrom  => Optional[String[1]],
-    srcipto    => Optional[String[1]],
-    dstipfrom  => Optional[String[1]],
-    dstipto    => Optional[String[1]],
-    type       => Optional[Integer[0,65535]],
-    code       => Optional[Integer[0,65535]],
-    dscp       => Optional[Integer[0,256]],
-    comment    => Optional[String[1,256]],
-    state      => Optional[String[1]],
-    ipset      => Optional[String[1]],
-    ipsetflags => Optional[String[1]],
-    connlimit-above => Optional[Integer],
+  id         => Enum['icmpv6'],
+  match      => Optional[Enum['no','yes']],
+  srcmacaddr => Optional[String[1]],
+  srcipaddr  => Optional[String[1]],
+  srcipmask  => Optional[String[1]],
+  dstipaddr  => Optional[String[1]],
+  dstipmask  => Optional[String[1]],
+  srcipfrom  => Optional[String[1]],
+  srcipto    => Optional[String[1]],
+  dstipfrom  => Optional[String[1]],
+  dstipto    => Optional[String[1]],
+  type       => Optional[Integer[0,65535]],
+  code       => Optional[Integer[0,65535]],
+  dscp       => Optional[Integer[0,256]],
+  comment    => Optional[String[1,256]],
+  state      => Optional[String[1]],
+  ipset      => Optional[String[1]],
+  ipsetflags => Optional[String[1]],
+  connlimit-above => Optional[Integer],
 }]
 ```
 
@@ -2597,26 +2597,26 @@ Alias of
 
 ```puppet
 Struct[{
-    id         => Enum['igmp', 'esp', 'ah', 'udplite', 'all'],
-    match      => Optional[Enum['no','yes']],
-    srcmacaddr => Optional[String[1]],
-    srcmacmask => Optional[String[1]],
-    dstmacaddr => Optional[String[1]],
-    dstmacmask => Optional[String[1]],
-    srcipaddr  => Optional[String[1]],
-    srcipmask  => Optional[String[1]],
-    dstipaddr  => Optional[String[1]],
-    dstipmask  => Optional[String[1]],
-    srcipfrom  => Optional[String[1]],
-    srcipto    => Optional[String[1]],
-    dstipfrom  => Optional[String[1]],
-    dstipto    => Optional[String[1]],
-    dscp       => Optional[Integer[0,256]],
-    comment    => Optional[String[1,256]],
-    state      => Optional[String[1]],
-    ipset      => Optional[String[1]],
-    ipsetflags => Optional[String[1]],
-    connlimit-above => Optional[Integer],
+  id         => Enum['igmp', 'esp', 'ah', 'udplite', 'all'],
+  match      => Optional[Enum['no','yes']],
+  srcmacaddr => Optional[String[1]],
+  srcmacmask => Optional[String[1]],
+  dstmacaddr => Optional[String[1]],
+  dstmacmask => Optional[String[1]],
+  srcipaddr  => Optional[String[1]],
+  srcipmask  => Optional[String[1]],
+  dstipaddr  => Optional[String[1]],
+  dstipmask  => Optional[String[1]],
+  srcipfrom  => Optional[String[1]],
+  srcipto    => Optional[String[1]],
+  dstipfrom  => Optional[String[1]],
+  dstipto    => Optional[String[1]],
+  dscp       => Optional[Integer[0,256]],
+  comment    => Optional[String[1,256]],
+  state      => Optional[String[1]],
+  ipset      => Optional[String[1]],
+  ipsetflags => Optional[String[1]],
+  connlimit-above => Optional[Integer],
 }]
 ```
 
@@ -2628,28 +2628,28 @@ Alias of
 
 ```puppet
 Struct[{
-    id           => Enum['ip'],
-    match        => Optional[Enum['no','yes']],
-    srcmacaddr   => Optional[String[1]],
-    srcmacmask   => Optional[String[1]],
-    dstmacaddr   => Optional[String[1]],
-    dstmacmask   => Optional[String[1]],
-    srcipaddr    => Optional[String[1]],
-    srcipmask    => Optional[String[1]],
-    dstipaddr    => Optional[String[1]],
-    dstipmask    => Optional[String[1]],
-    protocol     => Optional[Variant[
-        Integer[0,256],
-        Enum['tcp', 'udp', 'udplite', 'esp', 'ah', 'icmp', 'igmp', 'sctp'],
-    ]],
-    srcportstart    => Variant[Integer[0,65535],Libvirt::Nwfilter::Param, Undef],
-    srcportend      => Variant[Integer[0,65535],Libvirt::Nwfilter::Param, Undef],
-    dstportstart    => Variant[Integer[0,65535],Libvirt::Nwfilter::Param, Undef],
-    dstportend      => Variant[Integer[0,65535],Libvirt::Nwfilter::Param, Undef],
-    dscp            => Variant[Integer[0,256],Libvirt::Nwfilter::Param, Undef],
-    protocolid      => Variant[Integer[0,65535],Libvirt::Nwfilter::Param, Undef],
-    comment         => Optional[String[1,256]],
-    connlimit-above => Variant[Integer,Libvirt::Nwfilter::Param, Undef],
+  id           => Enum['ip'],
+  match        => Optional[Enum['no','yes']],
+  srcmacaddr   => Optional[String[1]],
+  srcmacmask   => Optional[String[1]],
+  dstmacaddr   => Optional[String[1]],
+  dstmacmask   => Optional[String[1]],
+  srcipaddr    => Optional[String[1]],
+  srcipmask    => Optional[String[1]],
+  dstipaddr    => Optional[String[1]],
+  dstipmask    => Optional[String[1]],
+  protocol     => Optional[Variant[
+    Integer[0,256],
+    Enum['tcp', 'udp', 'udplite', 'esp', 'ah', 'icmp', 'igmp', 'sctp'],
+  ]],
+  srcportstart    => Variant[Integer[0,65535],Libvirt::Nwfilter::Param, Undef],
+  srcportend      => Variant[Integer[0,65535],Libvirt::Nwfilter::Param, Undef],
+  dstportstart    => Variant[Integer[0,65535],Libvirt::Nwfilter::Param, Undef],
+  dstportend      => Variant[Integer[0,65535],Libvirt::Nwfilter::Param, Undef],
+  dscp            => Variant[Integer[0,256],Libvirt::Nwfilter::Param, Undef],
+  protocolid      => Variant[Integer[0,65535],Libvirt::Nwfilter::Param, Undef],
+  comment         => Optional[String[1,256]],
+  connlimit-above => Variant[Integer,Libvirt::Nwfilter::Param, Undef],
 }]
 ```
 
@@ -2661,29 +2661,29 @@ Alias of
 
 ```puppet
 Struct[{
-    id              => Enum['ipv6'],
-    match           => Optional[Enum['no','yes']],
-    srcmacaddr      => Optional[String[1]],
-    srcmacmask      => Optional[String[1]],
-    dstmacaddr      => Optional[String[1]],
-    dstmacmask      => Optional[String[1]],
-    srcipaddr       => Optional[String[1]],
-    srcipmask       => Optional[String[1]],
-    dstipaddr       => Optional[String[1]],
-    dstipmask       => Optional[String[1]],
-    protocol        => Optional[Variant[
-        Integer[0,256],
-        Enum['tcp', 'udp', 'udplite', 'esp', 'ah', 'icmpv6', 'sctp'],
-    ]],
-    srcportstart    => Variant[Integer[0,65535],Libvirt::Nwfilter::Param, Undef],
-    srcportend      => Variant[Integer[0,65535],Libvirt::Nwfilter::Param, Undef],
-    dstportstart    => Variant[Integer[0,65535],Libvirt::Nwfilter::Param, Undef],
-    dstportend      => Variant[Integer[0,65535],Libvirt::Nwfilter::Param, Undef],
-    type            => Variant[Integer[0,246],Libvirt::Nwfilter::Param, Undef],
-    typeend         => Variant[Integer[0,246],Libvirt::Nwfilter::Param, Undef],
-    code            => Variant[Integer[0,246],Libvirt::Nwfilter::Param, Undef],
-    comment         => Optional[String[1,256]],
-    connlimit-above => Optional[Integer],
+  id              => Enum['ipv6'],
+  match           => Optional[Enum['no','yes']],
+  srcmacaddr      => Optional[String[1]],
+  srcmacmask      => Optional[String[1]],
+  dstmacaddr      => Optional[String[1]],
+  dstmacmask      => Optional[String[1]],
+  srcipaddr       => Optional[String[1]],
+  srcipmask       => Optional[String[1]],
+  dstipaddr       => Optional[String[1]],
+  dstipmask       => Optional[String[1]],
+  protocol        => Optional[Variant[
+    Integer[0,256],
+    Enum['tcp', 'udp', 'udplite', 'esp', 'ah', 'icmpv6', 'sctp'],
+  ]],
+  srcportstart    => Variant[Integer[0,65535],Libvirt::Nwfilter::Param, Undef],
+  srcportend      => Variant[Integer[0,65535],Libvirt::Nwfilter::Param, Undef],
+  dstportstart    => Variant[Integer[0,65535],Libvirt::Nwfilter::Param, Undef],
+  dstportend      => Variant[Integer[0,65535],Libvirt::Nwfilter::Param, Undef],
+  type            => Variant[Integer[0,246],Libvirt::Nwfilter::Param, Undef],
+  typeend         => Variant[Integer[0,246],Libvirt::Nwfilter::Param, Undef],
+  code            => Variant[Integer[0,246],Libvirt::Nwfilter::Param, Undef],
+  comment         => Optional[String[1,256]],
+  connlimit-above => Optional[Integer],
 }]
 ```
 
@@ -2695,18 +2695,18 @@ Alias of
 
 ```puppet
 Struct[{
-    id         => Enum['mac'],
-    match      => Optional[Enum['no','yes']],
-    srcmacaddr => Optional[String[1]],
-    srcmacmask => Optional[String[1]],
-    dstmacaddr => Optional[String[1]],
-    dstmacmask => Optional[String[1]],
-    protocolid => Optional[Variant[
-        Enum['arp', 'rarp', 'ipv4', 'ipv6'],
-        Pattern[/\A0x[0-9]{1,4}\Z/],
-    ]],
-    comment    => Optional[String[1,256]],
-    connlimit-above => Optional[Integer],
+  id         => Enum['mac'],
+  match      => Optional[Enum['no','yes']],
+  srcmacaddr => Optional[String[1]],
+  srcmacmask => Optional[String[1]],
+  dstmacaddr => Optional[String[1]],
+  dstmacmask => Optional[String[1]],
+  protocolid => Optional[Variant[
+    Enum['arp', 'rarp', 'ipv4', 'ipv6'],
+    Pattern[/\A0x[0-9]{1,4}\Z/],
+  ]],
+  comment    => Optional[String[1,256]],
+  connlimit-above => Optional[Integer],
 }]
 ```
 
@@ -2718,34 +2718,34 @@ Alias of
 
 ```puppet
 Struct[{
-    id                  => Enum['stp'],
-    match               => Optional[Enum['no','yes']],
-    srcmacaddr          => Optional[String[1]],
-    srcmacmask          => Optional[String[1]],
-    type                => Optional[Integer[0,256]],
-    flags               => Optional[Integer[0,256]],
-    root-priority       => Optional[Integer[0,65535]],
-    root-priority-hi    => Optional[Integer[0,65535]],
-    root-address        => Optional[String[1]],
-    root-address-mask   => Optional[String[1]],
-    root-cost           => Optional[Integer[0,2147483647]],
-    root-cost-hi        => Optional[Integer[0,2147483647]],
-    sender-priority     => Optional[Integer[0,65535]],
-    sender-priority-hi  => Optional[Integer[0,65535]],
-    sender-address      => Optional[String[1]],
-    sender-address-mask => Optional[String[1]],
-    port                => Optional[Integer[0,65535]],
-    port-hi             => Optional[Integer[0,65535]],
-    msg-age             => Optional[Integer[0,65535]],
-    msg-age-hi          => Optional[Integer[0,65535]],
-    max-age             => Optional[Integer[0,65535]],
-    max-age-hi          => Optional[Integer[0,65535]],
-    hello-time          => Optional[Integer[0,65535]],
-    hello-time-hi       => Optional[Integer[0,65535]],
-    forward-delay       => Optional[Integer[0,65535]],
-    forward-delay-hi    => Optional[Integer[0,65535]],
-    comment             => Optional[String[1,256]],
-    connlimit-above => Optional[Integer],
+  id                  => Enum['stp'],
+  match               => Optional[Enum['no','yes']],
+  srcmacaddr          => Optional[String[1]],
+  srcmacmask          => Optional[String[1]],
+  type                => Optional[Integer[0,256]],
+  flags               => Optional[Integer[0,256]],
+  root-priority       => Optional[Integer[0,65535]],
+  root-priority-hi    => Optional[Integer[0,65535]],
+  root-address        => Optional[String[1]],
+  root-address-mask   => Optional[String[1]],
+  root-cost           => Optional[Integer[0,2147483647]],
+  root-cost-hi        => Optional[Integer[0,2147483647]],
+  sender-priority     => Optional[Integer[0,65535]],
+  sender-priority-hi  => Optional[Integer[0,65535]],
+  sender-address      => Optional[String[1]],
+  sender-address-mask => Optional[String[1]],
+  port                => Optional[Integer[0,65535]],
+  port-hi             => Optional[Integer[0,65535]],
+  msg-age             => Optional[Integer[0,65535]],
+  msg-age-hi          => Optional[Integer[0,65535]],
+  max-age             => Optional[Integer[0,65535]],
+  max-age-hi          => Optional[Integer[0,65535]],
+  hello-time          => Optional[Integer[0,65535]],
+  hello-time-hi       => Optional[Integer[0,65535]],
+  forward-delay       => Optional[Integer[0,65535]],
+  forward-delay-hi    => Optional[Integer[0,65535]],
+  comment             => Optional[String[1,256]],
+  connlimit-above => Optional[Integer],
 }]
 ```
 
@@ -2757,26 +2757,26 @@ Alias of
 
 ```puppet
 Struct[{
-    id           => Enum['tcp', 'udp', 'sctp'],
-    match        => Optional[Enum['no','yes']],
-    srcmacaddr   => Optional[String[1]],
-    srcipaddr    => Optional[String[1]],
-    srcipmask    => Optional[String[1]],
-    dstipaddr    => Optional[String[1]],
-    dstipmask    => Optional[String[1]],
-    srcipfrom    => Optional[String[1]],
-    srcipto      => Optional[String[1]],
-    srcportstart => Optional[Integer[0,65535]],
-    srcportend   => Optional[Integer[0,65535]],
-    dstportstart => Optional[Integer[0,65535]],
-    dstportend   => Optional[Integer[0,65535]],
-    dscp         => Optional[Integer[0,256]],
-    comment      => Optional[String[1,256]],
-    state        => Optional[String[1]],
-    flags        => Optional[String[1]],
-    ipset        => Optional[String[1]],
-    ipsetflags   => Optional[String[1]],
-    connlimit-above => Optional[Integer],
+  id           => Enum['tcp', 'udp', 'sctp'],
+  match        => Optional[Enum['no','yes']],
+  srcmacaddr   => Optional[String[1]],
+  srcipaddr    => Optional[String[1]],
+  srcipmask    => Optional[String[1]],
+  dstipaddr    => Optional[String[1]],
+  dstipmask    => Optional[String[1]],
+  srcipfrom    => Optional[String[1]],
+  srcipto      => Optional[String[1]],
+  srcportstart => Optional[Integer[0,65535]],
+  srcportend   => Optional[Integer[0,65535]],
+  dstportstart => Optional[Integer[0,65535]],
+  dstportend   => Optional[Integer[0,65535]],
+  dscp         => Optional[Integer[0,256]],
+  comment      => Optional[String[1,256]],
+  state        => Optional[String[1]],
+  flags        => Optional[String[1]],
+  ipset        => Optional[String[1]],
+  ipsetflags   => Optional[String[1]],
+  connlimit-above => Optional[Integer],
 }]
 ```
 
@@ -2788,28 +2788,28 @@ Alias of
 
 ```puppet
 Struct[{
-    id           => Enum['tcp-ipv6', 'udp-ipv6', 'sctp-ipv6'],
-    match        => Optional[Enum['no','yes']],
-    srcmacaddr   => Optional[String[1]],
-    srcipaddr    => Optional[String[1]],
-    srcipmask    => Optional[String[1]],
-    dstipaddr    => Optional[String[1]],
-    dstipmask    => Optional[String[1]],
-    srcipfrom    => Optional[String[1]],
-    srcipto      => Optional[String[1]],
-    dstipfrom    => Optional[String[1]],
-    dstipto      => Optional[String[1]],
-    srcportstart => Optional[Integer[0,65535]],
-    srcportend   => Optional[Integer[0,65535]],
-    dstportstart => Optional[Integer[0,65535]],
-    dstportend   => Optional[Integer[0,65535]],
-    dscp         => Optional[Integer[0,256]],
-    comment      => Optional[String[1,256]],
-    state        => Optional[String[1]],
-    flags        => Optional[String[1]],
-    ipset        => Optional[String[1]],
-    ipsetflags   => Optional[String[1]],
-    connlimit-above => Optional[Integer],
+  id           => Enum['tcp-ipv6', 'udp-ipv6', 'sctp-ipv6'],
+  match        => Optional[Enum['no','yes']],
+  srcmacaddr   => Optional[String[1]],
+  srcipaddr    => Optional[String[1]],
+  srcipmask    => Optional[String[1]],
+  dstipaddr    => Optional[String[1]],
+  dstipmask    => Optional[String[1]],
+  srcipfrom    => Optional[String[1]],
+  srcipto      => Optional[String[1]],
+  dstipfrom    => Optional[String[1]],
+  dstipto      => Optional[String[1]],
+  srcportstart => Optional[Integer[0,65535]],
+  srcportend   => Optional[Integer[0,65535]],
+  dstportstart => Optional[Integer[0,65535]],
+  dstportend   => Optional[Integer[0,65535]],
+  dscp         => Optional[Integer[0,256]],
+  comment      => Optional[String[1,256]],
+  state        => Optional[String[1]],
+  flags        => Optional[String[1]],
+  ipset        => Optional[String[1]],
+  ipsetflags   => Optional[String[1]],
+  connlimit-above => Optional[Integer],
 }]
 ```
 
@@ -2821,19 +2821,19 @@ Alias of
 
 ```puppet
 Struct[{
-    id             => Enum['vlan'],
-    match          => Optional[Enum['no','yes']],
-    srcmacaddr     => Optional[String[1]],
-    srcmacmask     => Optional[String[1]],
-    dstmacaddr     => Optional[String[1]],
-    dstmacmask     => Optional[String[1]],
-    vlanid         => Optional[Integer[0,4095]],
-    encap_protocol => Optional[Variant[
-        Enum['arp','ipv4','ipv6'],
-        Integer[0,65535]
-    ]],
-    comment        => Optional[String[1,256]],
-    connlimit-above => Optional[Integer],
+  id             => Enum['vlan'],
+  match          => Optional[Enum['no','yes']],
+  srcmacaddr     => Optional[String[1]],
+  srcmacmask     => Optional[String[1]],
+  dstmacaddr     => Optional[String[1]],
+  dstmacmask     => Optional[String[1]],
+  vlanid         => Optional[Integer[0,4095]],
+  encap_protocol => Optional[Variant[
+    Enum['arp','ipv4','ipv6'],
+    Integer[0,65535]
+  ]],
+  comment        => Optional[String[1,256]],
+  connlimit-above => Optional[Integer],
 }]
 ```
 
@@ -2845,24 +2845,24 @@ Alias of
 
 ```puppet
 Struct[{
-    action     => Enum['drop','reject','accept','return','continue'],
-    direction  => Enum['in','out','inout'],
-    priority   => Optional[Libvirt::Nwfilter::Priority],
-    statematch => Optional[Enum['0','false','1','true']],
-    protocols  => Optional[Array[Optional[Variant[
-            Libvirt::Nwfilter::Protocol::Mac,
-            Libvirt::Nwfilter::Protocol::Vlan,
-            Libvirt::Nwfilter::Protocol::Stp,
-            Libvirt::Nwfilter::Protocol::Arp_rarp,
-            Libvirt::Nwfilter::Protocol::Ipv4,
-            Libvirt::Nwfilter::Protocol::Ipv6,
-            Libvirt::Nwfilter::Protocol::Tcp_udp_sctp,
-            Libvirt::Nwfilter::Protocol::Icmp,
-            Libvirt::Nwfilter::Protocol::Igmp_esp_ah_udplite_all,
-            Libvirt::Nwfilter::Protocol::Tcpipv6_udpipv6_sctpipv6,
-            Libvirt::Nwfilter::Protocol::Icmpv6,
-            Libvirt::Nwfilter::Protocol::Espipv6_ahipv6_udpliteipv6_allipv6,
-    ]]]]
+  action     => Enum['drop','reject','accept','return','continue'],
+  direction  => Enum['in','out','inout'],
+  priority   => Optional[Libvirt::Nwfilter::Priority],
+  statematch => Optional[Enum['0','false','1','true']],
+  protocols  => Optional[Array[Optional[Variant[
+    Libvirt::Nwfilter::Protocol::Mac,
+    Libvirt::Nwfilter::Protocol::Vlan,
+    Libvirt::Nwfilter::Protocol::Stp,
+    Libvirt::Nwfilter::Protocol::Arp_rarp,
+    Libvirt::Nwfilter::Protocol::Ipv4,
+    Libvirt::Nwfilter::Protocol::Ipv6,
+    Libvirt::Nwfilter::Protocol::Tcp_udp_sctp,
+    Libvirt::Nwfilter::Protocol::Icmp,
+    Libvirt::Nwfilter::Protocol::Igmp_esp_ah_udplite_all,
+    Libvirt::Nwfilter::Protocol::Tcpipv6_udpipv6_sctpipv6,
+    Libvirt::Nwfilter::Protocol::Icmpv6,
+    Libvirt::Nwfilter::Protocol::Espipv6_ahipv6_udpliteipv6_allipv6,
+  ]]]]
 }]
 ```
 
@@ -2881,7 +2881,7 @@ Alias of
 ```puppet
 Hash[String[1], Variant[
     Struct[{
-        'profileconfig' => Optional[Struct[{ 'base' => Optional[String[1]] }]],
+      'profileconfig' => Optional[Struct[{ 'base' => Optional[String[1]] }]],
     }],
     Libvirt::Domain::Device,
   ]]

@@ -3,8 +3,8 @@
 File.expand_path('../../..', File.dirname(__FILE__)).tap { |dir| $LOAD_PATH.unshift(dir) unless $LOAD_PATH.include?(dir) }
 
 # require_relative '../../../puppet_x/libvirt/rexml_sorted_attributes.rb'
-require 'puppet_x/libvirt/rexml_sorted_attributes.rb'
-require 'puppet_x/libvirt/sort_elements.rb'
+require 'puppet_x/libvirt/rexml_sorted_attributes'
+require 'puppet_x/libvirt/sort_elements'
 
 # @summary
 #   normalize a xml string
@@ -13,7 +13,7 @@ require 'puppet_x/libvirt/sort_elements.rb'
 # this function does the same for the input as it is done with the
 # output of the dumpxml in the provider. (see resource libvirt_nwfilter)
 #
-Puppet::Functions.create_function(:"libvirt::normalxml") do
+Puppet::Functions.create_function(:'libvirt::normalxml') do
   # @param value
   #   the xml string
   #
@@ -32,8 +32,8 @@ Puppet::Functions.create_function(:"libvirt::normalxml") do
   def normalxml(value)
     begin
       xml = REXML::Document.new(value)
-    rescue REXML::ParseException => msg
-      raise Puppet::ParseError, "libvirt::normalxml: cannot parse xml: #{msg}"
+    rescue REXML::ParseException => e
+      raise Puppet::ParseError, "libvirt::normalxml: cannot parse xml: #{e}"
     end
 
     formatter = REXML::Formatters::Pretty.new(2)
