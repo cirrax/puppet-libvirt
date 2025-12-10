@@ -36,7 +36,7 @@ libvirt::network { 'default':
       'family'  => 'ipv6',
       'address' => '2001:db8:ca2:2::1',
       'prefix'  => '64',
-    }
+    },
   ],
 }
 
