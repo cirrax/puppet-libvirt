@@ -1,6 +1,6 @@
 {
   "name": "cirrax-libvirt",
-  "version": "5.1.0",
+  "version": "6.0.0",
   "author": "Cirrax GmbH",
   "summary": "Puppet module to install libvirt and create virtual domain configuration",
   "license": "GPL-3.0",
