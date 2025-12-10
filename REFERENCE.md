@@ -2046,13 +2046,21 @@ Type: Ruby 3.x API
 
 Generates MAC addresses for all interfaces in the array which do not yet have an
 address specified. The MAC addresses are based on the domain name, network and
-portgroup. The function libvirt_generate_mac is used to generate a single mac address.
+portgroup or the whole interface configuration (excluding the 'filter' key, to avoid
+mac changes when the firewall rules change).#{' '}
+The function libvirt_generate_mac is used to generate a single mac address.
+Additional remark: If the same network config is attached to a node twice
+the resulting mac address is the same !
 
 #### `libvirt_generate_mac_addresses(Any $hash)`
 
 Generates MAC addresses for all interfaces in the array which do not yet have an
 address specified. The MAC addresses are based on the domain name, network and
-portgroup. The function libvirt_generate_mac is used to generate a single mac address.
+portgroup or the whole interface configuration (excluding the 'filter' key, to avoid
+mac changes when the firewall rules change).#{' '}
+The function libvirt_generate_mac is used to generate a single mac address.
+Additional remark: If the same network config is attached to a node twice
+the resulting mac address is the same !
 
 Returns: `Any` the interfacess with mac address
 
