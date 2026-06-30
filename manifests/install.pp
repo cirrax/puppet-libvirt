@@ -22,12 +22,16 @@
 # @param manage_domain_file
 #   script to use for manage-domains
 #
+# @param manage_domains_script
+#   abolute path where to install the script to manage domains
+#
 class libvirt::install (
   Optional[String] $qemu_hook          = $libvirt::qemu_hook,
   Array            $packages           = $libvirt::libvirt_package_names,
   Hash             $qemu_hook_packages = $libvirt::qemu_hook_packages,
   String           $package_ensure     = 'installed',
   String[1]        $manage_domain_file = 'puppet:///modules/libvirt/scripts/manage-domains',
+  Stdlib::Absolutepath $manage_domains_script = '/usr/local/sbin/manage-domains',
 ) inherits libvirt {
   package { $packages:
     ensure => $package_ensure,
@@ -42,7 +46,7 @@ class libvirt::install (
 
   # install managment script for drbd hook
   if ($qemu_hook == 'drbd') {
-    file { '/usr/local/sbin/manage-domains':
+    file { $manage_domains_script :
       ensure => 'file',
       owner  => 'root',
       group  => 'root',

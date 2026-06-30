@@ -8,6 +8,7 @@ describe 'libvirt::install' do
       packages: %w[qemu libvirt-daemon-system libvirt-bin],
       qemu_hook_packages: { drbd: %w[xmlstarlet python-libvirt] },
       package_ensure: 'installed',
+      manage_domains_script: '/usr/local/sbin/manage-domains',
     }
   end
 
@@ -56,12 +57,13 @@ describe 'libvirt::install' do
           default_params.merge(
             qemu_hook: 'drbd',
             manage_domain_file: 'puppet:///modules/libvirt/dummy',
+            manage_domains_script: '/usr/sbin/manage-domains',
           )
         end
 
         it_behaves_like 'libvirt::install shared examples'
         it {
-          is_expected.to contain_file('/usr/local/sbin/manage-domains')
+          is_expected.to contain_file(params[:manage_domains_script])
             .with_ensure('file')
             .with_owner('root')
             .with_group('root')
