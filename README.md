@@ -1,7 +1,5 @@
 # libvirt puppet module
 
-[![PDK](https://github.com/cirrax/puppet-libvirt/actions/workflows/pdk.yml/badge.svg)](https://github.com/cirrax/puppet-libvirt/actions/workflows/pdk.yml)
-
 #### Table of Contents
 
 1. [Overview](#overview)
@@ -15,7 +13,7 @@
 ## Upgrade warnings
 
 Upgrading to puppet 8 comes with Ruby 3, which doesn't have the `rexml` gem bundled.
-It should be [installed on the puppetserver](https://www.puppet.com/docs/puppet/7/server/gems.html#installing-and-removing-gems).
+It should be [installed on the puppetserver](https://docs.openvoxproject.org/openvox-server/latest/gems.html#installing-and-removing-gems).
 
 ```bash
 sudo puppetserver gem install rexml
