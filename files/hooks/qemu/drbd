@@ -14,7 +14,7 @@ domxml=$(cat)
 find_drbd_resources () {
     drbd_disks=$(echo ${domxml} | xmlstarlet sel -t -v '/domain/devices/disk/source/@dev' | grep drbd)
     for d in ${drbd_disks} ; do
-        echo $(udevadm info --query=property --name=${d} | grep RESOURCE | cut -d "=" -f 2 | cut -d "/" -f 1)
+        echo $d | cut -d "/" -f 5
     done
 }
 
