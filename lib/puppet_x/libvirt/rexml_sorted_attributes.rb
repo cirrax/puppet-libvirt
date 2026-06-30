@@ -4,7 +4,6 @@
 #
 require 'rexml/document'
 
-# rubocop:disable Lint/ToEnumArguments
 # rubocop:disable Naming/MethodParameterName
 # replace each_attribute with a sorted version
 class REXML::Attributes
@@ -13,5 +12,4 @@ class REXML::Attributes
     to_enum(:xx_each_attribute).sort_by(&:name).each(&b)
   end
 end
-# rubocop:enable Lint/ToEnumArguments
 # rubocop:enable Naming/MethodParameterName

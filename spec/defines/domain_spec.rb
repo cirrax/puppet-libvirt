@@ -40,7 +40,7 @@ describe 'libvirt::domain' do
         let(:title) { 'mytitle' }
         let :params do
           default_params.merge(
-            autostart: true
+            autostart: true,
           )
         end
 
@@ -56,7 +56,7 @@ describe 'libvirt::domain' do
             autostart: false,
             active: true,
             ignore: ['//domain/devices/controller'],
-            replace: true
+            replace: true,
           )
         end
 
@@ -68,7 +68,7 @@ describe 'libvirt::domain' do
 
         let :params do
           default_params.merge(
-            ensure: 'absent'
+            ensure: 'absent',
           )
         end
 
