@@ -533,6 +533,7 @@ The following parameters are available in the `libvirt::install` class:
 * [`qemu_hook_packages`](#-libvirt--install--qemu_hook_packages)
 * [`package_ensure`](#-libvirt--install--package_ensure)
 * [`manage_domain_file`](#-libvirt--install--manage_domain_file)
+* [`manage_domains_script`](#-libvirt--install--manage_domains_script)
 
 ##### <a name="-libvirt--install--qemu_hook"></a>`qemu_hook`
 
@@ -578,6 +579,14 @@ Data type: `String[1]`
 script to use for manage-domains
 
 Default value: `'puppet:///modules/libvirt/scripts/manage-domains'`
+
+##### <a name="-libvirt--install--manage_domains_script"></a>`manage_domains_script`
+
+Data type: `Stdlib::Absolutepath`
+
+abolute path where to install the script to manage domains
+
+Default value: `'/usr/local/sbin/manage-domains'`
 
 ### <a name="libvirt--manage_domains_config"></a>`libvirt::manage_domains_config`
 
