@@ -43,7 +43,7 @@ describe 'libvirt::install' do
         let :params do
           default_params.merge(
             package_ensure: 'actual',
-            packages: %w[libvirt-clients libvirt qemu-kvm qemu-system-x86]
+            packages: %w[libvirt-clients libvirt qemu-kvm qemu-system-x86],
           )
         end
 
@@ -55,7 +55,7 @@ describe 'libvirt::install' do
         let :params do
           default_params.merge(
             qemu_hook: 'drbd',
-            manage_domain_file: 'puppet:///modules/libvirt/dummy'
+            manage_domain_file: 'puppet:///modules/libvirt/dummy',
           )
         end
 

@@ -6,7 +6,7 @@ describe 'libvirt::service' do
   let :default_params do
     { service_name: 'libvirtd',
       service_ensure: 'running',
-      service_enable: true }
+      service_enable: true, }
   end
 
   shared_examples 'libvirt::service shared examples' do
@@ -38,7 +38,7 @@ describe 'libvirt::service' do
           default_params.merge(
             service_ensure: 'stopped',
             service_enable: false,
-            service_name: 'dtrivbil'
+            service_name: 'dtrivbil',
           )
         end
 
@@ -48,7 +48,7 @@ describe 'libvirt::service' do
       context 'without managing service' do
         let :params do
           default_params.merge(
-            manage_service: false
+            manage_service: false,
           )
         end
 
@@ -60,7 +60,7 @@ describe 'libvirt::service' do
       context 'with modular services' do
         let :params do
           default_params.merge(
-            modular_services: { 'virtqemud' => { 'ensure' => 'running', 'enable' => true } }
+            modular_services: { 'virtqemud' => { 'ensure' => 'running', 'enable' => true } },
           )
         end
 

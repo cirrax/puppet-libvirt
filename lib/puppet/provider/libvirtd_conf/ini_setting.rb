@@ -2,7 +2,7 @@
 
 Puppet::Type.type(:libvirtd_conf).provide(
   :ini_setting,
-  parent: Puppet::Type.type(:ini_setting).provider(:ruby)
+  parent: Puppet::Type.type(:ini_setting).provider(:ruby),
 ) do
   desc '
     @summary add config to /etc/libvirt/libvirtd.conf

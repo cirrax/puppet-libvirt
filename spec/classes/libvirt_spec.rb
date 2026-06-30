@@ -17,7 +17,7 @@ describe 'libvirt' do
       uri_aliases: [],
       uri_default: '',
       default_conf: {},
-      libvirtd_conf: {} }
+      libvirtd_conf: {}, }
   end
 
   shared_examples 'libvirt shared examples' do
@@ -42,7 +42,7 @@ describe 'libvirt' do
       context 'with drbd qemu_hook' do
         let :params do
           default_params.merge(
-            qemu_hook: 'drbd'
+            qemu_hook: 'drbd',
           )
         end
 
@@ -54,7 +54,7 @@ describe 'libvirt' do
       context 'with create_pools' do
         let :params do
           default_params.merge(
-            create_pools: { 'mypool' => {} }
+            create_pools: { 'mypool' => {} },
           )
         end
 
@@ -68,7 +68,7 @@ describe 'libvirt' do
       context 'with create_networks' do
         let :params do
           default_params.merge(
-            create_networks: { 'mynetwork' => { 'bridge' => 'test' } }
+            create_networks: { 'mynetwork' => { 'bridge' => 'test' } },
           )
         end
 
@@ -85,7 +85,7 @@ describe 'libvirt' do
         let :params do
           default_params.merge(
             load_nwfilter_set: ['test'],
-            default_nwfilters: { 'test' => { 'filter' => {} } }
+            default_nwfilters: { 'test' => { 'filter' => {} } },
           )
         end
 
@@ -98,7 +98,7 @@ describe 'libvirt' do
       context 'with create_domain' do
         let :params do
           default_params.merge(
-            create_domains: { 'mydom' => { 'devices_profile' => 'myprofile' } }
+            create_domains: { 'mydom' => { 'devices_profile' => 'myprofile' } },
           )
         end
 
@@ -114,7 +114,7 @@ describe 'libvirt' do
       context 'with drop_default_net true' do
         let :params do
           default_params.merge(
-            drop_default_net: true
+            drop_default_net: true,
           )
         end
 
@@ -129,7 +129,7 @@ describe 'libvirt' do
       context 'with manage_service false' do
         let :params do
           default_params.merge(
-            manage_service: false
+            manage_service: false,
           )
         end
 
@@ -140,7 +140,7 @@ describe 'libvirt' do
       context 'with diff_dir' do
         let :params do
           default_params.merge(
-            diff_dir: '/tmp/test'
+            diff_dir: '/tmp/test',
           )
         end
 

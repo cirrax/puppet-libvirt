@@ -21,7 +21,7 @@ Puppet::Type.type(:libvirt_pool).provide(:virsh) do
         name: values[0],
         active: %r{^act}.match?(values[1]) ? :true : :false,
         autostart: values[2].include?('no') ? :false : :true,
-        provider: name
+        provider: name,
       )
     end
   end

@@ -35,7 +35,7 @@ describe 'libvirt::network' do
         let(:title) { 'mytitle' }
         let :params do
           default_params.merge(
-            bridge: 'test'
+            bridge: 'test',
           )
         end
 
@@ -48,7 +48,7 @@ describe 'libvirt::network' do
         let :params do
           default_params.merge(
             bridge: 'test',
-            autostart: false
+            autostart: false,
           )
         end
 
@@ -60,7 +60,7 @@ describe 'libvirt::network' do
 
         let :params do
           default_params.merge(
-            ensure: 'absent'
+            ensure: 'absent',
           )
         end
 

@@ -39,7 +39,7 @@ describe 'libvirt::nwfilter' do
         let(:title) { 'mytitle' }
         let :params do
           default_params.merge(
-            ip: '123.123.123.123'
+            ip: '123.123.123.123',
           )
         end
 
@@ -51,7 +51,7 @@ describe 'libvirt::nwfilter' do
         let :params do
           default_params.merge(
             filterref: [{ 'filter' => 'blah' }],
-            template: 'generic'
+            template: 'generic',
           )
         end
 
@@ -63,7 +63,7 @@ describe 'libvirt::nwfilter' do
         let :params do
           default_params.merge(
             filterref: [{ 'filter' => 'blah', 'parameters' => [{ 'PORT' => '22' }, { 'PORT' => '80' }] }],
-            template: 'generic'
+            template: 'generic',
           )
         end
 

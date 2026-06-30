@@ -27,7 +27,7 @@ Puppet::Type.type(:libvirt_nwfilter).provide(:virsh) do
   end
 
   def initialize(value = {})
-    super(value)
+    super
     @property_flush = {}
   end
 
@@ -38,7 +38,7 @@ Puppet::Type.type(:libvirt_nwfilter).provide(:virsh) do
       new(
         ensure: :present,
         name: Regexp.last_match(2),
-        uuid: Regexp.last_match(1)
+        uuid: Regexp.last_match(1),
       )
     end
   end
